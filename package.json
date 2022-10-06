@@ -1,0 +1,48 @@
+{
+  "name": "bearby-web3",
+  "version": "1.0.0",
+  "description": " The web3 inject of bearby walet to access massa blockchain ",
+  "main": "index.js",
+  "repository": "git@github.com:bearby-wallet/bearby-web3.git",
+  "author": "Rinat <lich666black@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "files": [
+    "dist/*",
+    "lib/*",
+    "index.js",
+    "index.ts"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "browser": {
+    "crypto": false
+  },
+  "keywords": [
+    "massa",
+    "web3",
+    "bearby",
+    "blockchain",
+    "bitcoin",
+    "bytes",
+    "cryptography"
+  ],
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.5.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.4"
+  }
+}
