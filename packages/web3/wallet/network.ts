@@ -4,7 +4,7 @@ import { Subject } from "lib/subject";
 
 export class Network {
   #subject: Subject;
-  #net = 'mainnet';
+  #net?: string;
   #providers: string[] = [];
 
   get net() {
@@ -23,7 +23,7 @@ export class Network {
     }
   }
 
-  subscribe(cb: (net: string) => void) {
+  subscribe(cb: (net?: string) => void) {
     cb(this.net);
 
     const obs = this.#subject.on((msg) => {

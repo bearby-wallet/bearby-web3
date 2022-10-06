@@ -44,7 +44,7 @@ export class Wallet {
   }
 
 
-  async connect(): Promise<boolean> {
+  connect(): Promise<boolean> {
     const type = MTypeTab.CONNECT_APP;
     const recipient = MTypeTabContent.CONTENT;
     const uuid = uuidv4();
@@ -61,10 +61,15 @@ export class Wallet {
       payload
     }).send(this.#stream, recipient);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const obs = this.#subject.on((msg) => {
         if (msg.type !== MTypeTab.RESPONSE_CONNECT_APP) return;
         if (msg.payload.uuid !== uuid) return;
+
+        if (msg.payload.reject) {
+          obs();
+          return reject(new Error(msg.payload.reject));
+        }
 
         this.#connected = Boolean(msg.payload.connected);
 

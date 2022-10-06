@@ -220,7 +220,7 @@
     class Network {
         constructor(subject, providers, net) {
             _Network_subject.set(this, void 0);
-            _Network_net.set(this, 'mainnet');
+            _Network_net.set(this, void 0);
             _Network_providers.set(this, []);
             __classPrivateFieldSet(this, _Network_subject, subject, "f");
             if (net) {
@@ -283,7 +283,7 @@
         get enabled() {
             return __classPrivateFieldGet(this, _Wallet_enabled, "f");
         }
-        async connect() {
+        connect() {
             const type = MTypeTab.CONNECT_APP;
             const recipient = MTypeTabContent.CONTENT;
             const uuid = uuidv4();
@@ -298,12 +298,16 @@
                 type,
                 payload
             }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
                     if (msg.type !== MTypeTab.RESPONSE_CONNECT_APP)
                         return;
                     if (msg.payload.uuid !== uuid)
                         return;
+                    if (msg.payload.reject) {
+                        obs();
+                        return reject(new Error(msg.payload.reject));
+                    }
                     __classPrivateFieldSet(this, _Wallet_connected, Boolean(msg.payload.connected), "f");
                     __classPrivateFieldSet(this, _Wallet_account, new Account(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.base58), "f");
                     obs();
