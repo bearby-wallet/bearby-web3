@@ -16,7 +16,6 @@
         CONTENT_PROXY_RESULT: `@/${app}/response-from-content`,
         CONNECT_APP: `@/${app}/connect-app`,
         RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
-        DISCONNECT_APP: `@/${app}/disconnect-app`,
         NETWORK_CHANGED: `@/${app}/network-just-changed`,
         LOCKED: `@/${app}/guard-just-lock`
     };
@@ -308,34 +307,10 @@
                         obs();
                         return reject(new Error(msg.payload.reject));
                     }
-                    __classPrivateFieldSet(this, _Wallet_connected, Boolean(msg.payload.connected), "f");
+                    __classPrivateFieldSet(this, _Wallet_connected, Boolean(msg.payload.resolve), "f");
                     __classPrivateFieldSet(this, _Wallet_account, new Account(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.base58), "f");
                     obs();
                     return resolve(this.connected);
-                });
-            });
-        }
-        disconnect() {
-            const type = MTypeTab.DISCONNECT_APP;
-            const recipient = MTypeTabContent.CONTENT;
-            const uuid = uuidv4();
-            const payload = {
-                uuid
-            };
-            new ContentMessage({
-                type,
-                payload
-            }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
-            return new Promise((resolve) => {
-                const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
-                    if (msg.type !== MTypeTab.RESPONSE_CONNECT_APP)
-                        return;
-                    if (msg.payload.uuid !== uuid)
-                        return;
-                    __classPrivateFieldSet(this, _Wallet_connected, false, "f");
-                    __classPrivateFieldSet(this, _Wallet_account, new Account(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.base58), "f");
-                    obs();
-                    return resolve(null);
                 });
             });
         }

@@ -34,7 +34,6 @@ export class Wallet {
     return this.#enabled;
   }
 
-
   constructor(stream: TabStream, subject: Subject) {
     this.#stream = stream;
     this.#subject = subject;
@@ -42,7 +41,6 @@ export class Wallet {
     this.#network = new Network(subject);
     this.#subscribe();
   }
-
 
   connect(): Promise<boolean> {
     const type = MTypeTab.CONNECT_APP;
@@ -71,7 +69,7 @@ export class Wallet {
           return reject(new Error(msg.payload.reject));
         }
 
-        this.#connected = Boolean(msg.payload.connected);
+        this.#connected = Boolean(msg.payload.resolve);
 
         this.#account = new Account(
           this.#subject,
@@ -80,36 +78,6 @@ export class Wallet {
 
         obs();
         return resolve(this.connected);
-      });
-    });
-  }
-
-  disconnect() {
-    const type = MTypeTab.DISCONNECT_APP;
-    const recipient = MTypeTabContent.CONTENT;
-    const uuid = uuidv4();
-    const payload = {
-      uuid
-    };
-
-    new ContentMessage({
-      type,
-      payload
-    }).send(this.#stream, recipient);
-
-    return new Promise((resolve) => {
-      const obs = this.#subject.on((msg) => {
-        if (msg.type !== MTypeTab.RESPONSE_CONNECT_APP) return;
-        if (msg.payload.uuid !== uuid) return;
-
-        this.#connected = false;
-        this.#account = new Account(
-          this.#subject,
-          msg.payload.base58
-        );
-
-        obs();
-        return resolve(null);
       });
     });
   }

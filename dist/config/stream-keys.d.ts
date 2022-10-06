@@ -9,7 +9,6 @@ export declare const MTypeTab: {
     CONTENT_PROXY_RESULT: string;
     CONNECT_APP: string;
     RESPONSE_CONNECT_APP: string;
-    DISCONNECT_APP: string;
     NETWORK_CHANGED: string;
     LOCKED: string;
 };

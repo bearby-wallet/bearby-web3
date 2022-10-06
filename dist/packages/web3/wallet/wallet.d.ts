@@ -10,5 +10,4 @@ export declare class Wallet {
     get enabled(): boolean;
     constructor(stream: TabStream, subject: Subject);
     connect(): Promise<boolean>;
-    disconnect(): Promise<unknown>;
 }
