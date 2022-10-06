@@ -1,13 +1,12 @@
+import { FAVICON_REQUIRED } from "./errors";
+
+
 export function getFavicon() {
-  try {
-    let ref = globalThis.document.querySelector<HTMLLinkElement>('link[rel*=\'icon\']');
+  let ref = globalThis.document.querySelector<HTMLLinkElement>('link[rel*=\'icon\']');
 
-    if (!ref) {
-      return;
-    }
-
-    return ref.href;
-  } catch (err) {
-    return;
+  if (!ref) {
+    throw new Error(FAVICON_REQUIRED);
   }
+
+  return ref.href;
 }
