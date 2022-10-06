@@ -112,6 +112,9 @@ export class Wallet {
   #subscribe() {
     this.#subject.on((msg) => {
       switch (msg.type) {
+        case MTypeTab.LOCKED:
+          this.#enabled = msg.payload.enabled;
+          break;
         case MTypeTab.ACCOUNT_CHANGED:
           this.#account = new Account(
             this.#subject,

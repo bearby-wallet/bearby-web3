@@ -15,5 +15,6 @@ export const MTypeTab = {
   CONNECT_APP: `@/${app}/connect-app`,
   RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
   DISCONNECT_APP: `@/${app}/disconnect-app`,
-  NETWORK_CHANGED: `@/${app}/network-just-changed`
+  NETWORK_CHANGED: `@/${app}/network-just-changed`,
+  LOCKED: `@/${app}/guard-just-lock`
 };
