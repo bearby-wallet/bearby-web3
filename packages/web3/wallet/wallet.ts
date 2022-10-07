@@ -1,8 +1,11 @@
 import { MTypeTab, MTypeTabContent } from "config/stream-keys";
+import { assert } from "lib/assert";
+import { INVALID_SIGN_PARAMS, WALLET_IS_NOT_CONNECTED } from "lib/errors";
 import { getFavicon } from "lib/favicon";
 import { ContentMessage } from "lib/secure-message";
 import { Subject } from "lib/subject";
 import { TabStream } from "lib/tab-stream";
+import { TypeOf } from "lib/type";
 import { uuidv4 } from "lib/uuid";
 import { Account } from './account';
 import { Network } from "./network";
@@ -82,6 +85,22 @@ export class Wallet {
     });
   }
 
+  async sign(arg: string | Error) {
+    assert(this.connected, WALLET_IS_NOT_CONNECTED);
+
+    if (TypeOf.isString(arg)) {
+      return await this.#signMessage(String(arg));
+    } else if (arg instanceof Error) {
+      return await this.#signTransaction(arg);
+    }
+
+    throw new Error(INVALID_SIGN_PARAMS);
+  }
+
+  async #signMessage(message: string) {}
+
+  async #signTransaction(tx: object) {}
+
   #subscribe() {
     this.#subject.on((msg) => {
       switch (msg.type) {
@@ -105,14 +124,12 @@ export class Wallet {
 
           this.#network = new Network(
             this.#subject,
-            msg.payload.providers,
             msg.payload.net
           );
           break;
         case MTypeTab.NETWORK_CHANGED:
           this.#network = new Network(
             this.#subject,
-            msg.payload.providers,
             msg.payload.net
           );
           break;

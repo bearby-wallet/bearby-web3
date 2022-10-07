@@ -5,21 +5,16 @@ import { Subject } from "lib/subject";
 export class Network {
   #subject: Subject;
   #net?: string;
-  #providers: string[] = [];
 
   get net() {
     return this.#net;
   }
 
-  constructor(subject: Subject, providers?: string[], net?: string) {
+  constructor(subject: Subject, net?: string) {
     this.#subject = subject;
 
     if (net) {
       this.#net = net;
-    }
-
-    if (providers && providers.length > 0) {
-      this.#providers = providers;
     }
   }
 

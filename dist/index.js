@@ -165,7 +165,15 @@
         }
     }
 
+    function assert(expressions, msg) {
+        if (!expressions) {
+            throw new Error(msg);
+        }
+    }
+
     const FAVICON_REQUIRED = 'website favicon is required';
+    const WALLET_IS_NOT_CONNECTED = 'Wallet is not connected';
+    const INVALID_SIGN_PARAMS = 'Invalid sign params';
 
     function getFavicon() {
         let ref = globalThis.document.querySelector('link[rel*=\'icon\']');
@@ -174,6 +182,64 @@
         }
         return ref.href;
     }
+
+    const TypeOf = Object.freeze({
+        isArray(argument) {
+            return Object.prototype.toString.call(argument) === '[object Array]';
+        },
+        isObject(argument) {
+            return Object.prototype.toString.call(argument) === '[object Object]';
+        },
+        isNumber(argument) {
+            return Object.prototype.toString.call(argument) === '[object Number]'
+                && !isNaN(Number(argument));
+        },
+        isInt(argument) {
+            try {
+                return Boolean(BigInt(String(argument)));
+            }
+            catch (_a) {
+                return false;
+            }
+        },
+        isError(argument) {
+            return Object.prototype.toString.call(argument) === '[object Error]';
+        },
+        isString(argument) {
+            return Object.prototype.toString.call(argument) === '[object String]';
+        },
+        isBoolean(argument) {
+            return Object.prototype.toString.call(argument) === '[object Boolean]';
+        },
+        isNull(argument) {
+            return Object.prototype.toString.call(argument) === '[object Null]';
+        },
+        isUndefined(argument) {
+            return Object.prototype.toString.call(argument) === '[object Undefined]';
+        },
+        isEmptyObject(argument) {
+            if (!this.isObject(argument)) {
+                return false;
+            }
+            else {
+                return Object.getOwnPropertyNames(argument).length === 0;
+            }
+        },
+        isEmptyArray(argument) {
+            if (!this.isArray(argument)) {
+                return false;
+            }
+            else {
+                return argument.length === 0;
+            }
+        },
+        getType(argument) {
+            if (Number.isNaN(argument)) {
+                return 'NaN';
+            }
+            return Object.prototype.toString.call(argument).split(' ')[1].slice(0, -1).toLowerCase();
+        }
+    });
 
     function uuidv4() {
         const size = 20;
@@ -215,18 +281,14 @@
     }
     _Account_subject = new WeakMap(), _Account_base58 = new WeakMap();
 
-    var _Network_subject, _Network_net, _Network_providers;
+    var _Network_subject, _Network_net;
     class Network {
-        constructor(subject, providers, net) {
+        constructor(subject, net) {
             _Network_subject.set(this, void 0);
             _Network_net.set(this, void 0);
-            _Network_providers.set(this, []);
             __classPrivateFieldSet(this, _Network_subject, subject, "f");
             if (net) {
                 __classPrivateFieldSet(this, _Network_net, net, "f");
-            }
-            if (providers && providers.length > 0) {
-                __classPrivateFieldSet(this, _Network_providers, providers, "f");
             }
         }
         get net() {
@@ -252,9 +314,9 @@
             };
         }
     }
-    _Network_subject = new WeakMap(), _Network_net = new WeakMap(), _Network_providers = new WeakMap();
+    _Network_subject = new WeakMap(), _Network_net = new WeakMap();
 
-    var _Wallet_instances, _Wallet_account, _Wallet_network, _Wallet_stream, _Wallet_subject, _Wallet_connected, _Wallet_enabled, _Wallet_subscribe;
+    var _Wallet_instances, _Wallet_account, _Wallet_network, _Wallet_stream, _Wallet_subject, _Wallet_connected, _Wallet_enabled, _Wallet_signMessage, _Wallet_signTransaction, _Wallet_subscribe;
     class Wallet {
         constructor(stream, subject) {
             _Wallet_instances.add(this);
@@ -314,8 +376,18 @@
                 });
             });
         }
+        async sign(arg) {
+            assert(this.connected, WALLET_IS_NOT_CONNECTED);
+            if (TypeOf.isString(arg)) {
+                return await __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_signMessage).call(this, String(arg));
+            }
+            else if (arg instanceof Error) {
+                return await __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_signTransaction).call(this, arg);
+            }
+            throw new Error(INVALID_SIGN_PARAMS);
+        }
     }
-    _Wallet_account = new WeakMap(), _Wallet_network = new WeakMap(), _Wallet_stream = new WeakMap(), _Wallet_subject = new WeakMap(), _Wallet_connected = new WeakMap(), _Wallet_enabled = new WeakMap(), _Wallet_instances = new WeakSet(), _Wallet_subscribe = function _Wallet_subscribe() {
+    _Wallet_account = new WeakMap(), _Wallet_network = new WeakMap(), _Wallet_stream = new WeakMap(), _Wallet_subject = new WeakMap(), _Wallet_connected = new WeakMap(), _Wallet_enabled = new WeakMap(), _Wallet_instances = new WeakSet(), _Wallet_signMessage = async function _Wallet_signMessage(message) { }, _Wallet_signTransaction = async function _Wallet_signTransaction(tx) { }, _Wallet_subscribe = function _Wallet_subscribe() {
         __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
             switch (msg.type) {
                 case MTypeTab.LOCKED:
@@ -328,10 +400,10 @@
                     __classPrivateFieldSet(this, _Wallet_account, new Account(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.base58), "f");
                     __classPrivateFieldSet(this, _Wallet_enabled, msg.payload.enabled, "f");
                     __classPrivateFieldSet(this, _Wallet_connected, msg.payload.connected, "f");
-                    __classPrivateFieldSet(this, _Wallet_network, new Network(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.providers, msg.payload.net), "f");
+                    __classPrivateFieldSet(this, _Wallet_network, new Network(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.net), "f");
                     break;
                 case MTypeTab.NETWORK_CHANGED:
-                    __classPrivateFieldSet(this, _Wallet_network, new Network(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.providers, msg.payload.net), "f");
+                    __classPrivateFieldSet(this, _Wallet_network, new Network(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.net), "f");
                     break;
             }
         });
