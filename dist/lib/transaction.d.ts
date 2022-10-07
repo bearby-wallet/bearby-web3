@@ -12,5 +12,6 @@ export declare class Transaction {
     recipient?: string;
     readonly type: OperationsType;
     readonly amount: string;
+    get payload(): any;
     constructor(type: OperationsType, amount: string, recipient?: string, parameter?: object, contract?: Uint8Array, functionName?: string);
 }

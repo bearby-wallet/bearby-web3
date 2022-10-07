@@ -58,7 +58,9 @@
         CONNECT_APP: `@/${app}/connect-app`,
         RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
         NETWORK_CHANGED: `@/${app}/network-just-changed`,
-        LOCKED: `@/${app}/guard-just-lock`
+        LOCKED: `@/${app}/guard-just-lock`,
+        TX_TO_SEND: `@/${app}/add-tx-to-send`,
+        TX_TO_SEND_RESULT: `@/${app}/response-tx-result`
     };
 
     var _TabStream_instances, _TabStream_eventName, _TabStream_dispatch, _TabStream_getEventInit, _TabStream_getEvent;
@@ -262,11 +264,27 @@
     class Transaction {
         constructor(type, amount, recipient, parameter, contract, functionName) {
             this.type = type;
-            this.amount = amount;
+            this.amount = String(amount);
             this.recipient = recipient;
             this.parameter = parameter;
             this.contract = contract ? toHex(contract) : contract;
             this.functionName = functionName;
+        }
+        get payload() {
+            return JSON.parse(JSON.stringify({
+                type: this.type,
+                amount: this.amount,
+                fee: this.fee,
+                gasPrice: this.gasPrice,
+                gasLimit: this.gasLimit,
+                coins: this.coins,
+                code: this.contract,
+                func: this.functionName,
+                params: JSON.stringify(this.parameter),
+                parallelCoins: this.parallelCoins,
+                sequentialCoins: this.sequentialCoins,
+                toAddr: this.recipient
+            }));
         }
     }
 
@@ -585,7 +603,35 @@
             throw new Error(INVALID_SIGN_PARAMS);
         }
     }
-    _Wallet_account = new WeakMap(), _Wallet_network = new WeakMap(), _Wallet_stream = new WeakMap(), _Wallet_subject = new WeakMap(), _Wallet_connected = new WeakMap(), _Wallet_enabled = new WeakMap(), _Wallet_instances = new WeakSet(), _Wallet_signMessage = async function _Wallet_signMessage(message) { }, _Wallet_signTransaction = async function _Wallet_signTransaction(tx) { }, _Wallet_subscribe = function _Wallet_subscribe() {
+    _Wallet_account = new WeakMap(), _Wallet_network = new WeakMap(), _Wallet_stream = new WeakMap(), _Wallet_subject = new WeakMap(), _Wallet_connected = new WeakMap(), _Wallet_enabled = new WeakMap(), _Wallet_instances = new WeakSet(), _Wallet_signMessage = async function _Wallet_signMessage(message) { }, _Wallet_signTransaction = async function _Wallet_signTransaction(tx) {
+        const type = MTypeTab.TX_TO_SEND;
+        const recipient = MTypeTabContent.CONTENT;
+        const uuid = uuidv4();
+        const payload = {
+            ...tx.payload,
+            uuid,
+            title: window.document.title,
+            icon: getFavicon()
+        };
+        new ContentMessage({
+            type,
+            payload
+        }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
+        return new Promise((resolve, reject) => {
+            const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
+                if (msg.type !== MTypeTab.TX_TO_SEND_RESULT)
+                    return;
+                if (msg.payload.uuid !== uuid)
+                    return;
+                if (msg.payload && msg.payload.reject) {
+                    obs();
+                    return reject(new Error(msg.payload.reject));
+                }
+                obs();
+                return resolve(msg.payload.resolve);
+            });
+        });
+    }, _Wallet_subscribe = function _Wallet_subscribe() {
         __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
             switch (msg.type) {
                 case MTypeTab.LOCKED:

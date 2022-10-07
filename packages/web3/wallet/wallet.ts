@@ -100,7 +100,37 @@ export class Wallet {
 
   async #signMessage(message: string) {}
 
-  async #signTransaction(tx: object) {}
+  async #signTransaction(tx: Transaction): Promise<string> {
+    const type = MTypeTab.TX_TO_SEND;
+    const recipient = MTypeTabContent.CONTENT;
+    const uuid = uuidv4();
+    const payload = {
+      ...tx.payload,
+      uuid,
+      title: window.document.title,
+      icon: getFavicon()
+    };
+
+    new ContentMessage({
+      type,
+      payload
+    }).send(this.#stream, recipient);
+
+    return new Promise((resolve, reject) => {
+      const obs = this.#subject.on((msg) => {
+        if (msg.type !== MTypeTab.TX_TO_SEND_RESULT) return;
+        if (msg.payload.uuid !== uuid) return;
+
+        if (msg.payload && msg.payload.reject) {
+          obs();
+          return reject(new Error(msg.payload.reject));
+        }
+
+        obs();
+        return resolve(msg.payload.resolve as string);
+      });
+    });
+  }
 
   #subscribe() {
     this.#subject.on((msg) => {

@@ -18,6 +18,25 @@ export class Transaction {
   readonly type: OperationsType;
   readonly amount: string;
 
+  get payload() {
+    return JSON.parse(
+      JSON.stringify({
+        type: this.type,
+        amount: this.amount,
+        fee: this.fee,
+        gasPrice: this.gasPrice,
+        gasLimit: this.gasLimit,
+        coins: this.coins,
+        code: this.contract,
+        func: this.functionName,
+        params: JSON.stringify(this.parameter),
+        parallelCoins: this.parallelCoins,
+        sequentialCoins: this.sequentialCoins,
+        toAddr: this.recipient
+      })
+    );
+  }
+
   constructor(
     type: OperationsType,
     amount: string,
@@ -27,7 +46,7 @@ export class Transaction {
     functionName?: string
   ) {
     this.type = type;
-    this.amount = amount;
+    this.amount = String(amount);
     this.recipient = recipient;
     this.parameter = parameter;
     this.contract = contract ? toHex(contract) : contract;
