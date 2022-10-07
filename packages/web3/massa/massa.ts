@@ -16,13 +16,18 @@ import type {
 
 import { ContentProvider } from "./provider";
 import { JsonRPCRequestMethods } from 'config/rpc-methods';
+import { Wallet } from "../wallet";
+import { Transaction } from "lib/transaction";
+import { OperationsType } from "config/operations";
 
 
 export class Massa {
   readonly #provider: ContentProvider;
+  readonly #wallet: Wallet;
 
-  constructor(provider: ContentProvider) {
+  constructor(provider: ContentProvider, wallet: Wallet) {
     this.#provider = provider;
+    this.#wallet = wallet;
   }
 
   async getNodesStatus() {
@@ -103,5 +108,33 @@ export class Massa {
       method,
       params: [params]
     }]);
+  }
+
+  async payment(amount: string, recipient: string) {
+    const transaction = new Transaction(
+      OperationsType.Payment,
+      amount,
+      recipient
+    );
+
+    return this.#wallet.sign(transaction);
+  }
+
+  async buyRolls(amount: string) {
+    const transaction = new Transaction(
+      OperationsType.RollBuy,
+      amount
+    );
+
+    return this.#wallet.sign(transaction);
+  }
+
+  async sellRolls(amount: string) {
+    const transaction = new Transaction(
+      OperationsType.RollSell,
+      amount
+    );
+
+    return this.#wallet.sign(transaction);
   }
 }

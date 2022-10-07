@@ -5,6 +5,7 @@ import { getFavicon } from "lib/favicon";
 import { ContentMessage } from "lib/secure-message";
 import { Subject } from "lib/subject";
 import { TabStream } from "lib/tab-stream";
+import { Transaction } from "lib/transaction";
 import { TypeOf } from "lib/type";
 import { uuidv4 } from "lib/uuid";
 import { Account } from './account';
@@ -85,12 +86,12 @@ export class Wallet {
     });
   }
 
-  async sign(arg: string | Error) {
+  async sign(arg: string | Transaction) {
     assert(this.connected, WALLET_IS_NOT_CONNECTED);
 
     if (TypeOf.isString(arg)) {
       return await this.#signMessage(String(arg));
-    } else if (arg instanceof Error) {
+    } else if (arg instanceof Transaction) {
       return await this.#signTransaction(arg);
     }
 

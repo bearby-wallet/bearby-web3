@@ -1,7 +1,8 @@
-(function (factory) {
-    typeof define === 'function' && define.amd ? define(factory) :
-    factory();
-})((function () { 'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.web3 = {}));
+})(this, (function (exports) { 'use strict';
 
     /******************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -254,11 +255,37 @@
         // GET_DATASTORE_ENTRIES        = 'get_datastore_entries'
     })(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
 
-    var _Massa_provider;
+    function toHex(bytes) {
+        return Array.from(bytes, (i) => i.toString(16).padStart(2, "0")).join("");
+    }
+
+    class Transaction {
+        constructor(type, amount, recipient, parameter, contract, functionName) {
+            this.type = type;
+            this.amount = amount;
+            this.recipient = recipient;
+            this.parameter = parameter;
+            this.contract = contract ? toHex(contract) : contract;
+            this.functionName = functionName;
+        }
+    }
+
+    var OperationsType;
+    (function (OperationsType) {
+        OperationsType[OperationsType["Payment"] = 0] = "Payment";
+        OperationsType[OperationsType["RollBuy"] = 1] = "RollBuy";
+        OperationsType[OperationsType["RollSell"] = 2] = "RollSell";
+        OperationsType[OperationsType["ExecuteSC"] = 3] = "ExecuteSC";
+        OperationsType[OperationsType["CallSC"] = 4] = "CallSC";
+    })(OperationsType || (OperationsType = {}));
+
+    var _Massa_provider, _Massa_wallet;
     class Massa {
-        constructor(provider) {
+        constructor(provider, wallet) {
             _Massa_provider.set(this, void 0);
+            _Massa_wallet.set(this, void 0);
             __classPrivateFieldSet(this, _Massa_provider, provider, "f");
+            __classPrivateFieldSet(this, _Massa_wallet, wallet, "f");
         }
         async getNodesStatus() {
             const method = JsonRPCRequestMethods.GET_STATUS;
@@ -330,8 +357,20 @@
                     params: [params]
                 }]);
         }
+        async payment(amount, recipient) {
+            const transaction = new Transaction(OperationsType.Payment, amount, recipient);
+            return __classPrivateFieldGet(this, _Massa_wallet, "f").sign(transaction);
+        }
+        async buyRolls(amount) {
+            const transaction = new Transaction(OperationsType.RollBuy, amount);
+            return __classPrivateFieldGet(this, _Massa_wallet, "f").sign(transaction);
+        }
+        async sellRolls(amount) {
+            const transaction = new Transaction(OperationsType.RollSell, amount);
+            return __classPrivateFieldGet(this, _Massa_wallet, "f").sign(transaction);
+        }
     }
-    _Massa_provider = new WeakMap();
+    _Massa_provider = new WeakMap(), _Massa_wallet = new WeakMap();
 
     function assert(expressions, msg) {
         if (!expressions) {
@@ -540,7 +579,7 @@
             if (TypeOf.isString(arg)) {
                 return await __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_signMessage).call(this, String(arg));
             }
-            else if (arg instanceof Error) {
+            else if (arg instanceof Transaction) {
                 return await __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_signTransaction).call(this, arg);
             }
             throw new Error(INVALID_SIGN_PARAMS);
@@ -575,14 +614,18 @@
             this.wallet = new Wallet(__classPrivateFieldGet(this, _Web3_handler, "f").stream, __classPrivateFieldGet(this, _Web3_handler, "f").subject);
             this.provider = new ContentProvider(__classPrivateFieldGet(this, _Web3_handler, "f").stream, __classPrivateFieldGet(this, _Web3_handler, "f").subject);
             this.contract = new Contract(this.provider);
-            this.massa = new Massa(this.provider);
+            this.massa = new Massa(this.provider, this.wallet);
             __classPrivateFieldGet(this, _Web3_handler, "f").initialized();
             globalThis.window['bearby'] = Object.freeze(this);
         }
     }
     _Web3_handler = new WeakMap();
 
-    new Web3();
+    const web3 = new Web3();
+
+    exports.web3 = web3;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
 //# sourceMappingURL=index.js.map

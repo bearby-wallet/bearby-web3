@@ -1,5 +1,6 @@
 import { Subject } from "lib/subject";
 import { TabStream } from "lib/tab-stream";
+import { Transaction } from "lib/transaction";
 import { Account } from './account';
 import { Network } from "./network";
 export declare class Wallet {
@@ -10,5 +11,5 @@ export declare class Wallet {
     get enabled(): boolean;
     constructor(stream: TabStream, subject: Subject);
     connect(): Promise<boolean>;
-    sign(arg: string | Error): Promise<void>;
+    sign(arg: string | Transaction): Promise<void>;
 }
