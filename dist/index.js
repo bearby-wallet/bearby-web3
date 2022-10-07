@@ -165,15 +165,167 @@
         }
     }
 
+    function uuidv4() {
+        const size = 20;
+        return [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+    }
+
+    const TIME_OUT_SECONDS = 5000;
+
+    const FAVICON_REQUIRED = 'website favicon is required';
+    const WALLET_IS_NOT_CONNECTED = 'Wallet is not connected';
+    const INVALID_SIGN_PARAMS = 'Invalid sign params';
+    const TIME_OUT = 'Request failed by timeout';
+
+    var _ContentProvider_stream, _ContentProvider_subject;
+    class ContentProvider {
+        constructor(stream, subject) {
+            _ContentProvider_stream.set(this, void 0);
+            _ContentProvider_subject.set(this, void 0);
+            __classPrivateFieldSet(this, _ContentProvider_stream, stream, "f");
+            __classPrivateFieldSet(this, _ContentProvider_subject, subject, "f");
+        }
+        async send(body) {
+            const type = MTypeTab.CONTENT_PROXY_MEHTOD;
+            const recipient = MTypeTabContent.CONTENT;
+            const uuid = uuidv4();
+            let sub;
+            new ContentMessage({
+                type,
+                payload: {
+                    body,
+                    uuid
+                }
+            }).send(__classPrivateFieldGet(this, _ContentProvider_stream, "f"), recipient);
+            const fulfilled = new Promise((resolve, reject) => {
+                sub = __classPrivateFieldGet(this, _ContentProvider_subject, "f").on((msg) => {
+                    if (msg.type !== MTypeTab.CONTENT_PROXY_RESULT)
+                        return;
+                    if (!msg.payload || !msg.payload.uuid)
+                        return;
+                    if (msg.payload.uuid !== uuid)
+                        return;
+                    if (msg.payload && msg.payload.reject) {
+                        sub();
+                        return reject(new Error(msg.payload.reject));
+                    }
+                    delete msg.payload.uuid;
+                    sub();
+                    return resolve(msg.payload.resolve);
+                });
+            });
+            const timeout = new Promise((_, reject) => {
+                setTimeout(() => {
+                    if (sub)
+                        sub();
+                    reject(new Error(TIME_OUT));
+                }, TIME_OUT_SECONDS);
+            });
+            return Promise.race([fulfilled, timeout]);
+        }
+    }
+    _ContentProvider_stream = new WeakMap(), _ContentProvider_subject = new WeakMap();
+
+    var JsonRPCRequestMethods;
+    (function (JsonRPCRequestMethods) {
+        JsonRPCRequestMethods["GET_STATUS"] = "get_status";
+        JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
+        // SEND_OPERATIONS              = 'send_operations',
+        JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
+        JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
+        JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
+        JsonRPCRequestMethods["GET_CLIQUES"] = "get_cliques";
+        JsonRPCRequestMethods["GET_STAKERS"] = "get_stakers";
+        JsonRPCRequestMethods["GET_FILTERED_SC_OUTPUT_EVENT"] = "get_filtered_sc_output_event";
+        JsonRPCRequestMethods["EXECUTE_READ_ONLY_BYTECODE"] = "execute_read_only_bytecode";
+        JsonRPCRequestMethods["EXECUTE_READ_ONLY_CALL"] = "execute_read_only_call";
+        // GET_DATASTORE_ENTRIES        = 'get_datastore_entries'
+    })(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
+
+    var _Massa_provider;
+    class Massa {
+        constructor(provider) {
+            _Massa_provider.set(this, void 0);
+            __classPrivateFieldSet(this, _Massa_provider, provider, "f");
+        }
+        async getNodesStatus() {
+            const method = JsonRPCRequestMethods.GET_STATUS;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: []
+                }]);
+        }
+        async getAddresses(...addresses) {
+            const method = JsonRPCRequestMethods.GET_ADDRESSES;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [addresses]
+                }]);
+        }
+        async getBlocks(...blocks) {
+            const method = JsonRPCRequestMethods.GET_BLOCKS;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [blocks]
+                }]);
+        }
+        async getOperations(...operations) {
+            const method = JsonRPCRequestMethods.GET_OPERATIONS;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [operations]
+                }]);
+        }
+        async getStakers() {
+            const method = JsonRPCRequestMethods.GET_STAKERS;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: []
+                }]);
+        }
+        async getEndorsements(...Ids) {
+            const method = JsonRPCRequestMethods.GET_ENDORSEMENTS;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [Ids]
+                }]);
+        }
+        async getCliques() {
+            const method = JsonRPCRequestMethods.GET_CLIQUES;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: []
+                }]);
+        }
+        async getFilteredSCOutputEvent(filter) {
+            const method = JsonRPCRequestMethods.GET_FILTERED_SC_OUTPUT_EVENT;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [filter]
+                }]);
+        }
+        async executeReadOlyBytecode(params) {
+            const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [params]
+                }]);
+        }
+        async executeReadOnlyCall(params) {
+            const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_CALL;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [params]
+                }]);
+        }
+    }
+    _Massa_provider = new WeakMap();
+
     function assert(expressions, msg) {
         if (!expressions) {
             throw new Error(msg);
         }
     }
-
-    const FAVICON_REQUIRED = 'website favicon is required';
-    const WALLET_IS_NOT_CONNECTED = 'Wallet is not connected';
-    const INVALID_SIGN_PARAMS = 'Invalid sign params';
 
     function getFavicon() {
         let ref = globalThis.document.querySelector('link[rel*=\'icon\']');
@@ -240,11 +392,6 @@
             return Object.prototype.toString.call(argument).split(' ')[1].slice(0, -1).toLowerCase();
         }
     });
-
-    function uuidv4() {
-        const size = 20;
-        return [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-    }
 
     var _Account_subject, _Account_base58;
     class Account {
@@ -411,7 +558,12 @@
 
     const handler = Object.freeze(new Handler());
     const wallet = Object.freeze(new Wallet(handler.stream, handler.subject));
-    globalThis.window['bearby'] = wallet;
+    const provider = new ContentProvider(handler.stream, handler.subject);
+    const massa = new Massa(provider);
+    globalThis.window['bearby'] = {
+        wallet,
+        massa
+    };
     handler.initialized();
 
 }));

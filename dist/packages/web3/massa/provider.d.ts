@@ -1,8 +1,8 @@
 import { Subject } from "lib/subject";
 import { TabStream } from "lib/tab-stream";
-import { OperationsType } from 'config/operations';
+import { RPCBody } from "types/massa";
 export declare class ContentProvider {
     #private;
     constructor(stream: TabStream, subject: Subject);
-    send(method: OperationsType, params: object): Promise<unknown>;
+    send<T>(body: RPCBody[]): Promise<T>;
 }

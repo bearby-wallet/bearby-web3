@@ -1,11 +1,11 @@
 import { Subject } from "lib/subject";
 import { TabStream } from "lib/tab-stream";
-import { OperationsType } from 'config/operations';
 import { MTypeTab, MTypeTabContent } from "config/stream-keys";
 import { uuidv4 } from "lib/uuid";
 import { ContentMessage } from "lib/secure-message";
 import { TIME_OUT_SECONDS } from "config/common";
 import { TIME_OUT } from "lib/errors";
+import { RPCBody } from "types/massa";
 
 
 export class ContentProvider {
@@ -17,7 +17,7 @@ export class ContentProvider {
     this.#subject = subject;
   }
 
-  async send(method: OperationsType, params: object) {
+  async send<T>(body: RPCBody[]): Promise<T> {
     const type = MTypeTab.CONTENT_PROXY_MEHTOD;
     const recipient = MTypeTabContent.CONTENT;
     const uuid = uuidv4();
@@ -26,8 +26,7 @@ export class ContentProvider {
     new ContentMessage({
       type,
       payload: {
-        params,
-        method,
+        body,
         uuid
       }
     }).send(this.#stream, recipient);
@@ -45,16 +44,16 @@ export class ContentProvider {
 
         delete msg.payload.uuid;
         sub();
-        return resolve(msg.payload.resolve);
+        return resolve(msg.payload.resolve as T);
       });
     });
     const timeout = new Promise((_, reject) =>{
       setTimeout(() => {
         if (sub) sub();
-        reject(new Error(`${method} ${TIME_OUT}`));
+        reject(new Error(TIME_OUT));
       }, TIME_OUT_SECONDS);
     });
 
-    return Promise.race([fulfilled, timeout]);
+    return Promise.race([fulfilled, timeout]) as T;
   }
 }
