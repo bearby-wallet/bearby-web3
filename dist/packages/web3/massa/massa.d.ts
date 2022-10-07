@@ -14,7 +14,7 @@ export declare class Massa {
     getFilteredSCOutputEvent(filter: EventFilterParam): Promise<JsonRPCResponseFilteredSCOutputEvent[]>;
     executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]): Promise<JsonRPCResponseExecuteReadOnlyBytecode[]>;
     executeReadOnlyCall(params: ExecuteReadOnlyCall[]): Promise<JsonRPCResponseExecuteReadOnlyCall[]>;
-    payment(amount: string, recipient: string): Promise<string | void>;
-    buyRolls(amount: string): Promise<string | void>;
-    sellRolls(amount: string): Promise<string | void>;
+    payment(amount: string, recipient: string): Promise<string>;
+    buyRolls(amount: string): Promise<string>;
+    sellRolls(amount: string): Promise<string>;
 }

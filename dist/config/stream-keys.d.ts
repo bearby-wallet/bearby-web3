@@ -13,4 +13,6 @@ export declare const MTypeTab: {
     LOCKED: string;
     TX_TO_SEND: string;
     TX_TO_SEND_RESULT: string;
+    SIGN_MESSAGE: string;
+    SING_MESSAGE_RESULT: string;
 };

@@ -17,5 +17,7 @@ export const MTypeTab = {
   NETWORK_CHANGED: `@/${app}/network-just-changed`,
   LOCKED: `@/${app}/guard-just-lock`,
   TX_TO_SEND: `@/${app}/add-tx-to-send`,
-  TX_TO_SEND_RESULT: `@/${app}/response-tx-result`
+  TX_TO_SEND_RESULT: `@/${app}/response-tx-result`,
+  SIGN_MESSAGE: `@/${app}/sign-message-call`,
+  SING_MESSAGE_RESULT: `@/${app}/sign-message-response`
 };

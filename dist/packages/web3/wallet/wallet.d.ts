@@ -1,3 +1,4 @@
+import type { SignedMessage } from "types";
 import { Subject } from "lib/subject";
 import { TabStream } from "lib/tab-stream";
 import { Transaction } from "lib/transaction";
@@ -11,5 +12,6 @@ export declare class Wallet {
     get enabled(): boolean;
     constructor(stream: TabStream, subject: Subject);
     connect(): Promise<boolean>;
-    sign(arg: string | Transaction): Promise<string | void>;
+    signMessage(message: string): Promise<SignedMessage>;
+    signTransaction(tx: Transaction): Promise<string>;
 }

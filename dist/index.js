@@ -60,7 +60,9 @@
         NETWORK_CHANGED: `@/${app}/network-just-changed`,
         LOCKED: `@/${app}/guard-just-lock`,
         TX_TO_SEND: `@/${app}/add-tx-to-send`,
-        TX_TO_SEND_RESULT: `@/${app}/response-tx-result`
+        TX_TO_SEND_RESULT: `@/${app}/response-tx-result`,
+        SIGN_MESSAGE: `@/${app}/sign-message-call`,
+        SING_MESSAGE_RESULT: `@/${app}/sign-message-response`
     };
 
     var _TabStream_instances, _TabStream_eventName, _TabStream_dispatch, _TabStream_getEventInit, _TabStream_getEvent;
@@ -377,15 +379,15 @@
         }
         async payment(amount, recipient) {
             const transaction = new Transaction(OperationsType.Payment, amount, recipient);
-            return __classPrivateFieldGet(this, _Massa_wallet, "f").sign(transaction);
+            return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
         }
         async buyRolls(amount) {
             const transaction = new Transaction(OperationsType.RollBuy, amount);
-            return __classPrivateFieldGet(this, _Massa_wallet, "f").sign(transaction);
+            return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
         }
         async sellRolls(amount) {
             const transaction = new Transaction(OperationsType.RollSell, amount);
-            return __classPrivateFieldGet(this, _Massa_wallet, "f").sign(transaction);
+            return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
         }
     }
     _Massa_provider = new WeakMap(), _Massa_wallet = new WeakMap();
@@ -403,64 +405,6 @@
         }
         return ref.href;
     }
-
-    const TypeOf = Object.freeze({
-        isArray(argument) {
-            return Object.prototype.toString.call(argument) === '[object Array]';
-        },
-        isObject(argument) {
-            return Object.prototype.toString.call(argument) === '[object Object]';
-        },
-        isNumber(argument) {
-            return Object.prototype.toString.call(argument) === '[object Number]'
-                && !isNaN(Number(argument));
-        },
-        isInt(argument) {
-            try {
-                return Boolean(BigInt(String(argument)));
-            }
-            catch (_a) {
-                return false;
-            }
-        },
-        isError(argument) {
-            return Object.prototype.toString.call(argument) === '[object Error]';
-        },
-        isString(argument) {
-            return Object.prototype.toString.call(argument) === '[object String]';
-        },
-        isBoolean(argument) {
-            return Object.prototype.toString.call(argument) === '[object Boolean]';
-        },
-        isNull(argument) {
-            return Object.prototype.toString.call(argument) === '[object Null]';
-        },
-        isUndefined(argument) {
-            return Object.prototype.toString.call(argument) === '[object Undefined]';
-        },
-        isEmptyObject(argument) {
-            if (!this.isObject(argument)) {
-                return false;
-            }
-            else {
-                return Object.getOwnPropertyNames(argument).length === 0;
-            }
-        },
-        isEmptyArray(argument) {
-            if (!this.isArray(argument)) {
-                return false;
-            }
-            else {
-                return argument.length === 0;
-            }
-        },
-        getType(argument) {
-            if (Number.isNaN(argument)) {
-                return 'NaN';
-            }
-            return Object.prototype.toString.call(argument).split(' ')[1].slice(0, -1).toLowerCase();
-        }
-    });
 
     var _Account_subject, _Account_base58;
     class Account {
@@ -532,7 +476,7 @@
     }
     _Network_subject = new WeakMap(), _Network_net = new WeakMap();
 
-    var _Wallet_instances, _Wallet_account, _Wallet_network, _Wallet_stream, _Wallet_subject, _Wallet_connected, _Wallet_enabled, _Wallet_signMessage, _Wallet_signTransaction, _Wallet_subscribe;
+    var _Wallet_instances, _Wallet_account, _Wallet_network, _Wallet_stream, _Wallet_subject, _Wallet_connected, _Wallet_enabled, _Wallet_subscribe;
     class Wallet {
         constructor(stream, subject) {
             _Wallet_instances.add(this);
@@ -592,46 +536,71 @@
                 });
             });
         }
-        async sign(arg) {
+        async signMessage(message) {
             assert(this.connected, WALLET_IS_NOT_CONNECTED);
-            if (TypeOf.isString(arg)) {
-                return await __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_signMessage).call(this, String(arg));
-            }
-            else if (arg instanceof Transaction) {
-                return await __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_signTransaction).call(this, arg);
-            }
-            throw new Error(INVALID_SIGN_PARAMS);
+            const type = MTypeTab.SIGN_MESSAGE;
+            const recipient = MTypeTabContent.CONTENT;
+            const uuid = uuidv4();
+            const title = window.document.title;
+            const icon = getFavicon();
+            const payload = {
+                message,
+                uuid,
+                title,
+                icon
+            };
+            new ContentMessage({
+                type,
+                payload
+            }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
+            return new Promise((resolve, reject) => {
+                const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
+                    if (msg.type !== MTypeTab.SING_MESSAGE_RESULT)
+                        return;
+                    if (msg.payload.uuid !== uuid)
+                        return;
+                    if (msg.payload && msg.payload.reject) {
+                        obs();
+                        return reject(msg.payload.reject);
+                    }
+                    obs();
+                    return resolve(msg.payload.resolve);
+                });
+            });
+        }
+        async signTransaction(tx) {
+            assert(this.connected, WALLET_IS_NOT_CONNECTED);
+            assert(tx instanceof Transaction, INVALID_SIGN_PARAMS);
+            const type = MTypeTab.TX_TO_SEND;
+            const recipient = MTypeTabContent.CONTENT;
+            const uuid = uuidv4();
+            const payload = {
+                ...tx.payload,
+                uuid,
+                title: window.document.title,
+                icon: getFavicon()
+            };
+            new ContentMessage({
+                type,
+                payload
+            }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
+            return new Promise((resolve, reject) => {
+                const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
+                    if (msg.type !== MTypeTab.TX_TO_SEND_RESULT)
+                        return;
+                    if (msg.payload.uuid !== uuid)
+                        return;
+                    if (msg.payload && msg.payload.reject) {
+                        obs();
+                        return reject(new Error(msg.payload.reject));
+                    }
+                    obs();
+                    return resolve(msg.payload.resolve);
+                });
+            });
         }
     }
-    _Wallet_account = new WeakMap(), _Wallet_network = new WeakMap(), _Wallet_stream = new WeakMap(), _Wallet_subject = new WeakMap(), _Wallet_connected = new WeakMap(), _Wallet_enabled = new WeakMap(), _Wallet_instances = new WeakSet(), _Wallet_signMessage = async function _Wallet_signMessage(message) { }, _Wallet_signTransaction = async function _Wallet_signTransaction(tx) {
-        const type = MTypeTab.TX_TO_SEND;
-        const recipient = MTypeTabContent.CONTENT;
-        const uuid = uuidv4();
-        const payload = {
-            ...tx.payload,
-            uuid,
-            title: window.document.title,
-            icon: getFavicon()
-        };
-        new ContentMessage({
-            type,
-            payload
-        }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
-        return new Promise((resolve, reject) => {
-            const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
-                if (msg.type !== MTypeTab.TX_TO_SEND_RESULT)
-                    return;
-                if (msg.payload.uuid !== uuid)
-                    return;
-                if (msg.payload && msg.payload.reject) {
-                    obs();
-                    return reject(new Error(msg.payload.reject));
-                }
-                obs();
-                return resolve(msg.payload.resolve);
-            });
-        });
-    }, _Wallet_subscribe = function _Wallet_subscribe() {
+    _Wallet_account = new WeakMap(), _Wallet_network = new WeakMap(), _Wallet_stream = new WeakMap(), _Wallet_subject = new WeakMap(), _Wallet_connected = new WeakMap(), _Wallet_enabled = new WeakMap(), _Wallet_instances = new WeakSet(), _Wallet_subscribe = function _Wallet_subscribe() {
         __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
             switch (msg.type) {
                 case MTypeTab.LOCKED:

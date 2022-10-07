@@ -117,7 +117,7 @@ export class Massa {
       recipient
     );
 
-    return this.#wallet.sign(transaction);
+    return this.#wallet.signTransaction(transaction);
   }
 
   async buyRolls(amount: string) {
@@ -126,7 +126,7 @@ export class Massa {
       amount
     );
 
-    return this.#wallet.sign(transaction);
+    return this.#wallet.signTransaction(transaction);
   }
 
   async sellRolls(amount: string) {
@@ -135,6 +135,6 @@ export class Massa {
       amount
     );
 
-    return this.#wallet.sign(transaction);
+    return this.#wallet.signTransaction(transaction);
   }
 }

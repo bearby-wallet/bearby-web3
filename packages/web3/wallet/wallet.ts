@@ -1,3 +1,5 @@
+import type { SignedMessage } from "types";
+
 import { MTypeTab, MTypeTabContent } from "config/stream-keys";
 import { assert } from "lib/assert";
 import { INVALID_SIGN_PARAMS, WALLET_IS_NOT_CONNECTED } from "lib/errors";
@@ -86,21 +88,47 @@ export class Wallet {
     });
   }
 
-  async sign(arg: string | Transaction) {
+
+  async signMessage(message: string): Promise<SignedMessage> {
     assert(this.connected, WALLET_IS_NOT_CONNECTED);
 
-    if (TypeOf.isString(arg)) {
-      return await this.#signMessage(String(arg));
-    } else if (arg instanceof Transaction) {
-      return await this.#signTransaction(arg);
-    }
+    const type = MTypeTab.SIGN_MESSAGE;
+    const recipient = MTypeTabContent.CONTENT;
+    const uuid = uuidv4();
+    const title = window.document.title;
+    const icon = getFavicon();
+    const payload = {
+      message,
+      uuid,
+      title,
+      icon
+    };
 
-    throw new Error(INVALID_SIGN_PARAMS);
+    new ContentMessage({
+      type,
+      payload
+    }).send(this.#stream, recipient);
+
+    return new Promise((resolve, reject) => {
+      const obs = this.#subject.on((msg) => {
+        if (msg.type !== MTypeTab.SING_MESSAGE_RESULT) return;
+        if (msg.payload.uuid !== uuid) return;
+
+        if (msg.payload && msg.payload.reject) {
+          obs();
+          return reject(msg.payload.reject);
+        }
+
+        obs();
+        return resolve(msg.payload.resolve as SignedMessage);
+      });
+    });
   }
 
-  async #signMessage(message: string) {}
+  async signTransaction(tx: Transaction): Promise<string> {
+    assert(this.connected, WALLET_IS_NOT_CONNECTED);
+    assert(tx instanceof Transaction, INVALID_SIGN_PARAMS);
 
-  async #signTransaction(tx: Transaction): Promise<string> {
     const type = MTypeTab.TX_TO_SEND;
     const recipient = MTypeTabContent.CONTENT;
     const uuid = uuidv4();
