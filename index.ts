@@ -1,1 +1,1 @@
-import './packages/web3';
+export * from './packages/web3';

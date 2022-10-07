@@ -568,17 +568,21 @@
         });
     };
 
-    const handler = Object.freeze(new Handler());
-    const wallet = Object.freeze(new Wallet(handler.stream, handler.subject));
-    const provider = new ContentProvider(handler.stream, handler.subject);
-    const contract = new Contract(provider);
-    const massa = new Massa(provider);
-    globalThis.window['bearby'] = Object.freeze({
-        wallet,
-        massa,
-        contract
-    });
-    handler.initialized();
+    var _Web3_handler;
+    class Web3 {
+        constructor() {
+            _Web3_handler.set(this, new Handler());
+            this.wallet = new Wallet(__classPrivateFieldGet(this, _Web3_handler, "f").stream, __classPrivateFieldGet(this, _Web3_handler, "f").subject);
+            this.provider = new ContentProvider(__classPrivateFieldGet(this, _Web3_handler, "f").stream, __classPrivateFieldGet(this, _Web3_handler, "f").subject);
+            this.contract = new Contract(this.provider);
+            this.massa = new Massa(this.provider);
+            __classPrivateFieldGet(this, _Web3_handler, "f").initialized();
+            globalThis.window['bearby'] = Object.freeze(this);
+        }
+    }
+    _Web3_handler = new WeakMap();
+
+    new Web3();
 
 }));
 //# sourceMappingURL=index.js.map
