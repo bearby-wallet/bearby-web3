@@ -6,7 +6,6 @@
   "repository": "git@github.com:bearby-wallet/bearby-web3.git",
   "author": "Rinat <lich666black@gmail.com>",
   "license": "MIT",
-  "private": false,
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
   "scripts": {
@@ -19,6 +18,10 @@
     "index.js",
     "index.ts"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
