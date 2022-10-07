@@ -1,5 +1,5 @@
 {
-  "name": "@bearby/web3.js",
+  "name": "@hicaru/web3.js",
   "version": "0.0.1",
   "description": " The web3 inject of bearby walet to access massa blockchain ",
   "main": "index.js",
