@@ -3,23 +3,6 @@
     factory();
 })((function () { 'use strict';
 
-    // This string need that sould did't have problem with conflicts.
-    const app = 'BearBy';
-    const MTypeTabContent = {
-        CONTENT: `@/${app}/content-script`,
-        INJECTED: `@/${app}/injected-script`
-    };
-    const MTypeTab = {
-        GET_DATA: `@/${app}/get-wallet-data`,
-        ACCOUNT_CHANGED: `@/${app}/accounts-just-changed`,
-        CONTENT_PROXY_MEHTOD: `@/${app}/proxy-method`,
-        CONTENT_PROXY_RESULT: `@/${app}/response-from-content`,
-        CONNECT_APP: `@/${app}/connect-app`,
-        RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
-        NETWORK_CHANGED: `@/${app}/network-just-changed`,
-        LOCKED: `@/${app}/guard-just-lock`
-    };
-
     /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
@@ -47,6 +30,35 @@
         if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
         return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
     }
+
+    var _Contract_provider;
+    class Contract {
+        constructor(provider) {
+            _Contract_provider.set(this, void 0);
+            __classPrivateFieldSet(this, _Contract_provider, provider, "f");
+        }
+        deploy() { }
+        call() { }
+        read() { }
+    }
+    _Contract_provider = new WeakMap();
+
+    // This string need that sould did't have problem with conflicts.
+    const app = 'BearBy';
+    const MTypeTabContent = {
+        CONTENT: `@/${app}/content-script`,
+        INJECTED: `@/${app}/injected-script`
+    };
+    const MTypeTab = {
+        GET_DATA: `@/${app}/get-wallet-data`,
+        ACCOUNT_CHANGED: `@/${app}/accounts-just-changed`,
+        CONTENT_PROXY_MEHTOD: `@/${app}/proxy-method`,
+        CONTENT_PROXY_RESULT: `@/${app}/response-from-content`,
+        CONNECT_APP: `@/${app}/connect-app`,
+        RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
+        NETWORK_CHANGED: `@/${app}/network-just-changed`,
+        LOCKED: `@/${app}/guard-just-lock`
+    };
 
     var _TabStream_instances, _TabStream_eventName, _TabStream_dispatch, _TabStream_getEventInit, _TabStream_getEvent;
     const { document } = globalThis;
@@ -559,11 +571,13 @@
     const handler = Object.freeze(new Handler());
     const wallet = Object.freeze(new Wallet(handler.stream, handler.subject));
     const provider = new ContentProvider(handler.stream, handler.subject);
+    const contract = new Contract(provider);
     const massa = new Massa(provider);
-    globalThis.window['bearby'] = {
+    globalThis.window['bearby'] = Object.freeze({
         wallet,
-        massa
-    };
+        massa,
+        contract
+    });
     handler.initialized();
 
 }));

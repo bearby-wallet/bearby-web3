@@ -1,3 +1,4 @@
+import { Contract } from './contract';
 import { Handler } from './handler';
 import { ContentProvider, Massa } from './massa';
 import { Wallet  } from './wallet';
@@ -10,9 +11,11 @@ export const provider = new ContentProvider(
   handler.stream,
   handler.subject
 );
+export const contract = new Contract(provider);
 export const massa = new Massa(provider);
-(globalThis.window as any)['bearby'] = {
+(globalThis.window as any)['bearby'] = Object.freeze({
   wallet,
-  massa
-};
+  massa,
+  contract
+});
 handler.initialized();
