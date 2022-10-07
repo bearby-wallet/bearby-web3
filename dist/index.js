@@ -561,7 +561,7 @@
                         return;
                     if (msg.payload && msg.payload.reject) {
                         obs();
-                        return reject(msg.payload.reject);
+                        return reject(new Error(msg.payload.reject));
                     }
                     obs();
                     return resolve(msg.payload.resolve);

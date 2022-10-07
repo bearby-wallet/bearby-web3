@@ -8,7 +8,6 @@ import { ContentMessage } from "lib/secure-message";
 import { Subject } from "lib/subject";
 import { TabStream } from "lib/tab-stream";
 import { Transaction } from "lib/transaction";
-import { TypeOf } from "lib/type";
 import { uuidv4 } from "lib/uuid";
 import { Account } from './account';
 import { Network } from "./network";
@@ -116,7 +115,7 @@ export class Wallet {
 
         if (msg.payload && msg.payload.reject) {
           obs();
-          return reject(msg.payload.reject);
+          return reject(new Error(msg.payload.reject));
         }
 
         obs();
