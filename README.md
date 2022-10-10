@@ -17,7 +17,7 @@ want to use it for.
 
 | Package                                                                         | Version                                                                                                                               | Description                                                                                                                                                               | Dependencies                                                  |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| [`@hicaru/web3.js`](./packages/web3)                                | [![npm](https://img.shields.io/npm/v/@hicaru/web3.js.svg)](https://img.shields.io/npm/v/@hicaru/web3.js)                           | Core abstractions and base classes, such as `ContentProvider` and network logic for interfacing with the bearby wallet.                                                   |                                                               |
+| [`@hicaru/bearby.js`](./packages/web3)                                | [![npm](https://img.shields.io/npm/v/@hicaru/bearby.js.svg)](https://img.shields.io/npm/v/@hicaru/bearby.js)                           | Core abstractions and base classes, such as `ContentProvider` and network logic for interfacing with the bearby wallet.                                                   |                                                               |
 
 
 ### Installation
@@ -42,18 +42,18 @@ $ yarn build # or npm run build
 
 In your project:
 ```bash
-yarn add @hicaru/web3.js # or npm install @hicaru/web3.js
+yarn add @hicaru/bearby.js # or npm install @hicaru/bearby.js
 ```
 
 import (this script works only in the browser!)
 ```javascript
-import { web3 } from '@hicaru/web3.js';
+import { web3 } from '@hicaru/bearby.js';
 ```
 
 states:
 
 ```javascript
-import { web3 } from '@hicaru/web3.js';
+import { web3 } from '@hicaru/bearby.js';
 
 web3.contract // the instance for read, call, deploy contracts
 web3.massa // JsonRPC methods connection to nodes.
@@ -72,7 +72,7 @@ web3.wallet // main statements of the wallet
 
 Account observer:
 ```javascript
-import { web3 } from '@hicaru/web3.js';
+import { web3 } from '@hicaru/bearby.js';
 
 /// Emit everytime when address been changed, or changed wallet status.
 const observer = web3.wallet.account.subscribe((base58) => console.log(base58));
@@ -83,7 +83,7 @@ observer.unsubscribe();
 
 Network observer:
 ```javascript
-import { web3 } from '@hicaru/web3.js';
+import { web3 } from '@hicaru/bearby.js';
 
 /// Emit everytime when network been changed.
 const observer = web3.wallet.network.subscribe((net) => console.log(net))
