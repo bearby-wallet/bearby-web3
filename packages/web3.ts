@@ -19,15 +19,17 @@ export class Web3 {
   readonly massa = new Massa(this.#provider, this.wallet);
 
   constructor() {
-    if ((globalThis.window as any)['bearby']) {
-      throw new Error(WEB3_INSTANCE_CREATED);
-    }
-
-    try {
-      this.#handler.initialized();
-      (globalThis.window as any)['bearby'] = Object.freeze(this);
-    } catch {
-      console.debug(AVAILABLE_ONLY_BROWSER);
+    if (globalThis.window) {
+      if ((globalThis.window as any)['bearby']) {
+        throw new Error(WEB3_INSTANCE_CREATED);
+      }
+  
+      try {
+        this.#handler.initialized();
+        (globalThis.window as any)['bearby'] = Object.freeze(this);
+      } catch {
+        console.debug(AVAILABLE_ONLY_BROWSER);
+      }
     }
   }
 }
