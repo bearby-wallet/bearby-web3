@@ -24,7 +24,6 @@ const { document } = globalThis;
    * Message listener that returns decrypted messages when synced
    */
   listen(cb: (payload: ReqBody) => void) {
-    if (!globalThis.window) return;
     document.addEventListener(this.#eventName, (event: CustomEvent) => {
       if (event && event.detail) {
         cb(JSON.parse(event.detail)); 
@@ -38,7 +37,6 @@ const { document } = globalThis;
    * @param to - The stream to send messages to.
    */
   send(data: ReqBody, to: string) {
-    if (!globalThis.window) return;
     data.from = this.#eventName;
 
     if (Object.values(MTypeTabContent).includes(to)) {
@@ -47,7 +45,6 @@ const { document } = globalThis;
   }
 
   #dispatch(data: string, to: string) {
-    if (!globalThis.window) return;
     document.dispatchEvent(this.#getEvent(data, to));
   }
 

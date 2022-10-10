@@ -23,7 +23,7 @@ export class Web3 {
       this.#handler.initialized();
       (globalThis.window as any)['bearby'] = Object.freeze(this);
     } catch {
-      console.log(AVAILABLE_ONLY_BROWSER);
+      console.debug(AVAILABLE_ONLY_BROWSER);
     }
   }
 }

@@ -47,7 +47,7 @@ export class Wallet {
     this.#subscribe();
   }
 
-  connect(): Promise<boolean> {
+  async connect(): Promise<boolean> {
     const type = MTypeTab.CONNECT_APP;
     const recipient = MTypeTabContent.CONTENT;
     const uuid = uuidv4();
@@ -86,7 +86,6 @@ export class Wallet {
       });
     });
   }
-
 
   async signMessage(message: string): Promise<SignedMessage> {
     assert(this.connected, WALLET_IS_NOT_CONNECTED);
@@ -157,6 +156,16 @@ export class Wallet {
         return resolve(msg.payload.resolve as string);
       });
     });
+  }
+
+  subscribe(cb: () => void) {
+    const obs = this.#subject.on((msg) => {
+      cb();
+    });
+
+    return {
+      unsubscribe: () => obs()
+    };
   }
 
   #subscribe() {
