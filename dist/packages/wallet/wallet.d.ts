@@ -14,4 +14,7 @@ export declare class Wallet {
     connect(): Promise<boolean>;
     signMessage(message: string): Promise<SignedMessage>;
     signTransaction(tx: Transaction): Promise<string>;
+    subscribe(cb: () => void): {
+        unsubscribe: () => void;
+    };
 }

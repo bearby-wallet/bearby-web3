@@ -9,9 +9,12 @@ export class Handler {
   readonly subject = new Subject();
 
   constructor() {
-    this.stream.listen((msg) => {
-      this.subject.emit(msg);
-    });
+    if (globalThis.document) {
+      // only not ssr
+      this.stream.listen((msg) => {
+        this.subject.emit(msg);
+      });
+    }
   }
 
   initialized() {
