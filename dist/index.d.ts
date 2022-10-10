@@ -1,1 +1,1 @@
-export * from './packages/web3';
+export * from './packages';
