@@ -80,6 +80,10 @@ export class Wallet {
           this.#subject,
           msg.payload.base58
         );
+        this.#network = new Network(
+          this.#subject,
+          msg.payload.net
+        );
 
         obs();
         return resolve(this.connected);
