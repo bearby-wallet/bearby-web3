@@ -160,6 +160,8 @@ export class Wallet {
   }
 
   #subscribe() {
+    if (!globalThis.window) return;
+
     this.#subject.on((msg) => {
       switch (msg.type) {
         case MTypeTab.LOCKED:
