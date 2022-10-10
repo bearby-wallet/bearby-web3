@@ -1,4 +1,4 @@
-import { ContentProvider } from "packages/web3/massa";
+import { ContentProvider } from 'packages/massa';
 export declare class Contract {
     #private;
     constructor(provider: ContentProvider);
