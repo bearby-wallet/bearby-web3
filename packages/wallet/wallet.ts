@@ -159,8 +159,9 @@ export class Wallet {
   }
 
   subscribe(cb: () => void) {
-    const obs = this.#subject.on((msg) => {
-      cb();
+    const obs = this.#subject.on(() => {
+      // emit only in the end of evenloop.
+      setTimeout(() => cb(), 1);
     });
 
     return {
