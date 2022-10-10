@@ -1,3 +1,4 @@
+import { AVAILABLE_ONLY_BROWSER } from 'lib/errors';
 import { Contract } from './contract';
 import { Handler } from './handler';
 import { ContentProvider, Massa } from './massa';
@@ -18,7 +19,11 @@ export class Web3 {
   readonly massa = new Massa(this.#provider, this.wallet);
 
   constructor() {
-    this.#handler.initialized();
-    (globalThis.window as any)['bearby'] = Object.freeze(this);
+    try {
+      this.#handler.initialized();
+      (globalThis.window as any)['bearby'] = Object.freeze(this);
+    } catch {
+      console.log(AVAILABLE_ONLY_BROWSER);
+    }
   }
 }
