@@ -77,6 +77,22 @@
         OperationsType[OperationsType["CallSC"] = 4] = "CallSC";
     })(OperationsType || (OperationsType = {}));
 
+    var JsonRPCRequestMethods;
+    (function (JsonRPCRequestMethods) {
+        JsonRPCRequestMethods["GET_STATUS"] = "get_status";
+        JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
+        // SEND_OPERATIONS              = 'send_operations',
+        JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
+        JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
+        JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
+        JsonRPCRequestMethods["GET_CLIQUES"] = "get_cliques";
+        JsonRPCRequestMethods["GET_STAKERS"] = "get_stakers";
+        JsonRPCRequestMethods["GET_FILTERED_SC_OUTPUT_EVENT"] = "get_filtered_sc_output_event";
+        JsonRPCRequestMethods["EXECUTE_READ_ONLY_BYTECODE"] = "execute_read_only_bytecode";
+        JsonRPCRequestMethods["EXECUTE_READ_ONLY_CALL"] = "execute_read_only_call";
+        // GET_DATASTORE_ENTRIES        = 'get_datastore_entries'
+    })(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
+
     var _Contract_provider, _Contract_wallet;
     class Contract {
         constructor(provider, wallet) {
@@ -85,7 +101,7 @@
             __classPrivateFieldSet(this, _Contract_provider, provider, "f");
             __classPrivateFieldSet(this, _Contract_wallet, wallet, "f");
         }
-        deploy(params) {
+        async deploy(params) {
             const transaction = new Transaction(OperationsType.ExecuteSC, '0', undefined, undefined, params.contractDataBase64, undefined, params.datastore);
             transaction.fee = String(params.fee);
             transaction.gasLimit = Number(params.maxGas);
@@ -93,7 +109,27 @@
             return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);
         }
         call() { }
-        read() { }
+        async getFilteredSCOutputEvent(filter) {
+            const method = JsonRPCRequestMethods.GET_FILTERED_SC_OUTPUT_EVENT;
+            return __classPrivateFieldGet(this, _Contract_provider, "f").send([{
+                    method,
+                    params: [filter]
+                }]);
+        }
+        async executeReadOlyBytecode(params) {
+            const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
+            return __classPrivateFieldGet(this, _Contract_provider, "f").send([{
+                    method,
+                    params: [params]
+                }]);
+        }
+        async executeReadOnlyCall(params) {
+            const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_CALL;
+            return __classPrivateFieldGet(this, _Contract_provider, "f").send([{
+                    method,
+                    params: [params]
+                }]);
+        }
     }
     _Contract_provider = new WeakMap(), _Contract_wallet = new WeakMap();
 
@@ -294,22 +330,6 @@
     }
     _ContentProvider_stream = new WeakMap(), _ContentProvider_subject = new WeakMap();
 
-    var JsonRPCRequestMethods;
-    (function (JsonRPCRequestMethods) {
-        JsonRPCRequestMethods["GET_STATUS"] = "get_status";
-        JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
-        // SEND_OPERATIONS              = 'send_operations',
-        JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
-        JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
-        JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
-        JsonRPCRequestMethods["GET_CLIQUES"] = "get_cliques";
-        JsonRPCRequestMethods["GET_STAKERS"] = "get_stakers";
-        JsonRPCRequestMethods["GET_FILTERED_SC_OUTPUT_EVENT"] = "get_filtered_sc_output_event";
-        JsonRPCRequestMethods["EXECUTE_READ_ONLY_BYTECODE"] = "execute_read_only_bytecode";
-        JsonRPCRequestMethods["EXECUTE_READ_ONLY_CALL"] = "execute_read_only_call";
-        // GET_DATASTORE_ENTRIES        = 'get_datastore_entries'
-    })(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
-
     var _Massa_provider, _Massa_wallet;
     class Massa {
         constructor(provider, wallet) {
@@ -365,27 +385,6 @@
             return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: []
-                }]);
-        }
-        async getFilteredSCOutputEvent(filter) {
-            const method = JsonRPCRequestMethods.GET_FILTERED_SC_OUTPUT_EVENT;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
-                    method,
-                    params: [filter]
-                }]);
-        }
-        async executeReadOlyBytecode(params) {
-            const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
-                    method,
-                    params: [params]
-                }]);
-        }
-        async executeReadOnlyCall(params) {
-            const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_CALL;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
-                    method,
-                    params: [params]
                 }]);
         }
         async payment(amount, recipient) {

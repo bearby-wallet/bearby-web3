@@ -1,12 +1,6 @@
 import type {
-  EventFilterParam,
-  ExecuteReadOnlyBytecodeParam,
-  ExecuteReadOnlyCall,
   JsonRPCResponseCliques,
   JsonRPCResponseEndorsements,
-  JsonRPCResponseExecuteReadOnlyBytecode,
-  JsonRPCResponseExecuteReadOnlyCall,
-  JsonRPCResponseFilteredSCOutputEvent,
   JsonRPCResponseNodeStatus,
   JsonRPCResponseNodeStatusAddresses,
   JsonRPCResponseStakers,
@@ -83,30 +77,6 @@ export class Massa {
     return this.#provider.send<JsonRPCResponseCliques[]>([{
       method,
       params: []
-    }]);
-  }
-
-  async getFilteredSCOutputEvent(filter: EventFilterParam) {
-    const method = JsonRPCRequestMethods.GET_FILTERED_SC_OUTPUT_EVENT;
-    return this.#provider.send<JsonRPCResponseFilteredSCOutputEvent[]>([{
-      method,
-      params: [filter]
-    }]);
-  }
-
-  async executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]) {
-    const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
-    return this.#provider.send<JsonRPCResponseExecuteReadOnlyBytecode[]>([{
-      method,
-      params: [params]
-    }]);
-  }
-
-  async executeReadOnlyCall(params: ExecuteReadOnlyCall[]) {
-    const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_CALL;
-    return this.#provider.send<JsonRPCResponseExecuteReadOnlyCall[]>([{
-      method,
-      params: [params]
     }]);
   }
 
