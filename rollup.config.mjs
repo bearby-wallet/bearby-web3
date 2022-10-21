@@ -13,9 +13,8 @@ export default {
     dir: 'dist',
 		name: 'web3',
 		sourcemap: true,
-		format: 'es',
-		sourcemap: true,
-		preferConst: true
+		format: 'umd',
+		sourcemap: true
   },
   plugins: [
     resolve({

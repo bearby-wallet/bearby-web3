@@ -1,5 +1,5 @@
 import { OperationsType } from "config/operations";
-import { toHex } from "./hex";
+import { KeyValue } from "types/general";
 
 
 export class Transaction {
@@ -7,13 +7,14 @@ export class Transaction {
   gasPrice?: number;
   gasLimit?: number;
 
-  coins?: number;
+  coins?: string;
   contract?: string;
   functionName?: string;
   parameter?: object;
   parallelCoins?: string;
   sequentialCoins?: string;
   recipient?: string;
+  datastore?: KeyValue<string>;
 
   readonly type: OperationsType;
   readonly amount: string;
@@ -32,7 +33,8 @@ export class Transaction {
         params: JSON.stringify(this.parameter),
         parallelCoins: this.parallelCoins,
         sequentialCoins: this.sequentialCoins,
-        toAddr: this.recipient
+        toAddr: this.recipient,
+        datastore: this.datastore
       })
     );
   }
@@ -42,14 +44,16 @@ export class Transaction {
     amount: string,
     recipient?: string,
     parameter?: object,
-    contract?: Uint8Array,
-    functionName?: string
+    contract?: string,
+    functionName?: string,
+    datastore?: KeyValue<string>
   ) {
     this.type = type;
     this.amount = String(amount);
     this.recipient = recipient;
     this.parameter = parameter;
-    this.contract = contract ? toHex(contract) : contract;
+    this.contract = contract;
     this.functionName = functionName;
+    this.datastore = datastore;
   }
 }
