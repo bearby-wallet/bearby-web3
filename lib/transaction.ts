@@ -11,8 +11,6 @@ export class Transaction {
   contract?: string;
   functionName?: string;
   parameter?: object;
-  parallelCoins?: string;
-  sequentialCoins?: string;
   recipient?: string;
   datastore?: KeyValue<string>;
 
@@ -27,13 +25,11 @@ export class Transaction {
         fee: this.fee,
         gasPrice: this.gasPrice,
         gasLimit: this.gasLimit,
-        coins: this.coins,
+        coins: String(this.coins),
         code: this.contract,
         func: this.functionName,
         params: JSON.stringify(this.parameter),
-        parallelCoins: this.parallelCoins,
-        sequentialCoins: this.sequentialCoins,
-        toAddr: this.recipient,
+        toAddr: this.recipient ||  this.contract,
         datastore: this.datastore
       })
     );

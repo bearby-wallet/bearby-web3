@@ -56,13 +56,11 @@
                 fee: this.fee,
                 gasPrice: this.gasPrice,
                 gasLimit: this.gasLimit,
-                coins: this.coins,
+                coins: String(this.coins),
                 code: this.contract,
                 func: this.functionName,
                 params: JSON.stringify(this.parameter),
-                parallelCoins: this.parallelCoins,
-                sequentialCoins: this.sequentialCoins,
-                toAddr: this.recipient,
+                toAddr: this.recipient || this.contract,
                 datastore: this.datastore
             }));
         }
@@ -112,6 +110,8 @@
             const transaction = new Transaction(OperationsType.CallSC, '0', undefined, params.parameter, params.targetAddress, params.functionName);
             transaction.fee = String(params.fee);
             transaction.gasLimit = Number(params.maxGas);
+            transaction.coins = String(params.coins || 0);
+            transaction.gasPrice = Number(params.gasPrice || 0);
             return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);
         }
         async getFilteredSCOutputEvent(...filters) {

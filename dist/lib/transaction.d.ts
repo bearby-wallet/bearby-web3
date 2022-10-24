@@ -8,8 +8,6 @@ export declare class Transaction {
     contract?: string;
     functionName?: string;
     parameter?: object;
-    parallelCoins?: string;
-    sequentialCoins?: string;
     recipient?: string;
     datastore?: KeyValue<string>;
     readonly type: OperationsType;

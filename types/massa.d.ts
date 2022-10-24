@@ -307,8 +307,8 @@ export interface CallSmartContractParams {
   fee: number;
   maxGas: number;
   coins: number;
-  gasPrice: number;
   targetAddress: string;
   functionName: string;
   parameter: object;
+  gasPrice?: number;
 }

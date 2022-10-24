@@ -11,6 +11,7 @@
 <body>
   <button onclick="deploy()">deploy</button>
   <button onclick="readBalance()">readBalance</button>
+  <button onclick="transfer()">transfer</button>
 
   <script>
     window.contract = '';
@@ -58,6 +59,24 @@
         parameter: bearby.wallet.account.base58
       });
       console.log(data);
+    }
+
+    async function transfer() {
+      const hash = await bearby.contract.call({
+        fee: 0,
+        maxGas: 2000000,
+        gasPrice: 0,
+        coins: 0,
+        gasPrice: 0,
+        targetAddress: window.contract,
+        functionName: 'transfer',
+        parameter: {
+          toAccount: 'A12fJb1M9EfAF7YmqYmhBrjb4pEa6hPthTrmwVDePGK9dVmGwknc',
+          nbTokens: '0'
+        }
+      });
+
+      console.log(hash);
     }
   </script>
 </body>
