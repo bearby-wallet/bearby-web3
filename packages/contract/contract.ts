@@ -1,5 +1,6 @@
 import type { Wallet } from 'packages/wallet';
 import type {
+  CallSmartContractParams,
   DeployParams,
   EventFilterParam,
   ExecuteReadOnlyBytecodeParam,
@@ -43,14 +44,34 @@ export class Contract {
     return this.#wallet.signTransaction(transaction);
   }
 
-  call() {}
+  async call(params: CallSmartContractParams) {
+    const transaction = new Transaction(
+      OperationsType.CallSC,
+      '0',
+      undefined,
+      params.parameter,
+      params.targetAddress,
+      params.functionName
+    );
 
-  async getFilteredSCOutputEvent(filter: EventFilterParam) {
+    transaction.fee = String(params.fee);
+    transaction.gasLimit = Number(params.maxGas);
+
+    return this.#wallet.signTransaction(transaction);
+  }
+
+  async getFilteredSCOutputEvent(...filters: EventFilterParam[]) {
     const method = JsonRPCRequestMethods.GET_FILTERED_SC_OUTPUT_EVENT;
-    return this.#provider.send<JsonRPCResponseFilteredSCOutputEvent[]>([{
+    const responses = await this.#provider.send<JsonRPCResponseFilteredSCOutputEvent[]>(filters.map((filter) => ({
       method,
       params: [filter]
-    }]);
+    })));
+
+    if (filters.length === 1) {
+      return responses[0];
+    }
+
+    return responses;
   }
 
   async executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]) {
@@ -61,11 +82,24 @@ export class Contract {
     }]);
   }
 
-  async executeReadOnlyCall(params: ExecuteReadOnlyCall[]) {
+  async readSmartContract(...params: ExecuteReadOnlyCall[]) {
     const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_CALL;
-    return this.#provider.send<JsonRPCResponseExecuteReadOnlyCall[]>([{
+    const responses = await this.#provider.send<JsonRPCResponseExecuteReadOnlyCall[]>([{
       method,
-      params: [params]
+      params: [params.map((v) => ({
+        max_gas: v.maxGas,
+        simulated_gas_price: String(v.simulatedGasPrice),
+        target_address: v.targetAddress,
+        target_function: v.targetFunction,
+        parameter: v.parameter,
+        caller_address: v.callerAddress || this.#wallet.account.base58
+      }))]
     }]);
+
+    if (params.length === 1) {
+      return responses[0];
+    }
+
+    return responses;
   }
 }

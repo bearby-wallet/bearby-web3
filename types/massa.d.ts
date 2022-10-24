@@ -294,10 +294,21 @@ export interface ExecuteReadOnlyBytecodeParam  {
 }
 
 export interface ExecuteReadOnlyCall {
-  max_gas: number;
-  simulated_gas_price: number;
-  target_address: string;
-  target_function: string;
+  fee: number;
+  maxGas: number;
+  simulatedGasPrice: number;
+  targetAddress: string;
+  targetFunction: string;
   parameter: string;
-  caller_address?: string;
+  callerAddress?: string;
+}
+
+export interface CallSmartContractParams {
+  fee: number;
+  maxGas: number;
+  coins: number;
+  gasPrice: number;
+  targetAddress: string;
+  functionName: string;
+  parameter: object;
 }
