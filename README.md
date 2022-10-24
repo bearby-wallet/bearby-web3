@@ -91,3 +91,67 @@ const observer = web3.wallet.network.subscribe((net) => console.log(net))
 /// To avoid memory leak don't forget unsubscribe!!!
 observer.unsubscribe();
 ```
+
+### Contracts:
+
+deploy
+```javascript
+import { web3 } from '@hicaru/bearby.js';
+
+const hash = await web3.contract.deploy({
+  fee: 0,
+  maxGas: 2000000,
+  gasPrice: 0,
+  contractDataBase64: 'base64'
+});
+```
+
+call
+```javascript
+import { web3 } from '@hicaru/bearby.js';
+
+const hash = await web3.contract.call({
+  maxGas: 2000000,
+  coins: 0,
+  targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
+  functionName: 'transfer',
+  parameter: {
+    toAccount: 'A12fJb1M9EfAF7YmqYmhBrjb4pEa6hPthTrmwVDePGK9dVmGwknc',
+    nbTokens: '0'
+  }
+});
+```
+
+read
+```javascript
+import { web3 } from '@hicaru/bearby.js';
+
+const data = await web3.contract.readSmartContract({
+  fee: 0,
+  maxGas: 200000,
+  simulatedGasPrice: 0,
+  targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
+  targetFunction: "balanceOf",
+  parameter: 'A12fJb1M9EfAF7YmqYmhBrjb4pEa6hPthTrmwVDePGK9dVmGwknc'
+});
+console.log(data);
+```
+
+events
+```javascript
+import { web3 } from '@hicaru/bearby.js';
+
+const eventsFilter = {
+  start: null,
+  end: null,
+  original_caller_address: null,
+  original_operation_id: hash,
+  emitter_address: null,
+};
+const response = await web3.contract.getFilteredSCOutputEvent(eventsFilter);
+
+if (response && response.result && response.result[0] && response.result[0].data) {
+  const contract = String(response.result[0].data).replace('Address:', '');
+  console.log(contract);
+}
+```

@@ -63,11 +63,8 @@
 
     async function transfer() {
       const hash = await bearby.contract.call({
-        fee: 0,
         maxGas: 2000000,
-        gasPrice: 0,
         coins: 0,
-        gasPrice: 0,
         targetAddress: window.contract,
         functionName: 'transfer',
         parameter: {
