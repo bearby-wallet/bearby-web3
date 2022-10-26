@@ -8,3 +8,18 @@ export interface DeployParams {
   fee?: number | string;
   datastore?: KeyValue<string>;
 }
+
+export interface DatastoreEntryInputParam {
+  address: string;
+  key: string;
+}
+
+export interface DataStoreEntryResponse {
+  final_value: number[] | null;
+  candidate_value: number[] | null;
+}
+
+export interface ContractStorageData {
+  final: string | null;
+  candidate: string | null;
+}

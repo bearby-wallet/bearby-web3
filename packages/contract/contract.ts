@@ -1,6 +1,9 @@
 import type { Wallet } from 'packages/wallet';
 import type {
   CallSmartContractParams,
+  ContractStorageData,
+  DatastoreEntryInputParam,
+  DataStoreEntryResponse,
   DeployParams,
   EventFilterParam,
   ExecuteReadOnlyBytecodeParam,
@@ -14,6 +17,7 @@ import { ContentProvider } from 'packages/massa';
 import { Transaction } from 'lib/transaction';
 import { OperationsType } from 'config/operations';
 import { JsonRPCRequestMethods } from 'config/rpc-methods';
+import { utf8ToBytes } from 'lib/hex';
 
 
 export class Contract {
@@ -74,6 +78,27 @@ export class Contract {
     }
 
     return responses;
+  }
+
+  async getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<ContractStorageData[]> {
+    const method = JsonRPCRequestMethods.GET_DATASTORE_ENTRIES;
+    const data = [];
+		for (const { key, address } of params) {
+			data.push({
+				address,
+				key: Array.from(utf8ToBytes(key))
+			});
+		}
+    const datastoreEntries = await this.#provider.send<DataStoreEntryResponse[]>([{
+      method,
+      params: [data]
+    }]);
+    const candidateDatastoreEntries: Array<Array<number>|null> = datastoreEntries.map((elem) => elem.candidate_value);
+		const finalDatastoreEntries: Array<Array<number>|null> = datastoreEntries.map((elem) => elem.final_value);
+    return datastoreEntries.map((_, index) => ({
+      candidate: (candidateDatastoreEntries[index] || []).map((s) => String.fromCharCode(s)).join(""),
+      final: (finalDatastoreEntries[index] || []).map((s) => String.fromCharCode(s)).join("")
+    }));
   }
 
   async executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]) {
