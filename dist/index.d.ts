@@ -1,2 +1,5 @@
-import * as web3 from './packages';
-export default web3;
+export * from './packages';
+export * from './packages/contract';
+export * from './packages/massa';
+export * from './packages/wallet';
+export * from './packages/web3';

@@ -10,8 +10,3 @@ function main() {
 }
 
 export const web3 = main();
-
-export * from './web3';
-export * from './contract';
-export * from './massa';
-export * from './wallet';
