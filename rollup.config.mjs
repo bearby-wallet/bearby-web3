@@ -12,7 +12,6 @@ export default {
   output: {
     dir: 'dist',
 		name: 'web3',
-		sourcemap: true,
 		format: 'umd',
 		sourcemap: true
   },
