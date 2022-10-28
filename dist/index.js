@@ -1,2 +1,722 @@
-(function(t,e){typeof exports==="object"&&typeof module!=="undefined"?e(exports):typeof define==="function"&&define.amd?define(["exports"],e):(t=typeof globalThis!=="undefined"?globalThis:t||self,e(t.web3={}))})(this,(function(t){"use strict";function e(t,e,s,n){if(s==="a"&&!n)throw new TypeError("Private accessor was defined without a getter");if(typeof e==="function"?t!==e||!n:!e.has(t))throw new TypeError("Cannot read private member from an object whose class did not declare it");return s==="m"?n:s==="a"?n.call(t):n?n.value:e.get(t)}function s(t,e,s,n,a){if(n==="m")throw new TypeError("Private method is not writable");if(n==="a"&&!a)throw new TypeError("Private accessor was defined without a setter");if(typeof e==="function"?t!==e||!a:!e.has(t))throw new TypeError("Cannot write private member to an object whose class did not declare it");return n==="a"?a.call(t,s):a?a.value=s:e.set(t,s),s}const n="website favicon is required";const a="Wallet is not connected";const i="Invalid sign params";const r="Request failed by timeout";const o="bearby-web3 available only browser";const c="bearby Web3 instance already created!";class d{constructor(t,e,s,n,a,i,r){this.type=t;this.amount=String(e);this.recipient=s;this.parameter=n;this.contract=a;this.functionName=i;this.datastore=r}get payload(){return JSON.parse(JSON.stringify({type:this.type,amount:this.amount,fee:this.fee,gasPrice:this.gasPrice,gasLimit:this.gasLimit,coins:String(this.coins),code:this.contract,func:this.functionName,params:JSON.stringify(this.parameter),toAddr:this.recipient||this.contract,datastore:this.datastore}))}}var l;(function(t){t[t["Payment"]=0]="Payment";t[t["RollBuy"]=1]="RollBuy";t[t["RollSell"]=2]="RollSell";t[t["ExecuteSC"]=3]="ExecuteSC";t[t["CallSC"]=4]="CallSC"})(l||(l={}));var h;(function(t){t["GET_STATUS"]="get_status";t["GET_ADDRESSES"]="get_addresses";t["GET_BLOCKS"]="get_block";t["GET_ENDORSEMENTS"]="get_endorsements";t["GET_OPERATIONS"]="get_operations";t["GET_CLIQUES"]="get_cliques";t["GET_STAKERS"]="get_stakers";t["GET_FILTERED_SC_OUTPUT_EVENT"]="get_filtered_sc_output_event";t["EXECUTE_READ_ONLY_BYTECODE"]="execute_read_only_bytecode";t["EXECUTE_READ_ONLY_CALL"]="execute_read_only_call";t["GET_DATASTORE_ENTRIES"]="get_datastore_entries"})(h||(h={}));function u(t){let e=new Uint8Array(t.length);Array.prototype.forEach.call(e,((e,s,n)=>{n[s]=t.charCodeAt(s)}));return e}var f,p;class E{constructor(t,e){f.set(this,void 0);p.set(this,void 0);s(this,f,t,"f");s(this,p,e,"f")}async deploy(t){const s=new d(l.ExecuteSC,"0",undefined,undefined,t.contractDataBase64,undefined,t.datastore);s.fee=String(t.fee);s.gasLimit=Number(t.maxGas);s.gasPrice=Number(t.gasPrice);return e(this,p,"f").signTransaction(s)}async call(t){const s=new d(l.CallSC,"0",undefined,t.parameter,t.targetAddress,t.functionName);s.fee=String(t.fee);s.gasLimit=Number(t.maxGas);s.coins=String(t.coins||0);s.gasPrice=Number(t.gasPrice||0);return e(this,p,"f").signTransaction(s)}async getFilteredSCOutputEvent(...t){const s=h.GET_FILTERED_SC_OUTPUT_EVENT;const n=await e(this,f,"f").send(t.map((t=>({method:s,params:[t]}))));if(t.length===1){return n[0]}return n}async getDatastoreEntries(...t){const s=h.GET_DATASTORE_ENTRIES;const n=[];for(const{key:e,address:s}of t){n.push({address:s,key:Array.from(u(e))})}const a=await e(this,f,"f").send([{method:s,params:[n]}]);const i=a.map((t=>t.candidate_value));const r=a.map((t=>t.final_value));return a.map(((t,e)=>({candidate:(i[e]||[]).map((t=>String.fromCharCode(t))).join(""),final:(r[e]||[]).map((t=>String.fromCharCode(t))).join("")})))}async executeReadOlyBytecode(t){const s=h.EXECUTE_READ_ONLY_BYTECODE;return e(this,f,"f").send([{method:s,params:[t]}])}async readSmartContract(...t){const s=h.EXECUTE_READ_ONLY_CALL;const n=await e(this,f,"f").send([{method:s,params:[t.map((t=>({max_gas:t.maxGas,simulated_gas_price:String(t.simulatedGasPrice),target_address:t.targetAddress,target_function:t.targetFunction,parameter:t.parameter,caller_address:t.callerAddress||e(this,p,"f").account.base58})))]}]);if(t.length===1){return n[0]}return n}}f=new WeakMap,p=new WeakMap;const y="BearBy";const T={CONTENT:`@/${y}/content-script`,INJECTED:`@/${y}/injected-script`};const w={GET_DATA:`@/${y}/get-wallet-data`,ACCOUNT_CHANGED:`@/${y}/accounts-just-changed`,CONTENT_PROXY_MEHTOD:`@/${y}/proxy-method`,CONTENT_PROXY_RESULT:`@/${y}/response-from-content`,CONNECT_APP:`@/${y}/connect-app`,RESPONSE_CONNECT_APP:`@/${y}/respoonse-connect-app`,NETWORK_CHANGED:`@/${y}/network-just-changed`,LOCKED:`@/${y}/guard-just-lock`,TX_TO_SEND:`@/${y}/add-tx-to-send`,TX_TO_SEND_RESULT:`@/${y}/response-tx-result`,SIGN_MESSAGE:`@/${y}/sign-message-call`,SING_MESSAGE_RESULT:`@/${y}/sign-message-response`};var m,_,g,S,b;const{document:N}=globalThis;class C{constructor(t){m.add(this);_.set(this,void 0);s(this,_,t,"f")}listen(t){N.addEventListener(e(this,_,"f"),(e=>{if(e&&e.detail){t(JSON.parse(e.detail))}}))}send(t,s){t.from=e(this,_,"f");if(Object.values(T).includes(s)){e(this,m,"m",g).call(this,JSON.stringify(t),s)}}}_=new WeakMap,m=new WeakSet,g=function t(s,n){N.dispatchEvent(e(this,m,"m",b).call(this,s,n))},S=function t(e){return{detail:e}},b=function t(s,n){return new CustomEvent(n,e(this,m,"m",S).call(this,s))};var O;class A{constructor(){O.set(this,[])}on(t){e(this,O,"f").push(t);return()=>this.removeListener(t)}removeListener(t){const s=e(this,O,"f").indexOf(t);if(s>-1)e(this,O,"f").splice(s,1)}removeAllListeners(){e(this,O,"f").splice(0,e(this,O,"f").length)}emit(...t){e(this,O,"f").forEach((e=>e.apply(this,t)))}once(t){const e=this.on(((...s)=>{e();t.apply(this,s)}))}}O=new WeakMap;var v;class R{constructor(t){v.set(this,void 0);s(this,v,t,"f")}get type(){return e(this,v,"f").type}get payload(){return e(this,v,"f").payload}send(t,s){const n=JSON.stringify(e(this,v,"f"));const a=JSON.parse(n);t.send(a,s)}}v=new WeakMap;class k{constructor(){this.stream=new C(T.INJECTED);this.subject=new A;if(globalThis.document){this.stream.listen((t=>{this.subject.emit(t)}))}}initialized(){const t=w.GET_DATA;const e=T.CONTENT;new R({type:t,payload:{}}).send(this.stream,e)}}function G(){const t=20;return[...Array(t)].map((()=>Math.floor(Math.random()*16).toString(16))).join("")}const D=5e3;var P,M;class L{constructor(t,e){P.set(this,void 0);M.set(this,void 0);s(this,P,t,"f");s(this,M,e,"f")}async send(t){const s=w.CONTENT_PROXY_MEHTOD;const n=T.CONTENT;const a=G();let i;new R({type:s,payload:{body:t,uuid:a}}).send(e(this,P,"f"),n);const o=new Promise(((t,s)=>{i=e(this,M,"f").on((e=>{if(e.type!==w.CONTENT_PROXY_RESULT)return;if(!e.payload||!e.payload.uuid)return;if(e.payload.uuid!==a)return;if(e.payload&&e.payload.reject){i();return s(new Error(e.payload.reject))}delete e.payload.uuid;i();return t(e.payload.resolve)}))}));const c=new Promise(((t,e)=>{setTimeout((()=>{if(i)i();e(new Error(r))}),D)}));return Promise.race([o,c])}}P=new WeakMap,M=new WeakMap;var W,j;class U{constructor(t,e){W.set(this,void 0);j.set(this,void 0);s(this,W,t,"f");s(this,j,e,"f")}async getNodesStatus(){const t=h.GET_STATUS;return e(this,W,"f").send([{method:t,params:[]}])}async getAddresses(...t){const s=h.GET_ADDRESSES;return e(this,W,"f").send([{method:s,params:[t]}])}async getBlocks(...t){const s=h.GET_BLOCKS;return e(this,W,"f").send([{method:s,params:[t]}])}async getOperations(...t){const s=h.GET_OPERATIONS;return e(this,W,"f").send([{method:s,params:[t]}])}async getStakers(){const t=h.GET_STAKERS;return e(this,W,"f").send([{method:t,params:[]}])}async getEndorsements(...t){const s=h.GET_ENDORSEMENTS;return e(this,W,"f").send([{method:s,params:[t]}])}async getCliques(){const t=h.GET_CLIQUES;return e(this,W,"f").send([{method:t,params:[]}])}async payment(t,s){const n=new d(l.Payment,t,s);return e(this,j,"f").signTransaction(n)}async buyRolls(t){const s=new d(l.RollBuy,t);return e(this,j,"f").signTransaction(s)}async sellRolls(t){const s=new d(l.RollSell,t);return e(this,j,"f").signTransaction(s)}}W=new WeakMap,j=new WeakMap;function x(t,e){if(!t){throw new Error(e)}}function I(){let t=globalThis.document.querySelector("link[rel*='icon']");if(!t){throw new Error(n)}return t.href}var $,B;class X{constructor(t,e){$.set(this,void 0);B.set(this,void 0);s(this,$,t,"f");s(this,B,e,"f")}get base58(){return e(this,B,"f")}subscribe(t){if(this.base58){t(this.base58)}const n=e(this,$,"f").on((n=>{switch(n.type){case w.ACCOUNT_CHANGED:s(this,B,n.payload.base58,"f");break;case w.GET_DATA:s(this,B,n.payload.base58,"f");break;default:return}t(e(this,B,"f"))}));return{unsubscribe:()=>n()}}}$=new WeakMap,B=new WeakMap;var Y,J;class K{constructor(t,e){Y.set(this,void 0);J.set(this,void 0);s(this,Y,t,"f");if(e){s(this,J,e,"f")}}get net(){return e(this,J,"f")}subscribe(t){t(this.net);const n=e(this,Y,"f").on((e=>{switch(e.type){case w.GET_DATA:s(this,J,e.payload.net,"f");break;case w.NETWORK_CHANGED:s(this,J,e.payload.net,"f");break;default:return}t(this.net)}));return{unsubscribe:()=>n()}}}Y=new WeakMap,J=new WeakMap;var H,q,F,z,Q,V,Z,tt;class et{constructor(t,n){H.add(this);q.set(this,void 0);F.set(this,void 0);z.set(this,void 0);Q.set(this,void 0);V.set(this,false);Z.set(this,false);s(this,z,t,"f");s(this,Q,n,"f");s(this,q,new X(n),"f");s(this,F,new K(n),"f");e(this,H,"m",tt).call(this)}get account(){return e(this,q,"f")}get network(){return e(this,F,"f")}get connected(){return e(this,V,"f")}get enabled(){return e(this,Z,"f")}async connect(){const t=w.CONNECT_APP;const n=T.CONTENT;const a=G();const i=window.document.title;const r=I();const o={title:i,icon:r,uuid:a};new R({type:t,payload:o}).send(e(this,z,"f"),n);return new Promise(((t,n)=>{const i=e(this,Q,"f").on((r=>{if(r.type!==w.RESPONSE_CONNECT_APP)return;if(r.payload.uuid!==a)return;if(r.payload.reject){i();return n(new Error(r.payload.reject))}s(this,V,Boolean(r.payload.resolve),"f");s(this,q,new X(e(this,Q,"f"),r.payload.base58),"f");s(this,F,new K(e(this,Q,"f"),r.payload.net),"f");i();return t(this.connected)}))}))}async signMessage(t){x(this.connected,a);const s=w.SIGN_MESSAGE;const n=T.CONTENT;const i=G();const r=window.document.title;const o=I();const c={message:t,uuid:i,title:r,icon:o};new R({type:s,payload:c}).send(e(this,z,"f"),n);return new Promise(((t,s)=>{const n=e(this,Q,"f").on((e=>{if(e.type!==w.SING_MESSAGE_RESULT)return;if(e.payload.uuid!==i)return;if(e.payload&&e.payload.reject){n();return s(new Error(e.payload.reject))}n();return t(e.payload.resolve)}))}))}async signTransaction(t){x(this.connected,a);x(t instanceof d,i);const s=w.TX_TO_SEND;const n=T.CONTENT;const r=G();const o={...t.payload,uuid:r,title:window.document.title,icon:I()};new R({type:s,payload:o}).send(e(this,z,"f"),n);return new Promise(((t,s)=>{const n=e(this,Q,"f").on((e=>{if(e.type!==w.TX_TO_SEND_RESULT)return;if(e.payload.uuid!==r)return;if(e.payload&&e.payload.reject){n();return s(new Error(e.payload.reject))}n();return t(e.payload.resolve)}))}))}subscribe(t){const s=e(this,Q,"f").on((()=>{setTimeout((()=>t()),1)}));return{unsubscribe:()=>s()}}}q=new WeakMap,F=new WeakMap,z=new WeakMap,Q=new WeakMap,V=new WeakMap,Z=new WeakMap,H=new WeakSet,tt=function t(){if(!globalThis.window)return;e(this,Q,"f").on((t=>{switch(t.type){case w.LOCKED:s(this,Z,t.payload.enabled,"f");break;case w.ACCOUNT_CHANGED:s(this,q,new X(e(this,Q,"f"),t.payload.base58),"f");break;case w.GET_DATA:s(this,q,new X(e(this,Q,"f"),t.payload.base58),"f");s(this,Z,t.payload.enabled,"f");s(this,V,t.payload.connected,"f");s(this,F,new K(e(this,Q,"f"),t.payload.net),"f");break;case w.NETWORK_CHANGED:s(this,F,new K(e(this,Q,"f"),t.payload.net),"f");break}}))};var st,nt;class at{constructor(){st.set(this,new k);nt.set(this,new L(e(this,st,"f").stream,e(this,st,"f").subject));this.wallet=new et(e(this,st,"f").stream,e(this,st,"f").subject);this.contract=new E(e(this,nt,"f"),this.wallet);this.massa=new U(e(this,nt,"f"),this.wallet);if(globalThis.window){if(globalThis.window["bearby"]){throw new Error(c)}try{e(this,st,"f").initialized();globalThis.window["bearby"]=Object.freeze(this)}catch(t){console.debug(o)}}}}st=new WeakMap,nt=new WeakMap;function it(){if(globalThis.window["bearby"]){return globalThis.window["bearby"]}return new at}const rt=it();t.ContentProvider=L;t.Contract=E;t.Massa=U;t.Wallet=et;t.Web3=at;t.default=rt;t.web3=rt;Object.defineProperty(t,"__esModule",{value:true})}));
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __classPrivateFieldGet(receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+}
+
+const FAVICON_REQUIRED = 'website favicon is required';
+const WALLET_IS_NOT_CONNECTED = 'Wallet is not connected';
+const INVALID_SIGN_PARAMS = 'Invalid sign params';
+const TIME_OUT = 'Request failed by timeout';
+const AVAILABLE_ONLY_BROWSER = 'bearby-web3 available only browser';
+const WEB3_INSTANCE_CREATED = 'bearby Web3 instance already created!';
+
+class Transaction {
+    constructor(type, amount, recipient, parameter, contract, functionName, datastore) {
+        this.type = type;
+        this.amount = String(amount);
+        this.recipient = recipient;
+        this.parameter = parameter;
+        this.contract = contract;
+        this.functionName = functionName;
+        this.datastore = datastore;
+    }
+    get payload() {
+        return JSON.parse(JSON.stringify({
+            type: this.type,
+            amount: this.amount,
+            fee: this.fee,
+            gasPrice: this.gasPrice,
+            gasLimit: this.gasLimit,
+            coins: String(this.coins),
+            code: this.contract,
+            func: this.functionName,
+            params: JSON.stringify(this.parameter),
+            toAddr: this.recipient || this.contract,
+            datastore: this.datastore
+        }));
+    }
+}
+
+var OperationsType;
+(function (OperationsType) {
+    OperationsType[OperationsType["Payment"] = 0] = "Payment";
+    OperationsType[OperationsType["RollBuy"] = 1] = "RollBuy";
+    OperationsType[OperationsType["RollSell"] = 2] = "RollSell";
+    OperationsType[OperationsType["ExecuteSC"] = 3] = "ExecuteSC";
+    OperationsType[OperationsType["CallSC"] = 4] = "CallSC";
+})(OperationsType || (OperationsType = {}));
+
+var JsonRPCRequestMethods;
+(function (JsonRPCRequestMethods) {
+    JsonRPCRequestMethods["GET_STATUS"] = "get_status";
+    JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
+    // SEND_OPERATIONS              = 'send_operations',
+    JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
+    JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
+    JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
+    JsonRPCRequestMethods["GET_CLIQUES"] = "get_cliques";
+    JsonRPCRequestMethods["GET_STAKERS"] = "get_stakers";
+    JsonRPCRequestMethods["GET_FILTERED_SC_OUTPUT_EVENT"] = "get_filtered_sc_output_event";
+    JsonRPCRequestMethods["EXECUTE_READ_ONLY_BYTECODE"] = "execute_read_only_bytecode";
+    JsonRPCRequestMethods["EXECUTE_READ_ONLY_CALL"] = "execute_read_only_call";
+    JsonRPCRequestMethods["GET_DATASTORE_ENTRIES"] = "get_datastore_entries";
+})(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
+
+function utf8ToBytes(str) {
+    let binaryArray = new Uint8Array(str.length);
+    Array.prototype.forEach.call(binaryArray, (_, idx, arr) => {
+        arr[idx] = str.charCodeAt(idx);
+    });
+    return binaryArray;
+}
+
+var _Contract_provider, _Contract_wallet;
+class Contract {
+    constructor(provider, wallet) {
+        _Contract_provider.set(this, void 0);
+        _Contract_wallet.set(this, void 0);
+        __classPrivateFieldSet(this, _Contract_provider, provider, "f");
+        __classPrivateFieldSet(this, _Contract_wallet, wallet, "f");
+    }
+    async deploy(params) {
+        const transaction = new Transaction(OperationsType.ExecuteSC, '0', undefined, undefined, params.contractDataBase64, undefined, params.datastore);
+        transaction.fee = String(params.fee);
+        transaction.gasLimit = Number(params.maxGas);
+        transaction.gasPrice = Number(params.gasPrice);
+        return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);
+    }
+    async call(params) {
+        const transaction = new Transaction(OperationsType.CallSC, '0', undefined, params.parameter, params.targetAddress, params.functionName);
+        transaction.fee = String(params.fee);
+        transaction.gasLimit = Number(params.maxGas);
+        transaction.coins = String(params.coins || 0);
+        transaction.gasPrice = Number(params.gasPrice || 0);
+        return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);
+    }
+    async getFilteredSCOutputEvent(...filters) {
+        const method = JsonRPCRequestMethods.GET_FILTERED_SC_OUTPUT_EVENT;
+        const responses = await __classPrivateFieldGet(this, _Contract_provider, "f").send(filters.map((filter) => ({
+            method,
+            params: [filter]
+        })));
+        if (filters.length === 1) {
+            return responses[0];
+        }
+        return responses;
+    }
+    async getDatastoreEntries(...params) {
+        const method = JsonRPCRequestMethods.GET_DATASTORE_ENTRIES;
+        const data = [];
+        for (const { key, address } of params) {
+            data.push({
+                address,
+                key: Array.from(utf8ToBytes(key))
+            });
+        }
+        const datastoreEntries = await __classPrivateFieldGet(this, _Contract_provider, "f").send([{
+                method,
+                params: [data]
+            }]);
+        const candidateDatastoreEntries = datastoreEntries.map((elem) => elem.candidate_value);
+        const finalDatastoreEntries = datastoreEntries.map((elem) => elem.final_value);
+        return datastoreEntries.map((_, index) => ({
+            candidate: (candidateDatastoreEntries[index] || []).map((s) => String.fromCharCode(s)).join(""),
+            final: (finalDatastoreEntries[index] || []).map((s) => String.fromCharCode(s)).join("")
+        }));
+    }
+    async executeReadOlyBytecode(params) {
+        const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
+        return __classPrivateFieldGet(this, _Contract_provider, "f").send([{
+                method,
+                params: [params]
+            }]);
+    }
+    async readSmartContract(...params) {
+        const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_CALL;
+        const responses = await __classPrivateFieldGet(this, _Contract_provider, "f").send([{
+                method,
+                params: [params.map((v) => ({
+                        max_gas: v.maxGas,
+                        simulated_gas_price: String(v.simulatedGasPrice),
+                        target_address: v.targetAddress,
+                        target_function: v.targetFunction,
+                        parameter: v.parameter,
+                        caller_address: v.callerAddress || __classPrivateFieldGet(this, _Contract_wallet, "f").account.base58
+                    }))]
+            }]);
+        if (params.length === 1) {
+            return responses[0];
+        }
+        return responses;
+    }
+}
+_Contract_provider = new WeakMap(), _Contract_wallet = new WeakMap();
+
+// This string need that sould did't have problem with conflicts.
+const app = 'BearBy';
+const MTypeTabContent = {
+    CONTENT: `@/${app}/content-script`,
+    INJECTED: `@/${app}/injected-script`
+};
+const MTypeTab = {
+    GET_DATA: `@/${app}/get-wallet-data`,
+    ACCOUNT_CHANGED: `@/${app}/accounts-just-changed`,
+    CONTENT_PROXY_MEHTOD: `@/${app}/proxy-method`,
+    CONTENT_PROXY_RESULT: `@/${app}/response-from-content`,
+    CONNECT_APP: `@/${app}/connect-app`,
+    RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
+    NETWORK_CHANGED: `@/${app}/network-just-changed`,
+    LOCKED: `@/${app}/guard-just-lock`,
+    TX_TO_SEND: `@/${app}/add-tx-to-send`,
+    TX_TO_SEND_RESULT: `@/${app}/response-tx-result`,
+    SIGN_MESSAGE: `@/${app}/sign-message-call`,
+    SING_MESSAGE_RESULT: `@/${app}/sign-message-response`
+};
+
+var _TabStream_instances, _TabStream_eventName, _TabStream_dispatch, _TabStream_getEventInit, _TabStream_getEvent;
+const { document } = globalThis;
+/**
+ * Used for communication between a web page and an extension's content script.
+ */
+class TabStream {
+    /**
+     * Creates a new TabStream.
+     * @param {String} eventName - Event type.
+     */
+    constructor(eventName) {
+        _TabStream_instances.add(this);
+        _TabStream_eventName.set(this, void 0);
+        __classPrivateFieldSet(this, _TabStream_eventName, eventName, "f");
+    }
+    /**
+     * Message listener that returns decrypted messages when synced
+     */
+    listen(cb) {
+        document.addEventListener(__classPrivateFieldGet(this, _TabStream_eventName, "f"), (event) => {
+            if (event && event.detail) {
+                cb(JSON.parse(event.detail));
+            }
+        });
+    }
+    /**
+     * Message sender which encrypts messages and adds the sender.
+     * @param data - The payload to send.
+     * @param to - The stream to send messages to.
+     */
+    send(data, to) {
+        data.from = __classPrivateFieldGet(this, _TabStream_eventName, "f");
+        if (Object.values(MTypeTabContent).includes(to)) {
+            __classPrivateFieldGet(this, _TabStream_instances, "m", _TabStream_dispatch).call(this, JSON.stringify(data), to);
+        }
+    }
+}
+_TabStream_eventName = new WeakMap(), _TabStream_instances = new WeakSet(), _TabStream_dispatch = function _TabStream_dispatch(data, to) {
+    document.dispatchEvent(__classPrivateFieldGet(this, _TabStream_instances, "m", _TabStream_getEvent).call(this, data, to));
+}, _TabStream_getEventInit = function _TabStream_getEventInit(detail) {
+    return {
+        detail
+    };
+}, _TabStream_getEvent = function _TabStream_getEvent(detail, to) {
+    return new CustomEvent(to, __classPrivateFieldGet(this, _TabStream_instances, "m", _TabStream_getEventInit).call(this, detail));
+};
+
+var _Subject_events;
+class Subject {
+    constructor() {
+        _Subject_events.set(this, []);
+    }
+    on(listener) {
+        __classPrivateFieldGet(this, _Subject_events, "f").push(listener);
+        return () => this.removeListener(listener);
+    }
+    removeListener(listener) {
+        const idx = __classPrivateFieldGet(this, _Subject_events, "f").indexOf(listener);
+        if (idx > -1)
+            __classPrivateFieldGet(this, _Subject_events, "f").splice(idx, 1);
+    }
+    removeAllListeners() {
+        __classPrivateFieldGet(this, _Subject_events, "f").splice(0, __classPrivateFieldGet(this, _Subject_events, "f").length);
+    }
+    emit(...args) {
+        __classPrivateFieldGet(this, _Subject_events, "f").forEach(listener => listener.apply(this, args));
+    }
+    once(listener) {
+        const remove = this.on((...args) => {
+            remove();
+            listener.apply(this, args);
+        });
+    }
+}
+_Subject_events = new WeakMap();
+
+var _ContentMessage_body;
+class ContentMessage {
+    constructor(msg) {
+        _ContentMessage_body.set(this, void 0);
+        __classPrivateFieldSet(this, _ContentMessage_body, msg, "f");
+    }
+    get type() {
+        return __classPrivateFieldGet(this, _ContentMessage_body, "f").type;
+    }
+    get payload() {
+        return __classPrivateFieldGet(this, _ContentMessage_body, "f").payload;
+    }
+    /**
+     * Method for send message.
+     */
+    send(stream, recipient) {
+        const seralized = JSON.stringify(__classPrivateFieldGet(this, _ContentMessage_body, "f"));
+        const deserialized = JSON.parse(seralized);
+        stream.send(deserialized, recipient);
+    }
+}
+_ContentMessage_body = new WeakMap();
+
+class Handler {
+    constructor() {
+        this.stream = new TabStream(MTypeTabContent.INJECTED);
+        this.subject = new Subject();
+        if (globalThis.document) {
+            // only not ssr
+            this.stream.listen((msg) => {
+                this.subject.emit(msg);
+            });
+        }
+    }
+    initialized() {
+        const type = MTypeTab.GET_DATA;
+        const recipient = MTypeTabContent.CONTENT;
+        new ContentMessage({
+            type,
+            payload: {}
+        }).send(this.stream, recipient);
+    }
+}
+
+function uuidv4() {
+    const size = 20;
+    return [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+}
+
+const TIME_OUT_SECONDS = 5000;
+
+var _ContentProvider_stream, _ContentProvider_subject;
+class ContentProvider {
+    constructor(stream, subject) {
+        _ContentProvider_stream.set(this, void 0);
+        _ContentProvider_subject.set(this, void 0);
+        __classPrivateFieldSet(this, _ContentProvider_stream, stream, "f");
+        __classPrivateFieldSet(this, _ContentProvider_subject, subject, "f");
+    }
+    async send(body) {
+        const type = MTypeTab.CONTENT_PROXY_MEHTOD;
+        const recipient = MTypeTabContent.CONTENT;
+        const uuid = uuidv4();
+        let sub;
+        new ContentMessage({
+            type,
+            payload: {
+                body,
+                uuid
+            }
+        }).send(__classPrivateFieldGet(this, _ContentProvider_stream, "f"), recipient);
+        const fulfilled = new Promise((resolve, reject) => {
+            sub = __classPrivateFieldGet(this, _ContentProvider_subject, "f").on((msg) => {
+                if (msg.type !== MTypeTab.CONTENT_PROXY_RESULT)
+                    return;
+                if (!msg.payload || !msg.payload.uuid)
+                    return;
+                if (msg.payload.uuid !== uuid)
+                    return;
+                if (msg.payload && msg.payload.reject) {
+                    sub();
+                    return reject(new Error(msg.payload.reject));
+                }
+                delete msg.payload.uuid;
+                sub();
+                return resolve(msg.payload.resolve);
+            });
+        });
+        const timeout = new Promise((_, reject) => {
+            setTimeout(() => {
+                if (sub)
+                    sub();
+                reject(new Error(TIME_OUT));
+            }, TIME_OUT_SECONDS);
+        });
+        return Promise.race([fulfilled, timeout]);
+    }
+}
+_ContentProvider_stream = new WeakMap(), _ContentProvider_subject = new WeakMap();
+
+var _Massa_provider, _Massa_wallet;
+class Massa {
+    constructor(provider, wallet) {
+        _Massa_provider.set(this, void 0);
+        _Massa_wallet.set(this, void 0);
+        __classPrivateFieldSet(this, _Massa_provider, provider, "f");
+        __classPrivateFieldSet(this, _Massa_wallet, wallet, "f");
+    }
+    async getNodesStatus() {
+        const method = JsonRPCRequestMethods.GET_STATUS;
+        return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                method,
+                params: []
+            }]);
+    }
+    async getAddresses(...addresses) {
+        const method = JsonRPCRequestMethods.GET_ADDRESSES;
+        return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                method,
+                params: [addresses]
+            }]);
+    }
+    async getBlocks(...blocks) {
+        const method = JsonRPCRequestMethods.GET_BLOCKS;
+        return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                method,
+                params: [blocks]
+            }]);
+    }
+    async getOperations(...operations) {
+        const method = JsonRPCRequestMethods.GET_OPERATIONS;
+        return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                method,
+                params: [operations]
+            }]);
+    }
+    async getStakers() {
+        const method = JsonRPCRequestMethods.GET_STAKERS;
+        return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                method,
+                params: []
+            }]);
+    }
+    async getEndorsements(...Ids) {
+        const method = JsonRPCRequestMethods.GET_ENDORSEMENTS;
+        return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                method,
+                params: [Ids]
+            }]);
+    }
+    async getCliques() {
+        const method = JsonRPCRequestMethods.GET_CLIQUES;
+        return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                method,
+                params: []
+            }]);
+    }
+    async payment(amount, recipient) {
+        const transaction = new Transaction(OperationsType.Payment, amount, recipient);
+        return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
+    }
+    async buyRolls(amount) {
+        const transaction = new Transaction(OperationsType.RollBuy, amount);
+        return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
+    }
+    async sellRolls(amount) {
+        const transaction = new Transaction(OperationsType.RollSell, amount);
+        return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
+    }
+}
+_Massa_provider = new WeakMap(), _Massa_wallet = new WeakMap();
+
+function assert(expressions, msg) {
+    if (!expressions) {
+        throw new Error(msg);
+    }
+}
+
+function getFavicon() {
+    let ref = globalThis.document.querySelector('link[rel*=\'icon\']');
+    if (!ref) {
+        throw new Error(FAVICON_REQUIRED);
+    }
+    return ref.href;
+}
+
+var _Account_subject, _Account_base58;
+class Account {
+    constructor(subject, base58) {
+        _Account_subject.set(this, void 0);
+        _Account_base58.set(this, void 0);
+        __classPrivateFieldSet(this, _Account_subject, subject, "f");
+        __classPrivateFieldSet(this, _Account_base58, base58, "f");
+    }
+    get base58() {
+        return __classPrivateFieldGet(this, _Account_base58, "f");
+    }
+    subscribe(cb) {
+        if (this.base58) {
+            cb(this.base58);
+        }
+        const obs = __classPrivateFieldGet(this, _Account_subject, "f").on((msg) => {
+            switch (msg.type) {
+                case MTypeTab.ACCOUNT_CHANGED:
+                    __classPrivateFieldSet(this, _Account_base58, msg.payload.base58, "f");
+                    break;
+                case MTypeTab.GET_DATA:
+                    __classPrivateFieldSet(this, _Account_base58, msg.payload.base58, "f");
+                    break;
+                default:
+                    return;
+            }
+            cb(__classPrivateFieldGet(this, _Account_base58, "f"));
+        });
+        return {
+            unsubscribe: () => obs()
+        };
+    }
+}
+_Account_subject = new WeakMap(), _Account_base58 = new WeakMap();
+
+var _Network_subject, _Network_net;
+class Network {
+    constructor(subject, net) {
+        _Network_subject.set(this, void 0);
+        _Network_net.set(this, void 0);
+        __classPrivateFieldSet(this, _Network_subject, subject, "f");
+        if (net) {
+            __classPrivateFieldSet(this, _Network_net, net, "f");
+        }
+    }
+    get net() {
+        return __classPrivateFieldGet(this, _Network_net, "f");
+    }
+    subscribe(cb) {
+        cb(this.net);
+        const obs = __classPrivateFieldGet(this, _Network_subject, "f").on((msg) => {
+            switch (msg.type) {
+                case MTypeTab.GET_DATA:
+                    __classPrivateFieldSet(this, _Network_net, msg.payload.net, "f");
+                    break;
+                case MTypeTab.NETWORK_CHANGED:
+                    __classPrivateFieldSet(this, _Network_net, msg.payload.net, "f");
+                    break;
+                default:
+                    return;
+            }
+            cb(this.net);
+        });
+        return {
+            unsubscribe: () => obs()
+        };
+    }
+}
+_Network_subject = new WeakMap(), _Network_net = new WeakMap();
+
+var _Wallet_instances, _Wallet_account, _Wallet_network, _Wallet_stream, _Wallet_subject, _Wallet_connected, _Wallet_enabled, _Wallet_subscribe;
+class Wallet {
+    constructor(stream, subject) {
+        _Wallet_instances.add(this);
+        _Wallet_account.set(this, void 0);
+        _Wallet_network.set(this, void 0);
+        _Wallet_stream.set(this, void 0);
+        _Wallet_subject.set(this, void 0);
+        _Wallet_connected.set(this, false);
+        _Wallet_enabled.set(this, false);
+        __classPrivateFieldSet(this, _Wallet_stream, stream, "f");
+        __classPrivateFieldSet(this, _Wallet_subject, subject, "f");
+        __classPrivateFieldSet(this, _Wallet_account, new Account(subject), "f");
+        __classPrivateFieldSet(this, _Wallet_network, new Network(subject), "f");
+        __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_subscribe).call(this);
+    }
+    get account() {
+        return __classPrivateFieldGet(this, _Wallet_account, "f");
+    }
+    get network() {
+        return __classPrivateFieldGet(this, _Wallet_network, "f");
+    }
+    get connected() {
+        return __classPrivateFieldGet(this, _Wallet_connected, "f");
+    }
+    get enabled() {
+        return __classPrivateFieldGet(this, _Wallet_enabled, "f");
+    }
+    async connect() {
+        const type = MTypeTab.CONNECT_APP;
+        const recipient = MTypeTabContent.CONTENT;
+        const uuid = uuidv4();
+        const title = window.document.title;
+        const icon = getFavicon();
+        const payload = {
+            title,
+            icon,
+            uuid
+        };
+        new ContentMessage({
+            type,
+            payload
+        }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
+        return new Promise((resolve, reject) => {
+            const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
+                if (msg.type !== MTypeTab.RESPONSE_CONNECT_APP)
+                    return;
+                if (msg.payload.uuid !== uuid)
+                    return;
+                if (msg.payload.reject) {
+                    obs();
+                    return reject(new Error(msg.payload.reject));
+                }
+                __classPrivateFieldSet(this, _Wallet_connected, Boolean(msg.payload.resolve), "f");
+                __classPrivateFieldSet(this, _Wallet_account, new Account(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.base58), "f");
+                __classPrivateFieldSet(this, _Wallet_network, new Network(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.net), "f");
+                obs();
+                return resolve(this.connected);
+            });
+        });
+    }
+    async signMessage(message) {
+        assert(this.connected, WALLET_IS_NOT_CONNECTED);
+        const type = MTypeTab.SIGN_MESSAGE;
+        const recipient = MTypeTabContent.CONTENT;
+        const uuid = uuidv4();
+        const title = window.document.title;
+        const icon = getFavicon();
+        const payload = {
+            message,
+            uuid,
+            title,
+            icon
+        };
+        new ContentMessage({
+            type,
+            payload
+        }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
+        return new Promise((resolve, reject) => {
+            const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
+                if (msg.type !== MTypeTab.SING_MESSAGE_RESULT)
+                    return;
+                if (msg.payload.uuid !== uuid)
+                    return;
+                if (msg.payload && msg.payload.reject) {
+                    obs();
+                    return reject(new Error(msg.payload.reject));
+                }
+                obs();
+                return resolve(msg.payload.resolve);
+            });
+        });
+    }
+    async signTransaction(tx) {
+        assert(this.connected, WALLET_IS_NOT_CONNECTED);
+        assert(tx instanceof Transaction, INVALID_SIGN_PARAMS);
+        const type = MTypeTab.TX_TO_SEND;
+        const recipient = MTypeTabContent.CONTENT;
+        const uuid = uuidv4();
+        const payload = {
+            ...tx.payload,
+            uuid,
+            title: window.document.title,
+            icon: getFavicon()
+        };
+        new ContentMessage({
+            type,
+            payload
+        }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
+        return new Promise((resolve, reject) => {
+            const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
+                if (msg.type !== MTypeTab.TX_TO_SEND_RESULT)
+                    return;
+                if (msg.payload.uuid !== uuid)
+                    return;
+                if (msg.payload && msg.payload.reject) {
+                    obs();
+                    return reject(new Error(msg.payload.reject));
+                }
+                obs();
+                return resolve(msg.payload.resolve);
+            });
+        });
+    }
+    subscribe(cb) {
+        const obs = __classPrivateFieldGet(this, _Wallet_subject, "f").on(() => {
+            // emit only in the end of evenloop.
+            setTimeout(() => cb(), 1);
+        });
+        return {
+            unsubscribe: () => obs()
+        };
+    }
+}
+_Wallet_account = new WeakMap(), _Wallet_network = new WeakMap(), _Wallet_stream = new WeakMap(), _Wallet_subject = new WeakMap(), _Wallet_connected = new WeakMap(), _Wallet_enabled = new WeakMap(), _Wallet_instances = new WeakSet(), _Wallet_subscribe = function _Wallet_subscribe() {
+    if (!globalThis.window)
+        return;
+    __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
+        switch (msg.type) {
+            case MTypeTab.LOCKED:
+                __classPrivateFieldSet(this, _Wallet_enabled, msg.payload.enabled, "f");
+                break;
+            case MTypeTab.ACCOUNT_CHANGED:
+                __classPrivateFieldSet(this, _Wallet_account, new Account(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.base58), "f");
+                break;
+            case MTypeTab.GET_DATA:
+                __classPrivateFieldSet(this, _Wallet_account, new Account(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.base58), "f");
+                __classPrivateFieldSet(this, _Wallet_enabled, msg.payload.enabled, "f");
+                __classPrivateFieldSet(this, _Wallet_connected, msg.payload.connected, "f");
+                __classPrivateFieldSet(this, _Wallet_network, new Network(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.net), "f");
+                break;
+            case MTypeTab.NETWORK_CHANGED:
+                __classPrivateFieldSet(this, _Wallet_network, new Network(__classPrivateFieldGet(this, _Wallet_subject, "f"), msg.payload.net), "f");
+                break;
+        }
+    });
+};
+
+var _Web3_handler, _Web3_provider;
+class Web3 {
+    constructor() {
+        _Web3_handler.set(this, new Handler());
+        _Web3_provider.set(this, new ContentProvider(__classPrivateFieldGet(this, _Web3_handler, "f").stream, __classPrivateFieldGet(this, _Web3_handler, "f").subject));
+        this.wallet = new Wallet(__classPrivateFieldGet(this, _Web3_handler, "f").stream, __classPrivateFieldGet(this, _Web3_handler, "f").subject);
+        this.contract = new Contract(__classPrivateFieldGet(this, _Web3_provider, "f"), this.wallet);
+        this.massa = new Massa(__classPrivateFieldGet(this, _Web3_provider, "f"), this.wallet);
+        if (globalThis.window) {
+            if (globalThis.window['bearby']) {
+                throw new Error(WEB3_INSTANCE_CREATED);
+            }
+            try {
+                __classPrivateFieldGet(this, _Web3_handler, "f").initialized();
+                globalThis.window['bearby'] = Object.freeze(this);
+            }
+            catch (_a) {
+                console.debug(AVAILABLE_ONLY_BROWSER);
+            }
+        }
+    }
+}
+_Web3_handler = new WeakMap(), _Web3_provider = new WeakMap();
+
+function main() {
+    if (globalThis.window && globalThis.window['bearby']) {
+        return globalThis.window['bearby'];
+    }
+    return new Web3();
+}
+const web3 = main();
+
+export { ContentProvider, Contract, Massa, Wallet, Web3, web3 };
 //# sourceMappingURL=index.js.map

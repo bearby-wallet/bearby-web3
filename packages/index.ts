@@ -2,7 +2,7 @@ import { Web3 } from './web3';
 
 
 function main() {
-  if ((globalThis.window as any)['bearby']) {
+  if (globalThis.window && (globalThis.window as any)['bearby']) {
     return (globalThis.window as any)['bearby'] as Web3;
   }
 
