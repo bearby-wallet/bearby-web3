@@ -84,7 +84,7 @@ export class Wallet {
         this.#connected = Boolean(msg.payload.resolve);
 
         this.#account.base58 = msg.payload.base58;
-        this.#network = msg.payload.net;
+        this.#network.net = msg.payload.net;
 
         obs();
         return resolve(this.connected);
@@ -183,10 +183,10 @@ export class Wallet {
           this.#enabled = msg.payload.enabled;
           this.#connected = msg.payload.connected;
 
-          this.#network = msg.payload.net;
+          this.#network.net = msg.payload.net;
           break;
         case MTypeTab.NETWORK_CHANGED:
-          this.#network = msg.payload.net;
+          this.#network.net = msg.payload.net;
           this.#blockchain.period = msg.payload.period;
           break;
         default:
