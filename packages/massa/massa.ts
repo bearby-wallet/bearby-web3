@@ -7,21 +7,29 @@ import type {
   MassaBlock,
   OperationTransaction
 } from "types";
+import type { Subject } from "lib/subject";
 
 import { ContentProvider } from "./provider";
 import { JsonRPCRequestMethods } from 'config/rpc-methods';
 import { Wallet } from "../wallet";
 import { Transaction } from "lib/transaction";
 import { OperationsType } from "config/operations";
+import { MTypeTab } from "config/stream-keys";
 
 
 export class Massa {
   readonly #provider: ContentProvider;
   readonly #wallet: Wallet;
+  readonly #subject: Subject;
 
-  constructor(provider: ContentProvider, wallet: Wallet) {
+  constructor(
+    provider: ContentProvider,
+    wallet: Wallet,
+    subject: Subject
+  ) {
     this.#provider = provider;
     this.#wallet = wallet;
+    this.#subject = subject;
   }
 
   async getNodesStatus() {
@@ -106,5 +114,17 @@ export class Massa {
     );
 
     return this.#wallet.signTransaction(transaction);
+  }
+
+  subscribe(cb: (block: number) => void) {
+    const obs = this.#subject.on((msg) => {
+      if (msg.type === MTypeTab.NEW_SLOT) {
+        cb(msg.payload);
+      }
+    });
+
+    return {
+      unsubscribe: () => obs()
+    };
   }
 }

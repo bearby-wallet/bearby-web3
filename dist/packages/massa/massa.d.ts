@@ -1,9 +1,10 @@
 import type { JsonRPCResponseCliques, JsonRPCResponseEndorsements, JsonRPCResponseNodeStatus, JsonRPCResponseNodeStatusAddresses, JsonRPCResponseStakers, MassaBlock, OperationTransaction } from "types";
+import type { Subject } from "lib/subject";
 import { ContentProvider } from "./provider";
 import { Wallet } from "../wallet";
 export declare class Massa {
     #private;
-    constructor(provider: ContentProvider, wallet: Wallet);
+    constructor(provider: ContentProvider, wallet: Wallet, subject: Subject);
     getNodesStatus(): Promise<JsonRPCResponseNodeStatus[]>;
     getAddresses(...addresses: string[]): Promise<JsonRPCResponseNodeStatusAddresses[]>;
     getBlocks(...blocks: string[]): Promise<MassaBlock[]>;
@@ -14,4 +15,7 @@ export declare class Massa {
     payment(amount: string, recipient: string): Promise<string>;
     buyRolls(amount: string): Promise<string>;
     sellRolls(amount: string): Promise<string>;
+    subscribe(cb: (block: number) => void): {
+        unsubscribe: () => void;
+    };
 }

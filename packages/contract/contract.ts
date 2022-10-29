@@ -1,7 +1,6 @@
 import type { Wallet } from 'packages/wallet';
 import type {
   CallSmartContractParams,
-  ContractStorageData,
   DatastoreEntryInputParam,
   DataStoreEntryResponse,
   DeployParams,

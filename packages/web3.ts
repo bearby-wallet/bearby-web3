@@ -16,7 +16,11 @@ export class Web3 {
     this.#handler.subject
   );
   readonly contract = new Contract(this.#provider, this.wallet);
-  readonly massa = new Massa(this.#provider, this.wallet);
+  readonly massa = new Massa(
+    this.#provider,
+    this.wallet,
+    this.#handler.subject
+  );
 
   constructor() {
     if (globalThis.window) {
