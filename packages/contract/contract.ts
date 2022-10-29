@@ -80,7 +80,7 @@ export class Contract {
     return responses;
   }
 
-  async getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<ContractStorageData[]> {
+  async getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<DataStoreEntryResponse[]> {
     const method = JsonRPCRequestMethods.GET_DATASTORE_ENTRIES;
     const data = [];
 		for (const { key, address } of params) {
@@ -89,16 +89,10 @@ export class Contract {
 				key: Array.from(utf8ToBytes(key))
 			});
 		}
-    const datastoreEntries = await this.#provider.send<DataStoreEntryResponse[]>([{
+    return await this.#provider.send<DataStoreEntryResponse[]>([{
       method,
       params: [data]
     }]);
-    const candidateDatastoreEntries: Array<Array<number>|null> = datastoreEntries.map((elem) => elem.candidate_value);
-		const finalDatastoreEntries: Array<Array<number>|null> = datastoreEntries.map((elem) => elem.final_value);
-    return datastoreEntries.map((_, index) => ({
-      candidate: (candidateDatastoreEntries[index] || []).map((s) => String.fromCharCode(s)).join(""),
-      final: (finalDatastoreEntries[index] || []).map((s) => String.fromCharCode(s)).join("")
-    }));
   }
 
   async executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]) {

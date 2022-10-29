@@ -15,11 +15,6 @@ export interface DatastoreEntryInputParam {
 }
 
 export interface DataStoreEntryResponse {
-  final_value: number[] | null;
-  candidate_value: number[] | null;
-}
-
-export interface ContractStorageData {
-  final: string | null;
-  candidate: string | null;
+  final_value: number[] |null;
+  candidate_value: number[] |null;
 }
