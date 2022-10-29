@@ -20,6 +20,9 @@ export class Account {
         case MTypeTab.ACCOUNT_CHANGED:
           this.base58 = msg.payload.base58;
           break;
+        case MTypeTab.RESPONSE_CONNECT_APP:
+          this.base58 = msg.payload.base58;
+          break;
         case MTypeTab.GET_DATA:
           this.base58 = msg.payload.base58;
           break;

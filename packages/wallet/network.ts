@@ -15,6 +15,9 @@ export class Network {
 
     const obs = this.#subject.on((msg) => {
       switch (msg.type) {
+        case MTypeTab.RESPONSE_CONNECT_APP:
+          this.net = msg.payload.net;
+          break;
         case MTypeTab.GET_DATA:
           this.net = msg.payload.net;
           break;
