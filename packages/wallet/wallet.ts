@@ -11,11 +11,13 @@ import { Transaction } from "lib/transaction";
 import { uuidv4 } from "lib/uuid";
 import { Account } from './account';
 import { Network } from "./network";
+import { Blockchain } from "./blockchain";
 
 
 export class Wallet {
   #account: Account;
   #network: Network;
+  #blockchain: Blockchain;
   #stream: TabStream;
   #subject: Subject;
 
@@ -31,6 +33,10 @@ export class Wallet {
     return this.#network;
   }
 
+  get blockchain() {
+    return this.#blockchain;
+  }
+
   get connected() {
     return this.#connected;
   }
@@ -44,6 +50,7 @@ export class Wallet {
     this.#subject = subject;
     this.#account = new Account(subject);
     this.#network = new Network(subject);
+    this.#blockchain = new Blockchain(subject);
     this.#subscribe();
   }
 
@@ -76,14 +83,8 @@ export class Wallet {
 
         this.#connected = Boolean(msg.payload.resolve);
 
-        this.#account = new Account(
-          this.#subject,
-          msg.payload.base58
-        );
-        this.#network = new Network(
-          this.#subject,
-          msg.payload.net
-        );
+        this.#account.base58 = msg.payload.base58;
+        this.#network = msg.payload.net;
 
         obs();
         return resolve(this.connected);
@@ -167,34 +168,26 @@ export class Wallet {
 
     this.#subject.on((msg) => {
       switch (msg.type) {
+        case MTypeTab.NEW_SLOT:
+          this.#blockchain.period = msg.payload;
+          break;
         case MTypeTab.LOCKED:
           this.#enabled = msg.payload.enabled;
           break;
         case MTypeTab.ACCOUNT_CHANGED:
-          this.#account = new Account(
-            this.#subject,
-            msg.payload.base58
-          );
+          this.#account.base58 = msg.payload.base58;
           break;
         case MTypeTab.GET_DATA:
-          this.#account = new Account(
-            this.#subject,
-            msg.payload.base58
-          );
-
+          this.#blockchain.period = msg.payload.period;
+          this.#account.base58 = msg.payload.base58;
           this.#enabled = msg.payload.enabled;
           this.#connected = msg.payload.connected;
 
-          this.#network = new Network(
-            this.#subject,
-            msg.payload.net
-          );
+          this.#network = msg.payload.net;
           break;
         case MTypeTab.NETWORK_CHANGED:
-          this.#network = new Network(
-            this.#subject,
-            msg.payload.net
-          );
+          this.#network = msg.payload.net;
+          this.#blockchain.period = msg.payload.period;
           break;
         default:
           break;
