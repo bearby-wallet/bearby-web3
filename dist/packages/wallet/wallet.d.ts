@@ -4,10 +4,12 @@ import { TabStream } from "lib/tab-stream";
 import { Transaction } from "lib/transaction";
 import { Account } from './account';
 import { Network } from "./network";
+import { Blockchain } from "./blockchain";
 export declare class Wallet {
     #private;
     get account(): Account;
     get network(): Network;
+    get blockchain(): Blockchain;
     get connected(): boolean;
     get enabled(): boolean;
     constructor(stream: TabStream, subject: Subject);
