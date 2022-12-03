@@ -2,7 +2,7 @@
 import type { ReqBody } from 'types';
 
 
-type Listener = (...args: ReqBody[]) => void;
+export type Listener = (...args: ReqBody[]) => void;
 
 export class Subject {
   readonly #events: Listener[] = [];

@@ -1,4 +1,4 @@
-declare type Arg = string | Array<string | number | null | undefined | unknown> | unknown | null | undefined | object | number;
+type Arg = string | Array<string | number | null | undefined | unknown> | unknown | null | undefined | object | number;
 export declare const TypeOf: Readonly<{
     isArray(argument: Arg): boolean;
     isObject(argument: Arg): boolean;

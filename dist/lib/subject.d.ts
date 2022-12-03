@@ -1,5 +1,5 @@
 import type { ReqBody } from 'types';
-declare type Listener = (...args: ReqBody[]) => void;
+export type Listener = (...args: ReqBody[]) => void;
 export declare class Subject {
     #private;
     on(listener: Listener): () => void;
@@ -8,4 +8,3 @@ export declare class Subject {
     emit(...args: ReqBody[]): void;
     once(listener: Listener): void;
 }
-export {};
