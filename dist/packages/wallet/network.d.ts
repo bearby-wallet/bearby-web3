@@ -7,3 +7,4 @@ export declare class Network {
         unsubscribe: () => void;
     };
 }
+//# sourceMappingURL=network.d.ts.map

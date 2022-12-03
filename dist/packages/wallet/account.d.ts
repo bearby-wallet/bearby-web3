@@ -7,3 +7,4 @@ export declare class Account {
         unsubscribe: () => void;
     };
 }
+//# sourceMappingURL=account.d.ts.map

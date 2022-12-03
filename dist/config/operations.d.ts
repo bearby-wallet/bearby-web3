@@ -5,3 +5,4 @@ export declare enum OperationsType {
     ExecuteSC = 3,
     CallSC = 4
 }
+//# sourceMappingURL=operations.d.ts.map

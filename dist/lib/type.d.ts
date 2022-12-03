@@ -14,3 +14,4 @@ export declare const TypeOf: Readonly<{
     getType(argument: Arg): string;
 }>;
 export {};
+//# sourceMappingURL=type.d.ts.map

@@ -15,3 +15,4 @@ export declare class Massa {
     buyRolls(amount: string): Promise<string>;
     sellRolls(amount: string): Promise<string>;
 }
+//# sourceMappingURL=massa.d.ts.map

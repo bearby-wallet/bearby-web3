@@ -6,3 +6,4 @@ export declare class ContentProvider {
     constructor(stream: TabStream, subject: Subject);
     send<T>(body: RPCBody[]): Promise<T>;
 }
+//# sourceMappingURL=provider.d.ts.map

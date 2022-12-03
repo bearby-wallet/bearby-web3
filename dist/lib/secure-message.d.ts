@@ -10,3 +10,4 @@ export declare class ContentMessage {
      */
     send(stream: TabStream, recipient: string): void;
 }
+//# sourceMappingURL=secure-message.d.ts.map

@@ -1,10 +1,12 @@
 import type { JsonRPCRequestMethods } from 'config/rpc-methods';
 
 
+export type Params = object[] | string[] | number[] | (string | string[] | number[])[];
+
 export interface RPCBody {
   method: JsonRPCRequestMethods;
   params: Params;
-};
+}
 
 export interface JsonRPCResponse {
   error?: {

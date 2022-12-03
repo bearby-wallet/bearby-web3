@@ -11,3 +11,4 @@ export declare class Contract {
     executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]): Promise<JsonRPCResponseExecuteReadOnlyBytecode[]>;
     readSmartContract(...params: ExecuteReadOnlyCall[]): Promise<JsonRPCResponseExecuteReadOnlyCall | JsonRPCResponseExecuteReadOnlyCall[]>;
 }
+//# sourceMappingURL=contract.d.ts.map

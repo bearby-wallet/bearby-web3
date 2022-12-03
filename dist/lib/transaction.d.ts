@@ -15,3 +15,4 @@ export declare class Transaction {
     get payload(): any;
     constructor(type: OperationsType, amount: string, recipient?: string, parameter?: object, contract?: string, functionName?: string, datastore?: KeyValue<string>);
 }
+//# sourceMappingURL=transaction.d.ts.map

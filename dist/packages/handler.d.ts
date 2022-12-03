@@ -6,3 +6,4 @@ export declare class Handler {
     constructor();
     initialized(): void;
 }
+//# sourceMappingURL=handler.d.ts.map

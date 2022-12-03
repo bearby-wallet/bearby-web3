@@ -17,3 +17,4 @@ export declare const MTypeTab: {
     SIGN_MESSAGE: string;
     SING_MESSAGE_RESULT: string;
 };
+//# sourceMappingURL=stream-keys.d.ts.map

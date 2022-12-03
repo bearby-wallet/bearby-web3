@@ -11,3 +11,4 @@ export declare enum JsonRPCRequestMethods {
     EXECUTE_READ_ONLY_CALL = "execute_read_only_call",
     GET_DATASTORE_ENTRIES = "get_datastore_entries"
 }
+//# sourceMappingURL=rpc-methods.d.ts.map

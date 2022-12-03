@@ -20,3 +20,4 @@ export declare class TabStream {
      */
     send(data: ReqBody, to: string): void;
 }
+//# sourceMappingURL=tab-stream.d.ts.map

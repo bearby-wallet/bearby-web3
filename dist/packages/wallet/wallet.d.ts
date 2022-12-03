@@ -17,3 +17,4 @@ export declare class Wallet {
     signMessage(message: string): Promise<SignedMessage>;
     signTransaction(tx: Transaction): Promise<string>;
 }
+//# sourceMappingURL=wallet.d.ts.map

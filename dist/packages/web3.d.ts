@@ -8,3 +8,4 @@ export declare class Web3 {
     readonly massa: Massa;
     constructor();
 }
+//# sourceMappingURL=web3.d.ts.map

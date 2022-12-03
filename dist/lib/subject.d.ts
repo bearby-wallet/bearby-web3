@@ -8,3 +8,4 @@ export declare class Subject {
     emit(...args: ReqBody[]): void;
     once(listener: Listener): void;
 }
+//# sourceMappingURL=subject.d.ts.map
