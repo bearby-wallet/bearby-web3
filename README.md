@@ -155,3 +155,10 @@ if (response && response.result && response.result[0] && response.result[0].data
   console.log(contract);
 }
 ```
+types
+```javascript
+import { JsonRPCResponseExecuteReadOnlyBytecode } from '@hicaru/bearby.js/types';
+
+const res?: JsonRPCResponseExecuteReadOnlyBytecode;
+```
+
