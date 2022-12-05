@@ -1,6 +1,6 @@
 {
   "name": "@hicaru/bearby.js",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": " The web3 inject of bearby walet to access massa blockchain ",
   "main": "index.js",
   "repository": "git@github.com:bearby-wallet/bearby-web3.git",
@@ -51,7 +51,6 @@
     "@rollup/plugin-typescript": "^10.0.1",
     "http-server": "^14.1.1",
     "rollup": "^3.5.1",
-    "rollup-plugin-dts": "^5.0.0",
     "tslib": "^2.4.1",
     "typescript": "^4.9.3"
   }

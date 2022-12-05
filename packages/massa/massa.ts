@@ -1,4 +1,4 @@
-import type {
+import {
   JsonRPCResponseCliques,
   JsonRPCResponseEndorsements,
   JsonRPCResponseNodeStatus,
@@ -7,11 +7,10 @@ import type {
   MassaBlock,
   OperationTransaction
 } from "types";
-import type { Subject } from "lib/subject";
 
 import { ContentProvider } from "./provider";
 import { JsonRPCRequestMethods } from 'config/rpc-methods';
-import { Wallet } from "../wallet";
+import { Wallet } from "packages/wallet";
 import { Transaction } from "lib/transaction";
 import { OperationsType } from "config/operations";
 

@@ -1,4 +1,4 @@
-import type { JsonRPCResponseCliques, JsonRPCResponseEndorsements, JsonRPCResponseNodeStatus, JsonRPCResponseNodeStatusAddresses, JsonRPCResponseStakers, MassaBlock, OperationTransaction } from "types";
+import { JsonRPCResponseCliques, JsonRPCResponseEndorsements, JsonRPCResponseNodeStatus, JsonRPCResponseNodeStatusAddresses, JsonRPCResponseStakers, MassaBlock, OperationTransaction } from "types";
 import { ContentProvider } from "./provider";
 import { Wallet } from "../wallet";
 export declare class Massa {
