@@ -27,7 +27,7 @@ export class Massa {
     this.#wallet = wallet;
   }
 
-  async getNodesStatus(): Promise<JsonRPCResponseNodeStatus[]> {
+  async getNodesStatus() {
     const method = JsonRPCRequestMethods.GET_STATUS;
     return this.#provider.send<JsonRPCResponseNodeStatus[]>([{
       method,
