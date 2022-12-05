@@ -1,10 +1,8 @@
 import resolve from '@rollup/plugin-node-resolve';
-import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
 
 const production = !process.env.ROLLUP_WATCH;
-
 
 export default [
 	{
