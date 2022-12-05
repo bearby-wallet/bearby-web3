@@ -1,7 +1,7 @@
-import { MTypeTab, MTypeTabContent } from "config/stream-keys";
-import { TabStream } from "lib/tab-stream";
-import { Subject } from 'lib/subject';
-import { ContentMessage } from 'lib/secure-message';
+import { MTypeTab, MTypeTabContent } from "../config/stream-keys";
+import { TabStream } from "../lib/tab-stream";
+import { Subject } from '../lib/subject';
+import { ContentMessage } from '../lib/secure-message';
 
 
 export class Handler {

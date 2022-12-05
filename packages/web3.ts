@@ -1,4 +1,4 @@
-import { AVAILABLE_ONLY_BROWSER, WEB3_INSTANCE_CREATED } from 'lib/errors';
+import { AVAILABLE_ONLY_BROWSER, WEB3_INSTANCE_CREATED } from '../lib/errors';
 import { Contract } from './contract';
 import { Handler } from './handler';
 import { ContentProvider, Massa } from './massa';

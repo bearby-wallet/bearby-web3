@@ -1,11 +1,11 @@
-import { Subject } from "lib/subject";
-import { TabStream } from "lib/tab-stream";
-import { MTypeTab, MTypeTabContent } from "config/stream-keys";
-import { uuidv4 } from "lib/uuid";
-import { ContentMessage } from "lib/secure-message";
-import { TIME_OUT_SECONDS } from "config/common";
-import { TIME_OUT } from "lib/errors";
-import { RPCBody } from "types/massa";
+import { Subject } from "../../lib/subject";
+import { TabStream } from "../../lib/tab-stream";
+import { MTypeTab, MTypeTabContent } from "../../config/stream-keys";
+import { uuidv4 } from "../../lib/uuid";
+import { ContentMessage } from "../../lib/secure-message";
+import { TIME_OUT_SECONDS } from "../../config/common";
+import { TIME_OUT } from "../../lib/errors";
+import { RPCBody } from "../../types";
 
 
 export class ContentProvider {

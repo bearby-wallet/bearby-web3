@@ -1,4 +1,4 @@
-import { Subject } from "lib/subject";
+import { Subject } from "../../lib/subject";
 export declare class Network {
     #private;
     net?: string;

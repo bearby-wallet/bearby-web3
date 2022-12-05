@@ -1,5 +1,5 @@
-import { MTypeTab } from "config/stream-keys";
-import { Subject } from "lib/subject";
+import { MTypeTab } from "../../config/stream-keys";
+import { Subject } from "../../lib/subject";
 
 
 export class Account {

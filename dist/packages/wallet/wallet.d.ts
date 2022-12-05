@@ -1,7 +1,7 @@
-import type { SignedMessage } from "types";
-import { Subject } from "lib/subject";
-import { TabStream } from "lib/tab-stream";
-import { Transaction } from "lib/transaction";
+import { SignedMessage } from "../../types";
+import { Subject } from "../../lib/subject";
+import { TabStream } from "../../lib/tab-stream";
+import { Transaction } from "../../lib/transaction";
 import { Account } from './account';
 import { Network } from "./network";
 import { Blockchain } from "./blockchain";

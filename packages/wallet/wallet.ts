@@ -1,14 +1,14 @@
-import type { SignedMessage } from "types";
+import { SignedMessage } from "../../types";
 
-import { MTypeTab, MTypeTabContent } from "config/stream-keys";
-import { assert } from "lib/assert";
-import { INVALID_SIGN_PARAMS, WALLET_IS_NOT_CONNECTED } from "lib/errors";
-import { getFavicon } from "lib/favicon";
-import { ContentMessage } from "lib/secure-message";
-import { Subject } from "lib/subject";
-import { TabStream } from "lib/tab-stream";
-import { Transaction } from "lib/transaction";
-import { uuidv4 } from "lib/uuid";
+import { MTypeTab, MTypeTabContent } from "../../config/stream-keys";
+import { assert } from "../../lib/assert";
+import { INVALID_SIGN_PARAMS, WALLET_IS_NOT_CONNECTED } from "../../lib/errors";
+import { getFavicon } from "../../lib/favicon";
+import { ContentMessage } from "../../lib/secure-message";
+import { Subject } from "../../lib/subject";
+import { TabStream } from "../../lib/tab-stream";
+import { Transaction } from "../../lib/transaction";
+import { uuidv4 } from "../../lib/uuid";
 import { Account } from './account';
 import { Network } from "./network";
 import { Blockchain } from "./blockchain";

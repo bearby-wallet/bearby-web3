@@ -6,13 +6,13 @@ import {
   JsonRPCResponseStakers,
   MassaBlock,
   OperationTransaction
-} from "types";
+} from "../../types";
 
 import { ContentProvider } from "./provider";
-import { JsonRPCRequestMethods } from 'config/rpc-methods';
-import { Wallet } from "packages/wallet";
-import { Transaction } from "lib/transaction";
-import { OperationsType } from "config/operations";
+import { JsonRPCRequestMethods } from '../../config/rpc-methods';
+import { Wallet } from "../../packages/wallet";
+import { Transaction } from "../../lib/transaction";
+import { OperationsType } from "../../config/operations";
 
 
 export class Massa {
@@ -27,7 +27,7 @@ export class Massa {
     this.#wallet = wallet;
   }
 
-  async getNodesStatus() {
+  async getNodesStatus(): Promise<JsonRPCResponseNodeStatus[]> {
     const method = JsonRPCRequestMethods.GET_STATUS;
     return this.#provider.send<JsonRPCResponseNodeStatus[]>([{
       method,

@@ -22,13 +22,7 @@ export default [
 				declaration: true,
 				inlineSources: true
 			}),
-			commonjs(),
-			// production && terser({
-			// 	format: {
-			// 		comments: false
-			// 	},
-			// 	compress: false
-			// })
+			commonjs()
 		]
 	}
 ];

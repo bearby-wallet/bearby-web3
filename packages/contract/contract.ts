@@ -1,5 +1,5 @@
-import type { Wallet } from 'packages/wallet';
-import type {
+import { Wallet } from '../../packages/wallet';
+import {
   CallSmartContractParams,
   DatastoreEntryInputParam,
   DataStoreEntryResponse,
@@ -10,13 +10,13 @@ import type {
   JsonRPCResponseExecuteReadOnlyBytecode,
   JsonRPCResponseExecuteReadOnlyCall,
   JsonRPCResponseFilteredSCOutputEvent
-} from 'types';
+} from '../../types';
 
-import { ContentProvider } from 'packages/massa';
-import { Transaction } from 'lib/transaction';
-import { OperationsType } from 'config/operations';
-import { JsonRPCRequestMethods } from 'config/rpc-methods';
-import { utf8ToBytes } from 'lib/hex';
+import { ContentProvider } from '../../packages/massa';
+import { Transaction } from '../../lib/transaction';
+import { OperationsType } from '../../config/operations';
+import { JsonRPCRequestMethods } from '../../config/rpc-methods';
+import { utf8ToBytes } from '../../lib/hex';
 
 
 export class Contract {
