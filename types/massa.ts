@@ -1,4 +1,4 @@
-import type { JsonRPCRequestMethods } from 'config/rpc-methods';
+import { JsonRPCRequestMethods } from '../config/rpc-methods';
 
 
 export type Params = object[] | string[] | number[] | (string | string[] | number[])[];
