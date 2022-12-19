@@ -134,6 +134,21 @@ export interface OperationTransaction extends JsonRPCResponse {
   }[];
 }
 
+export interface GraphIntervalResponse extends JsonRPCResponse {
+  result?: {
+    creator: string;
+    id: string;
+    is_final: boolean;
+    is_in_blockclique: boolean;
+    is_stale: boolean;
+    parents: string[];
+    slot: {
+        period: number;
+        thread: number;
+    }
+  }[];
+}
+
 export interface MassaBlock extends JsonRPCResponse {
   result?: {
     id: string; // BlockId,

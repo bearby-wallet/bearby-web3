@@ -1,4 +1,5 @@
 import {
+  GraphIntervalResponse,
   JsonRPCResponseCliques,
   JsonRPCResponseEndorsements,
   JsonRPCResponseNodeStatus,
@@ -48,6 +49,17 @@ export class Massa {
     return this.#provider.send<MassaBlock[]>([{
       method,
       params: [blocks]
+    }]);
+  }
+
+  async getGraphInterval(start: number, end: number) {
+    const method = JsonRPCRequestMethods.GET_GRAPH_INTERVAL;
+    return this.#provider.send<GraphIntervalResponse[]>([{
+      method,
+      params: [{
+        start,
+        end
+      }]
     }]);
   }
 
