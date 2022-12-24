@@ -17,11 +17,14 @@ import { Transaction } from '../../lib/transaction';
 import { OperationsType } from '../../config/operations';
 import { JsonRPCRequestMethods } from '../../config/rpc-methods';
 import { utf8ToBytes } from '../../lib/hex';
+import { Args } from '../utils';
 
 
 export class Contract {
   readonly #provider: ContentProvider;
   readonly #wallet: Wallet;
+
+  Args = Args;
 
   constructor(provider: ContentProvider, wallet: Wallet) {
     this.#provider = provider;

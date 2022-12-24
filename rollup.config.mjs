@@ -10,7 +10,7 @@ export default [
 		output: {
 			dir: 'dist',
 			name: 'web3',
-			format: 'umd',
+			format: 'es',
 			sourcemap: true
 		},
 		plugins: [

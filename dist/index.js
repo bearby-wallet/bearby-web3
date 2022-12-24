@@ -38,6 +38,7 @@
     const TIME_OUT = 'Request failed by timeout';
     const AVAILABLE_ONLY_BROWSER = 'bearby-web3 available only browser';
     const WEB3_INSTANCE_CREATED = 'bearby Web3 instance already created!';
+    const LONG_STRING = 'Input string is too long max is';
 
     class Transaction {
         get payload() {
@@ -80,6 +81,7 @@
         JsonRPCRequestMethods["GET_STATUS"] = "get_status";
         JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
         // SEND_OPERATIONS              = 'send_operations',
+        JsonRPCRequestMethods["GET_GRAPH_INTERVAL"] = "get_graph_interval";
         JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
         JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
         JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
@@ -99,11 +101,182 @@
         return binaryArray;
     }
 
+    function assert(expressions, msg) {
+        if (!expressions) {
+            throw new Error(msg);
+        }
+    }
+
+    var _Args_instances, _Args_offset, _Args_serialized, _Args_toByteString, _Args_fromByteString, _Args_concatArrays;
+    class Args {
+        /**
+         *
+         * @param {string} serialized
+         * @example
+         * import { web3 } from '@hicaru/bearby.js';
+         * const args1 = new web3.Args();
+         *     // add some arguments
+         * args1
+         *  .addString("hello")
+         *  .addString("world")
+         *  .addU32(97);
+         */
+        constructor(serialized = []) {
+            _Args_instances.add(this);
+            _Args_offset.set(this, 0);
+            _Args_serialized.set(this, void 0);
+            __classPrivateFieldSet(this, _Args_serialized, Uint8Array.from(serialized), "f");
+        }
+        serialize() {
+            return Array.from(__classPrivateFieldGet(this, _Args_serialized, "f"));
+        }
+        nextString() {
+            const length = Number(this.nextU32());
+            const end = __classPrivateFieldGet(this, _Args_offset, "f") + length;
+            const result = __classPrivateFieldGet(this, _Args_instances, "m", _Args_toByteString).call(this, __classPrivateFieldGet(this, _Args_serialized, "f").slice(__classPrivateFieldGet(this, _Args_offset, "f"), end));
+            __classPrivateFieldSet(this, _Args_offset, end, "f");
+            return result;
+        }
+        nextU32() {
+            const buffer = __classPrivateFieldGet(this, _Args_serialized, "f").buffer;
+            const view = new DataView(buffer);
+            const value = view.getUint32(__classPrivateFieldGet(this, _Args_offset, "f"), true);
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 4, "f");
+            return value;
+        }
+        nextU64() {
+            const buffer = __classPrivateFieldGet(this, _Args_serialized, "f").buffer;
+            const view = new DataView(buffer);
+            const value = view.getBigUint64(__classPrivateFieldGet(this, _Args_offset, "f"), true);
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 8, "f");
+            return value;
+        }
+        nextI32() {
+            const buffer = __classPrivateFieldGet(this, _Args_serialized, "f").buffer;
+            const view = new DataView(buffer);
+            const value = view.getInt32(__classPrivateFieldGet(this, _Args_offset, "f"), true);
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 4, "f");
+            return value;
+        }
+        nextI64() {
+            const buffer = __classPrivateFieldGet(this, _Args_serialized, "f").buffer;
+            const view = new DataView(buffer);
+            const value = view.getBigInt64(__classPrivateFieldGet(this, _Args_offset, "f"), true);
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 8, "f");
+            return value;
+        }
+        nextF32() {
+            const buffer = __classPrivateFieldGet(this, _Args_serialized, "f").buffer;
+            const view = new DataView(buffer);
+            const value = view.getFloat32(__classPrivateFieldGet(this, _Args_offset, "f"), true);
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 4, "f");
+            return value;
+        }
+        nextF64() {
+            const buffer = __classPrivateFieldGet(this, _Args_serialized, "f").buffer;
+            const view = new DataView(buffer);
+            const value = view.getFloat64(__classPrivateFieldGet(this, _Args_offset, "f"), true);
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 8, "f");
+            return value;
+        }
+        nextUint8Array() {
+            const length = Number(this.nextU32());
+            const byteArray = __classPrivateFieldGet(this, _Args_serialized, "f").slice(__classPrivateFieldGet(this, _Args_offset, "f"), (__classPrivateFieldGet(this, _Args_offset, "f")) + length);
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + length, "f");
+            return byteArray;
+        }
+        addU32(n) {
+            const buffer = new ArrayBuffer(4);
+            const view = new DataView(buffer);
+            view.setUint32(0, Number(n), true);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), new Uint8Array(view.buffer)), "f");
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 4, "f");
+            return this;
+        }
+        addU64(n) {
+            const buffer = new ArrayBuffer(8);
+            const view = new DataView(buffer);
+            view.setBigUint64(0, BigInt(n), true);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), new Uint8Array(view.buffer)), "f");
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 8, "f");
+            return this;
+        }
+        addI32(n) {
+            const buffer = new ArrayBuffer(4);
+            const view = new DataView(buffer);
+            view.setInt32(0, n, true);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), new Uint8Array(view.buffer)), "f");
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 4, "f");
+            return this;
+        }
+        addI64(n) {
+            const buffer = new ArrayBuffer(8);
+            const view = new DataView(buffer);
+            view.setBigInt64(0, BigInt(n), true);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), new Uint8Array(view.buffer)), "f");
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 8, "f");
+            return this;
+        }
+        addF32(number) {
+            const buffer = new ArrayBuffer(4);
+            const view = new DataView(buffer);
+            view.setFloat32(0, number, true);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), new Uint8Array(view.buffer)), "f");
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 4, "f");
+            return this;
+        }
+        addF64(number) {
+            const buffer = new ArrayBuffer(8);
+            const view = new DataView(buffer);
+            view.setFloat64(0, number, true);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), new Uint8Array(view.buffer)), "f");
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + 8, "f");
+            return this;
+        }
+        addUint8Array(array) {
+            this.addU32(array.length);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), array), "f");
+            __classPrivateFieldSet(this, _Args_offset, __classPrivateFieldGet(this, _Args_offset, "f") + array.length, "f");
+            return this;
+        }
+        /**
+         * Adds an argument to the serialized byte string if the argument is an
+         * instance of a handled type (String of 4294967295 characters maximum)
+         */
+        addString(arg) {
+            const maxSize = 4294967295;
+            const size = arg.length;
+            assert(size <= maxSize, LONG_STRING);
+            this.addU32(size);
+            __classPrivateFieldSet(this, _Args_serialized, __classPrivateFieldGet(this, _Args_instances, "m", _Args_concatArrays).call(this, __classPrivateFieldGet(this, _Args_serialized, "f"), __classPrivateFieldGet(this, _Args_instances, "m", _Args_fromByteString).call(this, arg)), "f");
+            return this;
+        }
+    }
+    _Args_offset = new WeakMap(), _Args_serialized = new WeakMap(), _Args_instances = new WeakSet(), _Args_toByteString = function _Args_toByteString(bytes) {
+        let s = "";
+        for (let i = 0; i < bytes.length; i++) {
+            s += String.fromCharCode(bytes[i]);
+        }
+        return s;
+    }, _Args_fromByteString = function _Args_fromByteString(byteString) {
+        const byteArray = new Uint8Array(byteString.length);
+        for (let i = 0; i < byteArray.length; i++) {
+            byteArray[i] = byteString.charCodeAt(i);
+        }
+        return byteArray;
+    }, _Args_concatArrays = function _Args_concatArrays(a, b) {
+        const c = new Uint8Array(a.length + b.length);
+        c.set(a, 0);
+        c.set(b, a.length);
+        return c;
+    };
+
     var _Contract_provider, _Contract_wallet;
     class Contract {
         constructor(provider, wallet) {
             _Contract_provider.set(this, void 0);
             _Contract_wallet.set(this, void 0);
+            this.Args = Args;
             __classPrivateFieldSet(this, _Contract_provider, provider, "f");
             __classPrivateFieldSet(this, _Contract_wallet, wallet, "f");
         }
@@ -402,6 +575,16 @@
                     params: [blocks]
                 }]);
         }
+        async getGraphInterval(start, end) {
+            const method = JsonRPCRequestMethods.GET_GRAPH_INTERVAL;
+            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+                    method,
+                    params: [{
+                            start,
+                            end
+                        }]
+                }]);
+        }
         async getOperations(...operations) {
             const method = JsonRPCRequestMethods.GET_OPERATIONS;
             return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
@@ -444,12 +627,6 @@
         }
     }
     _Massa_provider = new WeakMap(), _Massa_wallet = new WeakMap();
-
-    function assert(expressions, msg) {
-        if (!expressions) {
-            throw new Error(msg);
-        }
-    }
 
     function getFavicon() {
         let ref = globalThis.document.querySelector('link[rel*=\'icon\']');
@@ -745,6 +922,7 @@
     }
     const web3 = main();
 
+    exports.Args = Args;
     exports.ContentProvider = ContentProvider;
     exports.Contract = Contract;
     exports.Massa = Massa;

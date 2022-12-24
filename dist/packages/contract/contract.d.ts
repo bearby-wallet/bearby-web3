@@ -1,8 +1,10 @@
 import { Wallet } from '../../packages/wallet';
 import { CallSmartContractParams, DatastoreEntryInputParam, DataStoreEntryResponse, DeployParams, EventFilterParam, ExecuteReadOnlyBytecodeParam, ExecuteReadOnlyCall, JsonRPCResponseExecuteReadOnlyBytecode, JsonRPCResponseExecuteReadOnlyCall, JsonRPCResponseFilteredSCOutputEvent } from '../../types';
 import { ContentProvider } from '../../packages/massa';
+import { Args } from '../utils';
 export declare class Contract {
     #private;
+    Args: typeof Args;
     constructor(provider: ContentProvider, wallet: Wallet);
     deploy(params: DeployParams): Promise<string>;
     call(params: CallSmartContractParams): Promise<string>;
