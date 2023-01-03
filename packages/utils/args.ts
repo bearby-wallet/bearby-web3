@@ -1,6 +1,7 @@
 import { assert } from "lib/assert";
 import { LONG_STRING } from "lib/errors";
 
+
 export class Args {
   #offset: number = 0;
   #serialized: Uint8Array;

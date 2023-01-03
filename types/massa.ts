@@ -295,7 +295,7 @@ export interface ExecuteReadOnlyCall {
   simulatedGasPrice: number;
   targetAddress: string;
   targetFunction: string;
-  parameter: string;
+  parameter: string | Uint8Array | number[];
   callerAddress?: string;
 }
 
