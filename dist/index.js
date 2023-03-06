@@ -46,7 +46,7 @@ class Transaction {
             code: this.contract,
             func: this.functionName,
             params: JSON.stringify(this.parameter),
-            toAddr: this.recipient || this.contract,
+            toAddr: this.recipient,
             datastore: this.datastore
         }));
     }
