@@ -54,6 +54,28 @@ export class Wallet {
     this.#subscribe();
   }
 
+  async diconnect(): Promise<boolean> {
+    const type = MTypeTab.DISCONNECT_APP;
+    const recipient = MTypeTabContent.CONTENT;
+    const title = window.document.title;
+    const icon = getFavicon();
+    const payload = {
+      title,
+      icon
+    };
+
+    new ContentMessage({
+      type,
+      payload
+    }).send(this.#stream, recipient);
+
+    this.#connected = false;
+    this.#account.base58 = undefined;
+
+    return Promise.resolve(this.#connected);
+  }
+
+
   async connect(): Promise<boolean> {
     const type = MTypeTab.CONNECT_APP;
     const recipient = MTypeTabContent.CONTENT;

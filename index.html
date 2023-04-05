@@ -12,9 +12,19 @@
   <button onclick="deploy()">deploy</button>
   <button onclick="readBalance()">readBalance</button>
   <button onclick="transfer()">transfer</button>
+  <button onclick="disconnect()">disconect</button>
+  <button onclick="connect()">conect</button>
 
   <script>
     window.contract = '';
+    async function disconnect() {
+      const status = await bearby.wallet.diconnect();
+      console.log(status);
+    }
+    async function connect() {
+      const status = await bearby.wallet.connect();
+      console.log(status);
+    }
     async function deploy() {
       const hash = await bearby.contract.deploy({
           fee: 0,

@@ -11,6 +11,7 @@ export declare const MTypeTab: {
     CONNECT_APP: string;
     RESPONSE_CONNECT_APP: string;
     NETWORK_CHANGED: string;
+    DISCONNECT_APP: string;
     LOCKED: string;
     TX_TO_SEND: string;
     TX_TO_SEND_RESULT: string;

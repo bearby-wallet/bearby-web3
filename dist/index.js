@@ -357,6 +357,7 @@ const MTypeTab = {
     CONNECT_APP: `@/${app}/connect-app`,
     RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
     NETWORK_CHANGED: `@/${app}/network-just-changed`,
+    DISCONNECT_APP: `@/${app}/disconnect_app`,
     LOCKED: `@/${app}/guard-just-lock`,
     TX_TO_SEND: `@/${app}/add-tx-to-send`,
     TX_TO_SEND_RESULT: `@/${app}/response-tx-result`,
@@ -757,6 +758,23 @@ class Wallet {
         __classPrivateFieldSet(this, _Wallet_network, new Network(subject), "f");
         __classPrivateFieldSet(this, _Wallet_blockchain, new Blockchain(subject), "f");
         __classPrivateFieldGet(this, _Wallet_instances, "m", _Wallet_subscribe).call(this);
+    }
+    async diconnect() {
+        const type = MTypeTab.DISCONNECT_APP;
+        const recipient = MTypeTabContent.CONTENT;
+        const title = window.document.title;
+        const icon = getFavicon();
+        const payload = {
+            title,
+            icon
+        };
+        new ContentMessage({
+            type,
+            payload
+        }).send(__classPrivateFieldGet(this, _Wallet_stream, "f"), recipient);
+        __classPrivateFieldSet(this, _Wallet_connected, false, "f");
+        __classPrivateFieldGet(this, _Wallet_account, "f").base58 = undefined;
+        return Promise.resolve(__classPrivateFieldGet(this, _Wallet_connected, "f"));
     }
     async connect() {
         const type = MTypeTab.CONNECT_APP;

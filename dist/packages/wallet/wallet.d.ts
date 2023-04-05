@@ -13,6 +13,7 @@ export declare class Wallet {
     get connected(): boolean;
     get enabled(): boolean;
     constructor(stream: TabStream, subject: Subject);
+    diconnect(): Promise<boolean>;
     connect(): Promise<boolean>;
     signMessage(message: string): Promise<SignedMessage>;
     signTransaction(tx: Transaction): Promise<string>;
