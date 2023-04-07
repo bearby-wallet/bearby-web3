@@ -1,3 +1,4 @@
+import { CALLBACK_ERROR } from "lib/errors";
 import { MTypeTab } from "../../config/stream-keys";
 import { Subject } from "../../lib/subject";
 
@@ -11,12 +12,18 @@ export class Account {
   }
 
   subscribe(cb: (base58?: string) => void) {
+    if (!cb) {
+      throw new Error(CALLBACK_ERROR);
+    }
     if (this.base58) {
       cb(this.base58);
     }
 
     const obs = this.#subject.on((msg) => {
       switch (msg.type) {
+        case MTypeTab.DISCONNECT_APP_RESULT:
+          this.base58 = undefined;
+          break;
         case MTypeTab.ACCOUNT_CHANGED:
           this.base58 = msg.payload.base58;
           break;

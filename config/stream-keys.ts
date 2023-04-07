@@ -17,6 +17,7 @@ export const MTypeTab = {
   RESPONSE_CONNECT_APP: `@/${app}/respoonse-connect-app`,
   NETWORK_CHANGED: `@/${app}/network-just-changed`,
   DISCONNECT_APP: `@/${app}/disconnect_app`,
+  DISCONNECT_APP_RESULT: `@/${app}/disconnect_app_result`,
   LOCKED: `@/${app}/guard-just-lock`,
   TX_TO_SEND: `@/${app}/add-tx-to-send`,
   TX_TO_SEND_RESULT: `@/${app}/response-tx-result`,

@@ -59,9 +59,11 @@ export class Wallet {
     const recipient = MTypeTabContent.CONTENT;
     const title = window.document.title;
     const icon = getFavicon();
+    const uuid = uuidv4();
     const payload = {
       title,
-      icon
+      icon,
+      uuid
     };
 
     new ContentMessage({
@@ -69,10 +71,24 @@ export class Wallet {
       payload
     }).send(this.#stream, recipient);
 
-    this.#connected = false;
-    this.#account.base58 = undefined;
+    return new Promise((resolve, reject) => {
+      const obs = this.#subject.on((msg) => {
+        if (msg.type !== MTypeTab.DISCONNECT_APP_RESULT) return;
+        if (msg.payload.uuid !== uuid) return;
 
-    return Promise.resolve(this.#connected);
+        if (msg.payload.reject) {
+          obs();
+          return reject(new Error(msg.payload.reject));
+        }
+
+        this.#connected = false;
+        this.#account.base58 = undefined;
+        this.#network.net = msg.payload.net;
+
+        obs();
+        return resolve(this.connected);
+      });
+    });
   }
 
 
