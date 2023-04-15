@@ -47,7 +47,6 @@ export class Transaction {
     functionName?: string,
     datastore?: KeyValue<string>
   ) {
-    assert(parameter instanceof Args, ARGS_INSTACNE_ERROR);
     this.type = type;
     this.amount = String(amount);
     this.recipient = recipient;
@@ -55,5 +54,9 @@ export class Transaction {
     this.contract = contract;
     this.functionName = functionName;
     this.datastore = datastore;
+
+    if (this.parameter) {
+      assert(parameter instanceof Args, ARGS_INSTACNE_ERROR);
+    }
   }
 }
