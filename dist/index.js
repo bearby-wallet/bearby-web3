@@ -53,7 +53,7 @@
                 code: this.contract,
                 func: this.functionName,
                 params: JSON.stringify(this.parameter),
-                toAddr: this.recipient,
+                toAddr: this.recipient || this.contract,
                 datastore: this.datastore
             }));
         }
