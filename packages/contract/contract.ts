@@ -85,12 +85,12 @@ export class Contract {
   async getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<DataStoreEntryResponse[]> {
     const method = JsonRPCRequestMethods.GET_DATASTORE_ENTRIES;
     const data = [];
-		for (const { key, address } of params) {
-			data.push({
-				address,
-				key: Array.from(utf8ToBytes(key))
-			});
-		}
+    for (const { key, address } of params) {
+      data.push({
+        address,
+        key: Array.from(utf8ToBytes(key))
+      });
+    }
     return await this.#provider.send<DataStoreEntryResponse[]>([{
       method,
       params: [data]

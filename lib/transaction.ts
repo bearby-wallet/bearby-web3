@@ -1,5 +1,8 @@
 import { OperationsType } from "config/operations";
+import { ARGS_INSTACNE_ERROR } from 'lib/errors';
+import { Args } from "packages/utils";
 import { KeyValue } from "types/general";
+import { assert } from "./assert";
 
 
 export class Transaction {
@@ -10,7 +13,7 @@ export class Transaction {
   coins?: string;
   contract?: string;
   functionName?: string;
-  parameter?: object;
+  parameter?: Args;
   recipient?: string;
   datastore?: KeyValue<string>;
 
@@ -28,7 +31,7 @@ export class Transaction {
         coins: String(this.coins),
         code: this.contract,
         func: this.functionName,
-        params: JSON.stringify(this.parameter),
+        params: this.parameter?.serialize(),
         toAddr: this.recipient || this.contract,
         datastore: this.datastore
       })
@@ -39,11 +42,12 @@ export class Transaction {
     type: OperationsType,
     amount: string,
     recipient?: string,
-    parameter?: object,
+    parameter?: Args,
     contract?: string,
     functionName?: string,
     datastore?: KeyValue<string>
   ) {
+    assert(parameter instanceof Args, ARGS_INSTACNE_ERROR);
     this.type = type;
     this.amount = String(amount);
     this.recipient = recipient;

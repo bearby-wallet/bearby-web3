@@ -6,4 +6,5 @@ export declare const AVAILABLE_ONLY_BROWSER = "bearby-web3 available only browse
 export declare const WEB3_INSTANCE_CREATED = "bearby Web3 instance already created!";
 export declare const LONG_STRING = "Input string is too long max is";
 export declare const CALLBACK_ERROR = "Missing callback arg. use subscribe(cb => /do something/)";
+export declare const ARGS_INSTACNE_ERROR = "parameter should be Args.";
 //# sourceMappingURL=errors.d.ts.map

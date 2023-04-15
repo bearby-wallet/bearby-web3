@@ -40,67 +40,7 @@
     const WEB3_INSTANCE_CREATED = 'bearby Web3 instance already created!';
     const LONG_STRING = 'Input string is too long max is';
     const CALLBACK_ERROR = 'Missing callback arg. use subscribe(cb => /do something/)';
-
-    class Transaction {
-        get payload() {
-            return JSON.parse(JSON.stringify({
-                type: this.type,
-                amount: this.amount,
-                fee: this.fee,
-                gasPrice: this.gasPrice,
-                gasLimit: this.gasLimit,
-                coins: String(this.coins),
-                code: this.contract,
-                func: this.functionName,
-                params: JSON.stringify(this.parameter),
-                toAddr: this.recipient || this.contract,
-                datastore: this.datastore
-            }));
-        }
-        constructor(type, amount, recipient, parameter, contract, functionName, datastore) {
-            this.type = type;
-            this.amount = String(amount);
-            this.recipient = recipient;
-            this.parameter = parameter;
-            this.contract = contract;
-            this.functionName = functionName;
-            this.datastore = datastore;
-        }
-    }
-
-    var OperationsType;
-    (function (OperationsType) {
-        OperationsType[OperationsType["Payment"] = 0] = "Payment";
-        OperationsType[OperationsType["RollBuy"] = 1] = "RollBuy";
-        OperationsType[OperationsType["RollSell"] = 2] = "RollSell";
-        OperationsType[OperationsType["ExecuteSC"] = 3] = "ExecuteSC";
-        OperationsType[OperationsType["CallSC"] = 4] = "CallSC";
-    })(OperationsType || (OperationsType = {}));
-
-    var JsonRPCRequestMethods;
-    (function (JsonRPCRequestMethods) {
-        JsonRPCRequestMethods["GET_STATUS"] = "get_status";
-        JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
-        // SEND_OPERATIONS              = 'send_operations',
-        JsonRPCRequestMethods["GET_GRAPH_INTERVAL"] = "get_graph_interval";
-        JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
-        JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
-        JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
-        JsonRPCRequestMethods["GET_CLIQUES"] = "get_cliques";
-        JsonRPCRequestMethods["GET_STAKERS"] = "get_stakers";
-        JsonRPCRequestMethods["GET_FILTERED_SC_OUTPUT_EVENT"] = "get_filtered_sc_output_event";
-        JsonRPCRequestMethods["EXECUTE_READ_ONLY_BYTECODE"] = "execute_read_only_bytecode";
-        JsonRPCRequestMethods["EXECUTE_READ_ONLY_CALL"] = "execute_read_only_call";
-        JsonRPCRequestMethods["GET_DATASTORE_ENTRIES"] = "get_datastore_entries";
-    })(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
-
-    function utf8ToBytes(str) {
-        let binaryArray = new Uint8Array(str.length);
-        Array.prototype.forEach.call(binaryArray, (_, idx, arr) => {
-            arr[idx] = str.charCodeAt(idx);
-        });
-        return binaryArray;
-    }
+    const ARGS_INSTACNE_ERROR = 'parameter should be Args.';
 
     function assert(expressions, msg) {
         if (!expressions) {
@@ -271,6 +211,68 @@
         c.set(b, a.length);
         return c;
     };
+
+    class Transaction {
+        get payload() {
+            return JSON.parse(JSON.stringify({
+                type: this.type,
+                amount: this.amount,
+                fee: this.fee,
+                gasPrice: this.gasPrice,
+                gasLimit: this.gasLimit,
+                coins: String(this.coins),
+                code: this.contract,
+                func: this.functionName,
+                params: this.parameter?.serialize(),
+                toAddr: this.recipient || this.contract,
+                datastore: this.datastore
+            }));
+        }
+        constructor(type, amount, recipient, parameter, contract, functionName, datastore) {
+            assert(parameter instanceof Args, ARGS_INSTACNE_ERROR);
+            this.type = type;
+            this.amount = String(amount);
+            this.recipient = recipient;
+            this.parameter = parameter;
+            this.contract = contract;
+            this.functionName = functionName;
+            this.datastore = datastore;
+        }
+    }
+
+    var OperationsType;
+    (function (OperationsType) {
+        OperationsType[OperationsType["Payment"] = 0] = "Payment";
+        OperationsType[OperationsType["RollBuy"] = 1] = "RollBuy";
+        OperationsType[OperationsType["RollSell"] = 2] = "RollSell";
+        OperationsType[OperationsType["ExecuteSC"] = 3] = "ExecuteSC";
+        OperationsType[OperationsType["CallSC"] = 4] = "CallSC";
+    })(OperationsType || (OperationsType = {}));
+
+    var JsonRPCRequestMethods;
+    (function (JsonRPCRequestMethods) {
+        JsonRPCRequestMethods["GET_STATUS"] = "get_status";
+        JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
+        // SEND_OPERATIONS              = 'send_operations',
+        JsonRPCRequestMethods["GET_GRAPH_INTERVAL"] = "get_graph_interval";
+        JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
+        JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
+        JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
+        JsonRPCRequestMethods["GET_CLIQUES"] = "get_cliques";
+        JsonRPCRequestMethods["GET_STAKERS"] = "get_stakers";
+        JsonRPCRequestMethods["GET_FILTERED_SC_OUTPUT_EVENT"] = "get_filtered_sc_output_event";
+        JsonRPCRequestMethods["EXECUTE_READ_ONLY_BYTECODE"] = "execute_read_only_bytecode";
+        JsonRPCRequestMethods["EXECUTE_READ_ONLY_CALL"] = "execute_read_only_call";
+        JsonRPCRequestMethods["GET_DATASTORE_ENTRIES"] = "get_datastore_entries";
+    })(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
+
+    function utf8ToBytes(str) {
+        let binaryArray = new Uint8Array(str.length);
+        Array.prototype.forEach.call(binaryArray, (_, idx, arr) => {
+            arr[idx] = str.charCodeAt(idx);
+        });
+        return binaryArray;
+    }
 
     var _Contract_provider, _Contract_wallet;
     class Contract {
