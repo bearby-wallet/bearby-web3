@@ -307,5 +307,4 @@ export interface CallSmartContractParams {
   targetAddress: string;
   functionName: string;
   parameter: Args;
-  gasPrice?: number;
 }
