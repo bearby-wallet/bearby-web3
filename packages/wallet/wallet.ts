@@ -91,6 +91,30 @@ export class Wallet {
     });
   }
 
+  async isMassaAddress(addr: string) {
+    const type = MTypeTab.CHECK_MASSA_ADDRESS;
+    const recipient = MTypeTabContent.CONTENT;
+    const uuid = uuidv4();
+    const payload = {
+      uuid,
+      addr
+    };
+
+    new ContentMessage({
+      type,
+      payload
+    }).send(this.#stream, recipient);
+
+    return new Promise((resolve) => {
+      const obs = this.#subject.on((msg) => {
+        if (msg.type !== MTypeTab.CHECK_MASSA_ADDRESS_RES) return;
+        if (msg.payload.uuid !== uuid) return;
+
+        obs();
+        return resolve(msg.payload.resolve);
+      });
+    });
+  }
 
   async connect(): Promise<boolean> {
     const type = MTypeTab.CONNECT_APP;

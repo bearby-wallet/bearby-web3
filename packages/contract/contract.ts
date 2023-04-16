@@ -63,7 +63,6 @@ export class Contract {
     transaction.fee = String(params.fee);
     transaction.gasLimit = Number(params.maxGas);
     transaction.coins = String(params.coins || 0);
-    transaction.gasPrice = Number(params.gasPrice || 0);
 
     return this.#wallet.signTransaction(transaction);
   }

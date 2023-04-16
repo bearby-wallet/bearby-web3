@@ -16,6 +16,8 @@ export declare const MTypeTab: {
     LOCKED: string;
     TX_TO_SEND: string;
     TX_TO_SEND_RESULT: string;
+    CHECK_MASSA_ADDRESS: string;
+    CHECK_MASSA_ADDRESS_RES: string;
     SIGN_MESSAGE: string;
     SING_MESSAGE_RESULT: string;
 };

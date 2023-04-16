@@ -14,6 +14,7 @@ export declare class Wallet {
     get enabled(): boolean;
     constructor(stream: TabStream, subject: Subject);
     diconnect(): Promise<boolean>;
+    isMassaAddress(addr: string): Promise<unknown>;
     connect(): Promise<boolean>;
     signMessage(message: string): Promise<SignedMessage>;
     signTransaction(tx: Transaction): Promise<string>;

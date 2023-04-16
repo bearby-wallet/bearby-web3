@@ -21,6 +21,8 @@ export const MTypeTab = {
   LOCKED: `@/${app}/guard-just-lock`,
   TX_TO_SEND: `@/${app}/add-tx-to-send`,
   TX_TO_SEND_RESULT: `@/${app}/response-tx-result`,
+  CHECK_MASSA_ADDRESS: `@/${app}/check-massa-address`,
+  CHECK_MASSA_ADDRESS_RES: `@/${app}/check-massa-address-response`,
   SIGN_MESSAGE: `@/${app}/sign-message-call`,
   SING_MESSAGE_RESULT: `@/${app}/sign-message-response`
 };
