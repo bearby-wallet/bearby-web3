@@ -108,23 +108,25 @@ const hash = await web3.contract.deploy({
 
 call
 ```javascript
-import { web3 } from '@hicaru/bearby.js';
+import { web3, Args } from '@hicaru/bearby.js';
+const args = new Args();
+
+args
+  .addString("hello")
+  .addU32(22);
 
 const hash = await web3.contract.call({
   maxGas: 2000000,
   coins: 0,
   targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
   functionName: 'transfer',
-  parameter: {
-    toAccount: 'A12fJb1M9EfAF7YmqYmhBrjb4pEa6hPthTrmwVDePGK9dVmGwknc',
-    nbTokens: '0'
-  }
+  parameter: args
 });
 ```
 
 read
 ```javascript
-import { web3 } from '@hicaru/bearby.js';
+import { web3, Args } from '@hicaru/bearby.js';
 
 const data = await web3.contract.readSmartContract({
   fee: 0,
@@ -132,7 +134,7 @@ const data = await web3.contract.readSmartContract({
   simulatedGasPrice: 0,
   targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
   targetFunction: "balanceOf",
-  parameter: 'A12fJb1M9EfAF7YmqYmhBrjb4pEa6hPthTrmwVDePGK9dVmGwknc'
+  parameter: new Args()
 });
 console.log(data);
 ```
