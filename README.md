@@ -68,6 +68,7 @@ web3.wallet // main statements of the wallet
  * `web3.wallet.connect()` the method, after call shows a popup with website information, user can approve or reject.
  * `web3.wallet.signMessage("any message to sign")` the method for sign any messages, shows a popup about message info.
  * `web3.wallet.signTransaction(params)` the method for sending transaction to network.
+ * `web3.wallet.isMassaAddress` The method validation of massa base58 address
 
 
 Account observer:
