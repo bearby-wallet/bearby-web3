@@ -54,9 +54,5 @@ export class Transaction {
     this.contract = contract;
     this.functionName = functionName;
     this.datastore = datastore;
-
-    if (this.parameter) {
-      assert(parameter instanceof Args, ARGS_INSTACNE_ERROR);
-    }
   }
 }
