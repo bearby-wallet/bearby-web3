@@ -1,6 +1,6 @@
 import { OperationsType } from "config/operations";
-import { Args } from "packages/utils";
 import { KeyValue } from "types/general";
+import { CallParam } from "types/massa";
 export declare class Transaction {
     fee?: string;
     gasPrice?: number;
@@ -8,12 +8,12 @@ export declare class Transaction {
     coins?: string;
     contract?: string;
     functionName?: string;
-    parameter?: Args;
+    parameter?: CallParam[];
     recipient?: string;
     datastore?: KeyValue<string>;
     readonly type: OperationsType;
     readonly amount: string;
     get payload(): any;
-    constructor(type: OperationsType, amount: string, recipient?: string, parameter?: Args, contract?: string, functionName?: string, datastore?: KeyValue<string>);
+    constructor(type: OperationsType, amount: string, recipient?: string, parameter?: CallParam[], contract?: string, functionName?: string, datastore?: KeyValue<string>);
 }
 //# sourceMappingURL=transaction.d.ts.map

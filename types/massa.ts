@@ -1,5 +1,5 @@
-import { Args } from 'packages/utils';
 import { JsonRPCRequestMethods } from '../config/rpc-methods';
+import { ArgTypes } from '../config/args-types';
 
 
 export type Params = object[] | string[] | number[] | (string | string[] | number[])[];
@@ -300,11 +300,18 @@ export interface ExecuteReadOnlyCall {
   callerAddress?: string;
 }
 
+export interface CallParam {
+  type: ArgTypes;
+  vname: string;
+  value: string | bigint | number | boolean;
+}
+
 export interface CallSmartContractParams {
   fee: number;
   maxGas: number;
   coins: number;
   targetAddress: string;
   functionName: string;
-  parameter: Args;
+  parameter: CallParam[];
 }
+
