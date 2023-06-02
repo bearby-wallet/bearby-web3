@@ -75,12 +75,15 @@
       const hash = await bearby.contract.call({
         maxGas: 2000000,
         coins: 0,
-        targetAddress: window.contract,
+        targetAddress: "AS1jRkWpQuLyXbHm8PkQ78X3JNBt4RxBLpqSgotfmGBmPtPvxpoc",
         functionName: 'transfer',
-        parameter: {
-          toAccount: 'AU1jRkWpQuLyXbHm8PkQ78X3JNBt4RxBLpqSgotfmGBmPtPvxpoc',
-          nbTokens: '0'
-        }
+        parameter: [
+          {
+            type: bearby.contract.types.U8,
+            vname: "test",
+            value: 9
+          }
+        ]
       });
 
       console.log(hash);

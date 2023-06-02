@@ -1,4 +1,8 @@
-define(['exports'], (function (exports) { 'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.web3 = {}));
+})(this, (function (exports) { 'use strict';
 
     /******************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -97,11 +101,25 @@ define(['exports'], (function (exports) { 'use strict';
         return binaryArray;
     }
 
+    var ArgTypes;
+    (function (ArgTypes) {
+        ArgTypes[ArgTypes["STRING"] = 0] = "STRING";
+        ArgTypes[ArgTypes["BOOL"] = 1] = "BOOL";
+        ArgTypes[ArgTypes["U8"] = 2] = "U8";
+        ArgTypes[ArgTypes["U32"] = 3] = "U32";
+        ArgTypes[ArgTypes["U64"] = 4] = "U64";
+        ArgTypes[ArgTypes["I32"] = 5] = "I32";
+        ArgTypes[ArgTypes["I64"] = 6] = "I64";
+        ArgTypes[ArgTypes["F32"] = 7] = "F32";
+        ArgTypes[ArgTypes["F64"] = 8] = "F64";
+    })(ArgTypes || (ArgTypes = {}));
+
     var _Contract_provider, _Contract_wallet;
     class Contract {
         constructor(provider, wallet) {
             _Contract_provider.set(this, void 0);
             _Contract_wallet.set(this, void 0);
+            this.types = ArgTypes;
             __classPrivateFieldSet(this, _Contract_provider, provider, "f");
             __classPrivateFieldSet(this, _Contract_wallet, wallet, "f");
         }

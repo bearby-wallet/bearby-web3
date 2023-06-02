@@ -10,3 +10,5 @@ export enum ArgTypes {
   F64,
 }
 
+export type NativeType = string | boolean | number | bigint;
+
