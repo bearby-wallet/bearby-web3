@@ -302,7 +302,7 @@ export interface ExecuteReadOnlyCall {
 
 export interface CallParam {
   type: ArgTypes;
-  vname: string;
+  vname?: string;
   value: string | bigint | number | boolean;
 }
 

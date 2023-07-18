@@ -4,6 +4,8 @@ export enum ArgTypes {
   U8,
   U32,
   U64,
+  U128,
+  U256,
   I32,
   I64,
   F32,

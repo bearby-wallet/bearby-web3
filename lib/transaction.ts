@@ -1,19 +1,19 @@
 import { OperationsType } from "config/operations";
-import { KeyValue } from "types/general";
 import { CallParam } from "types/massa";
 
 
 export class Transaction {
   fee?: string;
-  gasPrice?: number;
-  gasLimit?: number;
+  gasPrice?: string;
+  gasLimit?: string;
 
   coins?: string;
+  maxCoins?: string;
   contract?: string;
   functionName?: string;
   parameter?: CallParam[];
   recipient?: string;
-  datastore?: KeyValue<string>;
+  datastore?: Map<Uint8Array, Uint8Array>;
 
   readonly type: OperationsType;
   readonly amount: string;
@@ -27,6 +27,7 @@ export class Transaction {
         gasPrice: this.gasPrice,
         gasLimit: this.gasLimit,
         coins: String(this.coins),
+        maxCoins: this.maxCoins,
         code: this.contract,
         func: this.functionName,
         params: this.parameter,
@@ -43,7 +44,7 @@ export class Transaction {
     parameter?: CallParam[],
     contract?: string,
     functionName?: string,
-    datastore?: KeyValue<string>
+    datastore?: Map<Uint8Array, Uint8Array>
   ) {
     this.type = type;
     this.amount = String(amount);

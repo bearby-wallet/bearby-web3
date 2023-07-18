@@ -109,19 +109,30 @@ const hash = await web3.contract.deploy({
 
 call
 ```javascript
-import { web3, Args } from '@hicaru/bearby.js';
-const args = new Args();
-
-args
-  .addString("hello")
-  .addU32(22);
-
+import { web3, ArgTypes } from '@hicaru/bearby.js';
 const hash = await web3.contract.call({
   maxGas: 2000000,
   coins: 0,
   targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
   functionName: 'transfer',
-  parameter: args
+  parameter: [
+    {
+      type: ArgTypes.STRING,
+      value: "Hello, World!"
+    },
+    {
+      type: ArgTypes.BOOL,
+      value: true
+    },
+    {
+      type: globalThis.bearby.contract.types.F64,
+      value: 32
+    },
+    {
+      type: globalThis.bearby.contract.types.U256,
+      value: '435435345234324324324323243242398854684'
+    }
+  ]
 });
 ```
 
@@ -135,7 +146,7 @@ const data = await web3.contract.readSmartContract({
   simulatedGasPrice: 0,
   targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
   targetFunction: "balanceOf",
-  parameter: new Args()
+  parameter: []
 });
 console.log(data);
 ```

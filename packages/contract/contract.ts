@@ -37,15 +37,16 @@ export class Contract {
       OperationsType.ExecuteSC,
       '0',
       undefined,
-      undefined,
+      params.parameter,
       params.contractDataBase64,
       undefined,
       params.datastore
     );
 
     transaction.fee = String(params.fee);
-    transaction.gasLimit = Number(params.maxGas);
-    transaction.gasPrice = Number(params.gasPrice);
+    transaction.gasLimit = String(params.maxGas);
+    transaction.gasPrice = String(params.gasPrice);
+    transaction.maxCoins = String(params.maxCoins);
 
     return this.#wallet.signTransaction(transaction);
   }
@@ -61,7 +62,7 @@ export class Contract {
     );
 
     transaction.fee = String(params.fee);
-    transaction.gasLimit = Number(params.maxGas);
+    transaction.gasLimit = String(params.maxGas);
     transaction.coins = String(params.coins || 0);
 
     return this.#wallet.signTransaction(transaction);

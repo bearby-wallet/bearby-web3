@@ -1,12 +1,13 @@
-import type { KeyValue } from './general';
-
+import type { CallParam } from "./massa";
 
 export interface DeployParams {
   maxGas: number | string;
+  maxCoins: number | string;
   gasPrice: number | string;
   contractDataBase64: string;
   fee?: number | string;
-  datastore?: KeyValue<string>;
+  parameter?: CallParam[];
+  datastore?: Map<Uint8Array, Uint8Array>;
 }
 
 export interface DatastoreEntryInputParam {
