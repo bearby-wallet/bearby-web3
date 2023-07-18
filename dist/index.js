@@ -834,5 +834,5 @@ function main() {
 }
 const web3 = main();
 
-export { ContentProvider, Contract, Massa, Wallet, Web3, web3 };
+export { ArgTypes, ContentProvider, Contract, Massa, Wallet, Web3, web3 };
 //# sourceMappingURL=index.js.map
