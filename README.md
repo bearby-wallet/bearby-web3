@@ -99,11 +99,19 @@ deploy
 ```javascript
 import { web3 } from '@hicaru/bearby.js';
 
-const hash = await web3.contract.deploy({
-  fee: 0,
-  maxGas: 2000000,
-  gasPrice: 0,
-  contractDataBase64: 'base64'
+ const hash = await bearby.contract.deploy({
+    fee: 0,
+    maxGas: 4_200_000_000,
+    maxCoins: 0.1 * 10**9,
+    coins: 100000000n,
+    parameters: [
+      {
+        type: bearby.contract.types.STRING,
+        value: "Hello, World!"
+      }
+    ],
+    deployerBase64: "AGFzbQEAAAABWA9gAX8Bf2AAAGACf38AAAAAAAAAAAIAAAACAAAAA=",
+    contractDataBase64: "AGFzbQEAAAABKQhgAX8AYAJ/fbWFw"
 });
 ```
 
