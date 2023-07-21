@@ -8,12 +8,12 @@ export declare class Transaction {
     maxCoins?: string;
     contract?: string;
     functionName?: string;
-    parameter?: CallParam[];
+    parameters?: CallParam[];
     recipient?: string;
-    datastore?: Map<Uint8Array, Uint8Array>;
+    deployer?: string;
     readonly type: OperationsType;
     readonly amount: string;
     get payload(): any;
-    constructor(type: OperationsType, amount: string, recipient?: string, parameter?: CallParam[], contract?: string, functionName?: string, datastore?: Map<Uint8Array, Uint8Array>);
+    constructor(type: OperationsType, amount: string, recipient?: string, parameters?: CallParam[], contract?: string, functionName?: string);
 }
 //# sourceMappingURL=transaction.d.ts.map

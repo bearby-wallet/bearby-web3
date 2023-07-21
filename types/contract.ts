@@ -1,13 +1,14 @@
 import type { CallParam } from "./massa";
 
 export interface DeployParams {
-  maxGas: number | string;
-  maxCoins: number | string;
-  gasPrice: number | string;
+  maxGas: number | string | bigint;
+  maxCoins: number | string | bigint;
+  coins: number | string | bigint;
+  gasPrice: number | string | bigint;
   contractDataBase64: string;
-  fee?: number | string;
-  parameter?: CallParam[];
-  datastore?: Map<Uint8Array, Uint8Array>;
+  deployerBase64: string;
+  fee?: number | string | bigint;
+  parameters?: CallParam[];
 }
 
 export interface DatastoreEntryInputParam {

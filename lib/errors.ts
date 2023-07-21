@@ -6,6 +6,6 @@ export const AVAILABLE_ONLY_BROWSER = 'bearby-web3 available only browser';
 export const WEB3_INSTANCE_CREATED = 'bearby Web3 instance already created!';
 export const LONG_STRING = 'Input string is too long max is';
 export const CALLBACK_ERROR = 'Missing callback arg. use subscribe(cb => /do something/)';
-export const ARGS_INSTACNE_ERROR = 'parameter should be Args.';
+export const ARGS_INSTACNE_ERROR = 'parameters should be Args.';
 
 

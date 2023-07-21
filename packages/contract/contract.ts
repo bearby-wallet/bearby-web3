@@ -37,16 +37,17 @@ export class Contract {
       OperationsType.ExecuteSC,
       '0',
       undefined,
-      params.parameter,
+      params.parameters,
       params.contractDataBase64,
-      undefined,
-      params.datastore
+      undefined
     );
 
+    transaction.deployer = params.deployerBase64;
     transaction.fee = String(params.fee);
     transaction.gasLimit = String(params.maxGas);
     transaction.gasPrice = String(params.gasPrice);
     transaction.maxCoins = String(params.maxCoins);
+    transaction.coins = String(params.coins);
 
     return this.#wallet.signTransaction(transaction);
   }
@@ -56,7 +57,7 @@ export class Contract {
       OperationsType.CallSC,
       '0',
       undefined,
-      params.parameter,
+      params.parameters,
       params.targetAddress,
       params.functionName
     );
@@ -114,7 +115,7 @@ export class Contract {
         simulated_gas_price: String(v.simulatedGasPrice),
         target_address: v.targetAddress,
         target_function: v.targetFunction,
-        parameter: v.parameter,
+        parameters: v.parameters,
         caller_address: v.callerAddress || this.#wallet.account.base58
       }))]
     }]);

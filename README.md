@@ -115,7 +115,7 @@ const hash = await web3.contract.call({
   coins: 0,
   targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
   functionName: 'transfer',
-  parameter: [
+  parameters: [
     {
       type: ArgTypes.STRING,
       value: "Hello, World!"
@@ -146,7 +146,7 @@ const data = await web3.contract.readSmartContract({
   simulatedGasPrice: 0,
   targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
   targetFunction: "balanceOf",
-  parameter: []
+  parameters: []
 });
 console.log(data);
 ```

@@ -11,9 +11,9 @@ export class Transaction {
   maxCoins?: string;
   contract?: string;
   functionName?: string;
-  parameter?: CallParam[];
+  parameters?: CallParam[];
   recipient?: string;
-  datastore?: Map<Uint8Array, Uint8Array>;
+  deployer?: string;
 
   readonly type: OperationsType;
   readonly amount: string;
@@ -26,13 +26,13 @@ export class Transaction {
         fee: this.fee,
         gasPrice: this.gasPrice,
         gasLimit: this.gasLimit,
-        coins: String(this.coins),
+        coins: this.coins,
         maxCoins: this.maxCoins,
         code: this.contract,
         func: this.functionName,
-        params: this.parameter,
+        params: this.parameters,
         toAddr: this.recipient || this.contract,
-        datastore: this.datastore
+        deployer: this.deployer
       })
     );
   }
@@ -41,17 +41,15 @@ export class Transaction {
     type: OperationsType,
     amount: string,
     recipient?: string,
-    parameter?: CallParam[],
+    parameters?: CallParam[],
     contract?: string,
-    functionName?: string,
-    datastore?: Map<Uint8Array, Uint8Array>
+    functionName?: string
   ) {
     this.type = type;
     this.amount = String(amount);
     this.recipient = recipient;
-    this.parameter = parameter || [];
+    this.parameters = parameters || [];
     this.contract = contract;
     this.functionName = functionName;
-    this.datastore = datastore;
   }
 }

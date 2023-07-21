@@ -120,7 +120,7 @@ export interface OperationTransaction extends JsonRPCResponse {
           CallSC?: {
             target_addr: string; // Address
             target_func: string; // Function name
-            param: string; // Parameter to pass to the function
+            param: string; // parameters to pass to the function
             max_gas: number;
             sequential_coins: number; // Amount
             parallel_coins: number; // Amount
@@ -296,7 +296,7 @@ export interface ExecuteReadOnlyCall {
   simulatedGasPrice: number;
   targetAddress: string;
   targetFunction: string;
-  parameter: string | Uint8Array | number[];
+  parameters: string | Uint8Array | number[];
   callerAddress?: string;
 }
 
@@ -312,6 +312,6 @@ export interface CallSmartContractParams {
   coins: number;
   targetAddress: string;
   functionName: string;
-  parameter: CallParam[];
+  parameters: CallParam[];
 }
 
