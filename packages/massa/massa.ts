@@ -122,7 +122,7 @@ export class Massa {
     return this.#wallet.signTransaction(transaction);
   }
 
-  async buyRolls(amount: string) {
+  async buyRolls(amount = '1') {
     const transaction = new Transaction(
       OperationsType.RollBuy,
       amount
@@ -131,7 +131,7 @@ export class Massa {
     return this.#wallet.signTransaction(transaction);
   }
 
-  async sellRolls(amount: string) {
+  async sellRolls(amount = '1') {
     const transaction = new Transaction(
       OperationsType.RollSell,
       amount

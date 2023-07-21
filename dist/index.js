@@ -476,11 +476,11 @@
             const transaction = new Transaction(OperationsType.Payment, amount, recipient);
             return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
         }
-        async buyRolls(amount) {
+        async buyRolls(amount = '1') {
             const transaction = new Transaction(OperationsType.RollBuy, amount);
             return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
         }
-        async sellRolls(amount) {
+        async sellRolls(amount = '1') {
             const transaction = new Transaction(OperationsType.RollSell, amount);
             return __classPrivateFieldGet(this, _Massa_wallet, "f").signTransaction(transaction);
         }

@@ -13,7 +13,7 @@ export declare class Massa {
     getEndorsements(...Ids: string[]): Promise<JsonRPCResponse<JsonRPCResponseEndorsements[]>>;
     getCliques(): Promise<JsonRPCResponse<JsonRPCResponseCliques[]>>;
     payment(amount: string, recipient: string): Promise<string>;
-    buyRolls(amount: string): Promise<string>;
-    sellRolls(amount: string): Promise<string>;
+    buyRolls(amount?: string): Promise<string>;
+    sellRolls(amount?: string): Promise<string>;
 }
 //# sourceMappingURL=massa.d.ts.map
