@@ -2,7 +2,7 @@ export declare enum JsonRPCRequestMethods {
     GET_STATUS = "get_status",
     GET_ADDRESSES = "get_addresses",
     GET_GRAPH_INTERVAL = "get_graph_interval",
-    GET_BLOCKS = "get_block",
+    GET_BLOCKS = "get_blocks",
     GET_ENDORSEMENTS = "get_endorsements",
     GET_OPERATIONS = "get_operations",
     GET_CLIQUES = "get_cliques",

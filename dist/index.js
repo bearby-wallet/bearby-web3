@@ -82,7 +82,7 @@
         JsonRPCRequestMethods["GET_ADDRESSES"] = "get_addresses";
         // SEND_OPERATIONS              = 'send_operations',
         JsonRPCRequestMethods["GET_GRAPH_INTERVAL"] = "get_graph_interval";
-        JsonRPCRequestMethods["GET_BLOCKS"] = "get_block";
+        JsonRPCRequestMethods["GET_BLOCKS"] = "get_blocks";
         JsonRPCRequestMethods["GET_ENDORSEMENTS"] = "get_endorsements";
         JsonRPCRequestMethods["GET_OPERATIONS"] = "get_operations";
         JsonRPCRequestMethods["GET_CLIQUES"] = "get_cliques";
@@ -407,62 +407,70 @@
         }
         async getNodesStatus() {
             const method = JsonRPCRequestMethods.GET_STATUS;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: []
                 }]);
+            return res;
         }
         async getAddresses(...addresses) {
             const method = JsonRPCRequestMethods.GET_ADDRESSES;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: [addresses]
                 }]);
+            return res;
         }
         async getBlocks(...blocks) {
             const method = JsonRPCRequestMethods.GET_BLOCKS;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: [blocks]
                 }]);
+            return res;
         }
         async getGraphInterval(start, end) {
             const method = JsonRPCRequestMethods.GET_GRAPH_INTERVAL;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: [{
                             start,
                             end
                         }]
                 }]);
+            return res;
         }
         async getOperations(...operations) {
             const method = JsonRPCRequestMethods.GET_OPERATIONS;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: [operations]
                 }]);
+            return res;
         }
         async getStakers() {
             const method = JsonRPCRequestMethods.GET_STAKERS;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: []
                 }]);
+            return res;
         }
         async getEndorsements(...Ids) {
             const method = JsonRPCRequestMethods.GET_ENDORSEMENTS;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: [Ids]
                 }]);
+            return res;
         }
         async getCliques() {
             const method = JsonRPCRequestMethods.GET_CLIQUES;
-            return __classPrivateFieldGet(this, _Massa_provider, "f").send([{
+            const [res] = await __classPrivateFieldGet(this, _Massa_provider, "f").send([{
                     method,
                     params: []
                 }]);
+            return res;
         }
         async payment(amount, recipient) {
             const transaction = new Transaction(OperationsType.Payment, amount, recipient);

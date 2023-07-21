@@ -1,5 +1,6 @@
-import {
+import type {
   GraphIntervalResponse,
+  JsonRPCResponse,
   JsonRPCResponseCliques,
   JsonRPCResponseEndorsements,
   JsonRPCResponseNodeStatus,
@@ -30,69 +31,85 @@ export class Massa {
 
   async getNodesStatus() {
     const method = JsonRPCRequestMethods.GET_STATUS;
-    return this.#provider.send<JsonRPCResponseNodeStatus[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<JsonRPCResponseNodeStatus>[]>([{
       method,
       params: []
     }]);
+
+    return res;
   }
 
   async getAddresses(...addresses: string[]) {
     const method = JsonRPCRequestMethods.GET_ADDRESSES;
-    return this.#provider.send<JsonRPCResponseNodeStatusAddresses[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<JsonRPCResponseNodeStatusAddresses[]>[]>([{
       method,
       params: [addresses]
     }]);
+
+    return res;
   }
 
   async getBlocks(...blocks: string[]) {
     const method = JsonRPCRequestMethods.GET_BLOCKS;
-    return this.#provider.send<MassaBlock[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<MassaBlock[]>[]>([{
       method,
       params: [blocks]
     }]);
+
+    return res;
   }
 
   async getGraphInterval(start: number, end: number) {
     const method = JsonRPCRequestMethods.GET_GRAPH_INTERVAL;
-    return this.#provider.send<GraphIntervalResponse[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<GraphIntervalResponse[]>[]>([{
       method,
       params: [{
         start,
         end
       }]
     }]);
+
+    return res;
   }
 
   async getOperations(...operations: string[]) {
     const method = JsonRPCRequestMethods.GET_OPERATIONS;
-    return this.#provider.send<OperationTransaction[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<OperationTransaction[]>[]>([{
       method,
       params: [operations]
     }]);
+
+    return res;
   }
 
   async getStakers() {
     const method = JsonRPCRequestMethods.GET_STAKERS;
-    return this.#provider.send<JsonRPCResponseStakers[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<JsonRPCResponseStakers[]>[]>([{
       method,
       params: []
     }]);
+
+    return res;
   }
 
   async getEndorsements(...Ids: string[]) {
     const method = JsonRPCRequestMethods.GET_ENDORSEMENTS;
-    return this.#provider.send<JsonRPCResponseEndorsements[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<JsonRPCResponseEndorsements[]>[]>([{
       method,
       params: [Ids]
     }]);
+
+    return res;
   }
 
   async getCliques() {
     const method = JsonRPCRequestMethods.GET_CLIQUES;
-    return this.#provider.send<JsonRPCResponseCliques[]>([{
+    const [res] = await this.#provider.send<JsonRPCResponse<JsonRPCResponseCliques[]>[]>([{
       method,
       params: []
     }]);
+
+    return res;
   }
 
   async payment(amount: string, recipient: string) {

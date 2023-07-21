@@ -3,7 +3,7 @@ export enum JsonRPCRequestMethods {
 	GET_ADDRESSES                = 'get_addresses',
 	// SEND_OPERATIONS              = 'send_operations',
 	GET_GRAPH_INTERVAL           = 'get_graph_interval',
-	GET_BLOCKS                   = 'get_block',
+	GET_BLOCKS                   = 'get_blocks',
 	GET_ENDORSEMENTS             = 'get_endorsements',
 	GET_OPERATIONS               = 'get_operations',
 	GET_CLIQUES                  = 'get_cliques',
