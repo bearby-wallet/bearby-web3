@@ -54,7 +54,7 @@ export class Wallet {
     this.#subscribe();
   }
 
-  async diconnect(): Promise<boolean> {
+  async disconnect(): Promise<boolean> {
     const type = MTypeTab.DISCONNECT_APP;
     const recipient = MTypeTabContent.CONTENT;
     const title = window.document.title;
