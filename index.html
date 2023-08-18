@@ -14,6 +14,8 @@
   <button onclick="transfer()">transfer</button>
   <button onclick="disconnect()">disconect</button>
   <button onclick="connect()">conect</button>
+  <button onclick="test_sign()">sign message</button>
+  <button onclick="test_req_pub_key()">get pubkey</button>
 
   <script>
     window.contract = '';
@@ -83,7 +85,7 @@
       const hash = await bearby.contract.call({
         maxGas: 2000000,
         coins: 0,
-        targetAddress: "AS1jRkWpQuLyXbHm8PkQ78X3JNBt4RxBLpqSgotfmGBmPtPvxpoc",
+        targetAddress: "AS1brg4nueUAT41sm8eRZrmYndUgkAhs2hwEkJD4N8UejtK2Qa9C",
         functionName: 'transfer',
         parameters: [
           {
@@ -108,6 +110,16 @@
       console.log(hash);
     }
 
+    async function test_req_pub_key() {
+      const pubkey = await bearby.wallet.requestPubKey();
+      console.log(pubkey);
+    }
+
+    async function test_sign() {
+      const res = await bearby.wallet.signMessage("test");
+
+      console.log(res);
+    }
     console.log(bearby);
   </script>
 </body>

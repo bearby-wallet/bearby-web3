@@ -20,5 +20,7 @@ export declare const MTypeTab: {
     CHECK_MASSA_ADDRESS_RES: string;
     SIGN_MESSAGE: string;
     SING_MESSAGE_RESULT: string;
+    RESPONSE_PUB_KEY: string;
+    REQUEST_PUB_KEY: string;
 };
 //# sourceMappingURL=stream-keys.d.ts.map

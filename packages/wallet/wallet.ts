@@ -116,6 +116,39 @@ export class Wallet {
     });
   }
 
+  async requestPubKey(): Promise<string> {
+    const type = MTypeTab.REQUEST_PUB_KEY;
+    const recipient = MTypeTabContent.CONTENT;
+    const uuid = uuidv4();
+    const title = window.document.title;
+    const icon = getFavicon();
+    const payload = {
+      uuid,
+      title,
+      icon
+    };
+
+    new ContentMessage({
+      type,
+      payload
+    }).send(this.#stream, recipient);
+
+    return new Promise((resolve, reject) => {
+      const obs = this.#subject.on((msg) => {
+        if (msg.type !== MTypeTab.RESPONSE_PUB_KEY) return;
+        if (msg.payload.uuid !== uuid) return;
+
+        if (msg.payload.reject) {
+          obs();
+          return reject(new Error(msg.payload.reject));
+        }
+
+        obs();
+        return resolve(msg.payload.resolve);
+      });
+    });
+  }
+
   async connect(): Promise<boolean> {
     const type = MTypeTab.CONNECT_APP;
     const recipient = MTypeTabContent.CONTENT;

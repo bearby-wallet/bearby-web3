@@ -24,5 +24,7 @@ export const MTypeTab = {
   CHECK_MASSA_ADDRESS: `@/${app}/check-massa-address`,
   CHECK_MASSA_ADDRESS_RES: `@/${app}/check-massa-address-response`,
   SIGN_MESSAGE: `@/${app}/sign-message-call`,
-  SING_MESSAGE_RESULT: `@/${app}/sign-message-response`
+  SING_MESSAGE_RESULT: `@/${app}/sign-message-response`,
+  RESPONSE_PUB_KEY: `@/${app}/response-pub-key`,
+  REQUEST_PUB_KEY: `@/${app}/request-pub-key`,
 };
