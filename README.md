@@ -177,6 +177,15 @@ if (response && response.result && response.result[0] && response.result[0].data
   console.log(contract);
 }
 ```
+
+Request pubkey.
+```typescript
+import { web3 } from '@hicaru/bearby.js';
+
+const pubkey = await web3.wallet.requestPubKey();
+```
+
+
 types
 ```javascript
 import { JsonRPCResponseExecuteReadOnlyBytecode } from '@hicaru/bearby.js/types';
