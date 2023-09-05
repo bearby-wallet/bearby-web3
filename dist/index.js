@@ -34,6 +34,67 @@ const AVAILABLE_ONLY_BROWSER = 'bearby-web3 available only browser';
 const WEB3_INSTANCE_CREATED = 'bearby Web3 instance already created!';
 const CALLBACK_ERROR = 'Missing callback arg. use subscribe(cb => /do something/)';
 
+const TypeOf = Object.freeze({
+    isArray(argument) {
+        return Object.prototype.toString.call(argument) === '[object Array]';
+    },
+    isObject(argument) {
+        return Object.prototype.toString.call(argument) === '[object Object]';
+    },
+    isNumber(argument) {
+        return Object.prototype.toString.call(argument) === '[object Number]'
+            && !isNaN(Number(argument));
+    },
+    isInt(argument) {
+        try {
+            return Boolean(BigInt(String(argument)));
+        }
+        catch {
+            return false;
+        }
+    },
+    isError(argument) {
+        return Object.prototype.toString.call(argument) === '[object Error]';
+    },
+    isString(argument) {
+        return Object.prototype.toString.call(argument) === '[object String]';
+    },
+    isBoolean(argument) {
+        return Object.prototype.toString.call(argument) === '[object Boolean]';
+    },
+    isNull(argument) {
+        return Object.prototype.toString.call(argument) === '[object Null]';
+    },
+    isUndefined(argument) {
+        return Object.prototype.toString.call(argument) === '[object Undefined]';
+    },
+    isBigInt(argument) {
+        return Object.prototype.toString.call(argument) === '[object BigInt]';
+    },
+    isEmptyObject(argument) {
+        if (!this.isObject(argument)) {
+            return false;
+        }
+        else {
+            return Object.getOwnPropertyNames(argument).length === 0;
+        }
+    },
+    isEmptyArray(argument) {
+        if (!this.isArray(argument)) {
+            return false;
+        }
+        else {
+            return argument.length === 0;
+        }
+    },
+    getType(argument) {
+        if (Number.isNaN(argument)) {
+            return 'NaN';
+        }
+        return Object.prototype.toString.call(argument).split(' ')[1].slice(0, -1).toLowerCase();
+    }
+});
+
 class Transaction {
     get payload() {
         return JSON.parse(JSON.stringify({
@@ -55,9 +116,16 @@ class Transaction {
         this.type = type;
         this.amount = String(amount);
         this.recipient = recipient;
-        this.parameters = parameters || [];
         this.contract = contract;
         this.functionName = functionName;
+        this.parameters = parameters || [];
+        // serialize bgin params.
+        this.parameters = this.parameters.map((data) => {
+            if (TypeOf.isBigInt(data.value)) {
+                data.value = String(data.value);
+            }
+            return data;
+        });
     }
 }
 

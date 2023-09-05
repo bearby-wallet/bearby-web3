@@ -1,5 +1,6 @@
 import { OperationsType } from "config/operations";
 import { CallParam } from "types/massa";
+import { TypeOf } from "./type";
 
 
 export class Transaction {
@@ -48,8 +49,17 @@ export class Transaction {
     this.type = type;
     this.amount = String(amount);
     this.recipient = recipient;
-    this.parameters = parameters || [];
     this.contract = contract;
     this.functionName = functionName;
+    this.parameters = parameters || [];
+
+    // serialize bgin params.
+    this.parameters = this.parameters.map((data) => {
+      if (TypeOf.isBigInt(data.value)) {
+        data.value = String(data.value);
+      }
+
+      return data;
+    });
   }
 }
