@@ -10,6 +10,8 @@ export enum ArgTypes {
   I64,
   F32,
   F64,
+  ARRAY,
+  UINT8ARRAY,
 }
 
 export type NativeType = string | boolean | number | bigint;

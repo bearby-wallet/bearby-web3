@@ -13,6 +13,7 @@ export class Transaction {
   contract?: string;
   functionName?: string;
   parameters?: CallParam[];
+  unsaveParameters?: Uint8Array;
   recipient?: string;
   deployer?: string;
 
@@ -32,6 +33,7 @@ export class Transaction {
         code: this.contract,
         func: this.functionName,
         params: this.parameters,
+        unsaveParams: this.unsaveParameters,
         toAddr: this.recipient || this.contract,
         deployer: this.deployer
       })
@@ -43,6 +45,7 @@ export class Transaction {
     amount: string,
     recipient?: string,
     parameters?: CallParam[],
+    unsaveParameters?: Uint8Array,
     contract?: string,
     functionName?: string
   ) {
@@ -51,15 +54,18 @@ export class Transaction {
     this.recipient = recipient;
     this.contract = contract;
     this.functionName = functionName;
-    this.parameters = parameters || [];
+    this.parameters = parameters;
+    this.unsaveParameters = unsaveParameters;
 
-    // serialize bgin params.
-    this.parameters = this.parameters.map((data) => {
-      if (TypeOf.isBigInt(data.value)) {
-        data.value = String(data.value);
-      }
+    if (this.parameters) {
+      // serialize bgin params.
+      this.parameters = this.parameters.map((data) => {
+        if (TypeOf.isBigInt(data.value)) {
+          data.value = String(data.value);
+        }
 
-      return data;
-    });
+        return data;
+      });
+    }
   }
 }

@@ -9,6 +9,7 @@ export interface DeployParams {
   deployerBase64: string;
   fee?: number | string | bigint;
   parameters?: CallParam[];
+  unsaveParameters?: Uint8Array;
 }
 
 export interface DatastoreEntryInputParam {
@@ -17,6 +18,17 @@ export interface DatastoreEntryInputParam {
 }
 
 export interface DataStoreEntryResponse {
-  final_value: number[] |null;
-  candidate_value: number[] |null;
+  final_value: number[] | null;
+  candidate_value: number[] | null;
 }
+
+export interface CallSmartContractParams {
+  fee: number;
+  maxGas: number;
+  coins: number;
+  targetAddress: string;
+  functionName: string;
+  parameters?: CallParam[];
+  unsaveParameters?: Uint8Array;
+}
+
