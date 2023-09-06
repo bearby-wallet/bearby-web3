@@ -312,6 +312,6 @@ export interface CallSmartContractParams {
   coins: number;
   targetAddress: string;
   functionName: string;
-  parameters: CallParam[];
+  parameters: CallParam[] | Uint8Array;
 }
 

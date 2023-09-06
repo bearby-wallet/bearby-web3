@@ -118,14 +118,20 @@ class Transaction {
         this.recipient = recipient;
         this.contract = contract;
         this.functionName = functionName;
-        this.parameters = parameters || [];
-        // serialize bgin params.
-        this.parameters = this.parameters.map((data) => {
-            if (TypeOf.isBigInt(data.value)) {
-                data.value = String(data.value);
-            }
-            return data;
-        });
+        if (parameters instanceof Uint8Array) {
+            console.log("parameters is Uint8Array");
+            this.parameters = parameters;
+        }
+        else {
+            this.parameters = parameters || [];
+            // serialize bgin params.
+            this.parameters = this.parameters.map((data) => {
+                if (TypeOf.isBigInt(data.value)) {
+                    data.value = String(data.value);
+                }
+                return data;
+            });
+        }
     }
 }
 
