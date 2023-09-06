@@ -142,6 +142,21 @@ const hash = await web3.contract.call({
     }
   ]
 });
+
+// UNSAFE_PARAMS:
+import { Args } from "@massalabs/massa-web3";
+
+const args = new Args()
+  .addString("Hello word")
+  .addBool(true)
+  .addF64(0.3);
+const hash = await web3.contract.call({
+  maxGas: 2000000,
+  coins: 0,
+  targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
+  functionName: 'transfer',
+  unsafeParameters: args.serialize()
+});
 ```
 
 read
