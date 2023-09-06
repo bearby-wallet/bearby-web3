@@ -16,6 +16,7 @@
   <button onclick="connect()">conect</button>
   <button onclick="test_sign()">sign message</button>
   <button onclick="test_req_pub_key()">get pubkey</button>
+  <button onclick="testunsafe()">test unsafe</button>
 
   <script>
     window.contract = '';
@@ -104,6 +105,24 @@
             type: bearby.contract.types.U256,
             value: '435435345234324324324323243242398854684'
           }
+        ]
+      });
+
+      console.log(hash);
+    }
+
+    async function testunsafe() {
+      const hash = await bearby.contract.call({
+        maxGas: 1000000,
+        coins: 0,
+        fee: 1000,
+        targetAddress: "AS1X4atEfMdoV4Rj9agjgpowsFgdZULpCig6SXhyX22kgnHMqK4y",
+        functionName: "logEventArgAll",
+        unsafeParameters: [
+            2,   0,   0,   0,   1,  2, 3,   0,   0,  0,
+           49,  49,  49,   9,   0,  0, 0, 114, 101, 99,
+          101, 105, 118, 101, 114, 49, 3,   0,   0,  0,
+           77,  65,  83,   0,   0,  0, 0
         ]
       });
 

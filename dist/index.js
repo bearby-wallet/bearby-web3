@@ -114,19 +114,19 @@
                 code: this.contract,
                 func: this.functionName,
                 params: this.parameters,
-                unsaveParams: this.unsaveParameters,
+                unsafeParams: this.unsafeParams,
                 toAddr: this.recipient || this.contract,
                 deployer: this.deployer
             }));
         }
-        constructor(type, amount, recipient, parameters, unsaveParameters, contract, functionName) {
+        constructor(type, amount, recipient, parameters, unsafeParams, contract, functionName) {
             this.type = type;
             this.amount = String(amount);
             this.recipient = recipient;
             this.contract = contract;
             this.functionName = functionName;
             this.parameters = parameters;
-            this.unsaveParameters = unsaveParameters;
+            this.unsafeParams = unsafeParams;
             if (this.parameters) {
                 // serialize bgin params.
                 this.parameters = this.parameters.map((data) => {
@@ -200,7 +200,7 @@
             __classPrivateFieldSet(this, _Contract_wallet, wallet, "f");
         }
         async deploy(params) {
-            const transaction = new Transaction(OperationsType.ExecuteSC, '0', undefined, params.parameters, params.unsaveParameters, params.contractDataBase64, undefined);
+            const transaction = new Transaction(OperationsType.ExecuteSC, '0', undefined, params.parameters, params.unsafeParameters, params.contractDataBase64, undefined);
             transaction.deployer = params.deployerBase64;
             transaction.fee = String(params.fee);
             transaction.gasLimit = String(params.maxGas);
@@ -210,7 +210,7 @@
             return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);
         }
         async call(params) {
-            const transaction = new Transaction(OperationsType.CallSC, '0', undefined, params.parameters, params.unsaveParameters, params.targetAddress, params.functionName);
+            const transaction = new Transaction(OperationsType.CallSC, '0', undefined, params.parameters, params.unsafeParameters, params.targetAddress, params.functionName);
             transaction.fee = String(params.fee);
             transaction.gasLimit = String(params.maxGas);
             transaction.coins = String(params.coins || 0);

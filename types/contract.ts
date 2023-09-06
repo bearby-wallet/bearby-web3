@@ -9,7 +9,7 @@ export interface DeployParams {
   deployerBase64: string;
   fee?: number | string | bigint;
   parameters?: CallParam[];
-  unsaveParameters?: Uint8Array;
+  unsafeParameters?: Uint8Array;
 }
 
 export interface DatastoreEntryInputParam {
@@ -29,6 +29,6 @@ export interface CallSmartContractParams {
   targetAddress: string;
   functionName: string;
   parameters?: CallParam[];
-  unsaveParameters?: Uint8Array;
+  unsafeParameters?: Uint8Array;
 }
 

@@ -38,7 +38,7 @@ export class Contract {
       '0',
       undefined,
       params.parameters,
-      params.unsaveParameters,
+      params.unsafeParameters,
       params.contractDataBase64,
       undefined
     );
@@ -59,7 +59,7 @@ export class Contract {
       '0',
       undefined,
       params.parameters,
-      params.unsaveParameters,
+      params.unsafeParameters,
       params.targetAddress,
       params.functionName
     );

@@ -13,7 +13,7 @@ export class Transaction {
   contract?: string;
   functionName?: string;
   parameters?: CallParam[];
-  unsaveParameters?: Uint8Array;
+  unsafeParams?: Uint8Array;
   recipient?: string;
   deployer?: string;
 
@@ -33,7 +33,7 @@ export class Transaction {
         code: this.contract,
         func: this.functionName,
         params: this.parameters,
-        unsaveParams: this.unsaveParameters,
+        unsafeParams: this.unsafeParams,
         toAddr: this.recipient || this.contract,
         deployer: this.deployer
       })
@@ -45,7 +45,7 @@ export class Transaction {
     amount: string,
     recipient?: string,
     parameters?: CallParam[],
-    unsaveParameters?: Uint8Array,
+    unsafeParams?: Uint8Array,
     contract?: string,
     functionName?: string
   ) {
@@ -55,7 +55,7 @@ export class Transaction {
     this.contract = contract;
     this.functionName = functionName;
     this.parameters = parameters;
-    this.unsaveParameters = unsaveParameters;
+    this.unsafeParams = unsafeParams;
 
     if (this.parameters) {
       // serialize bgin params.
