@@ -27,4 +27,6 @@ export const MTypeTab = {
   SING_MESSAGE_RESULT: `@/${app}/sign-message-response`,
   RESPONSE_PUB_KEY: `@/${app}/response-pub-key`,
   REQUEST_PUB_KEY: `@/${app}/request-pub-key`,
+  REQUEST_PING: `@/${app}/req-content-ping`,
+  PING_RESPONSE: `@/${app}/res-content-ping`,
 };

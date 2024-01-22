@@ -12,6 +12,7 @@ export declare class Wallet {
     get blockchain(): Blockchain;
     get connected(): boolean;
     get enabled(): boolean;
+    get installed(): boolean;
     constructor(stream: TabStream, subject: Subject);
     disconnect(): Promise<boolean>;
     isMassaAddress(addr: string): Promise<unknown>;

@@ -2,7 +2,7 @@ import { SignedMessage } from "../../types";
 
 import { MTypeTab, MTypeTabContent } from "../../config/stream-keys";
 import { assert } from "../../lib/assert";
-import { INVALID_SIGN_PARAMS, WALLET_IS_NOT_CONNECTED } from "../../lib/errors";
+import { INVALID_SIGN_PARAMS, NOT_INSTALLED, WALLET_IS_NOT_CONNECTED } from "../../lib/errors";
 import { getFavicon } from "../../lib/favicon";
 import { ContentMessage } from "../../lib/secure-message";
 import { Subject } from "../../lib/subject";
@@ -12,6 +12,7 @@ import { uuidv4 } from "../../lib/uuid";
 import { Account } from './account';
 import { Network } from "./network";
 import { Blockchain } from "./blockchain";
+import { TIME_OUT_SECONDS } from "config/common";
 
 
 export class Wallet {
@@ -23,6 +24,7 @@ export class Wallet {
 
   #connected = false;
   #enabled = false;
+  #installed = false;
 
 
   get account() {
@@ -45,6 +47,10 @@ export class Wallet {
     return this.#enabled;
   }
 
+  get installed() {
+    return this.#installed;
+  }
+
   constructor(stream: TabStream, subject: Subject) {
     this.#stream = stream;
     this.#subject = subject;
@@ -65,6 +71,8 @@ export class Wallet {
       icon,
       uuid
     };
+
+    await this.#ping();
 
     new ContentMessage({
       type,
@@ -128,6 +136,8 @@ export class Wallet {
       icon
     };
 
+    await this.#ping();
+
     new ContentMessage({
       type,
       payload
@@ -161,6 +171,8 @@ export class Wallet {
       uuid
     };
 
+    await this.#ping();
+
     new ContentMessage({
       type,
       payload
@@ -189,6 +201,8 @@ export class Wallet {
 
   async signMessage(message: string): Promise<SignedMessage> {
     assert(this.connected, WALLET_IS_NOT_CONNECTED);
+
+    await this.#ping();
 
     const type = MTypeTab.SIGN_MESSAGE;
     const recipient = MTypeTabContent.CONTENT;
@@ -227,6 +241,8 @@ export class Wallet {
     assert(this.connected, WALLET_IS_NOT_CONNECTED);
     assert(tx instanceof Transaction, INVALID_SIGN_PARAMS);
 
+    await this.#ping();
+
     const type = MTypeTab.TX_TO_SEND;
     const recipient = MTypeTabContent.CONTENT;
     const uuid = uuidv4();
@@ -258,6 +274,44 @@ export class Wallet {
     });
   }
 
+  async #ping(): Promise<boolean> {
+    const type = MTypeTab.REQUEST_PING;
+    const recipient = MTypeTabContent.CONTENT;
+    const uuid = uuidv4();
+    let sub: Function;
+
+    const fulfilled = () => {
+      return new Promise((resolve, reject) => {
+        sub = this.#subject.on((msg) => {
+          if (msg.type !== MTypeTab.PING_RESPONSE) return;
+          if (!msg.payload || !msg.payload.uuid) return;
+          if (msg.payload.uuid !== uuid) return;
+
+          this.#installed = true;
+
+          sub();
+          return resolve(true);
+        });
+
+        new ContentMessage({
+          type,
+          payload: {
+            uuid
+          }
+        }).send(this.#stream, recipient);
+
+        setTimeout(() => {
+          if (sub) sub();
+
+          this.#installed = false;
+          reject(new Error(NOT_INSTALLED));
+        }, TIME_OUT_SECONDS);
+      });
+    };
+
+    return fulfilled() as Promise<boolean>;
+  }
+
   #subscribe() {
     if (!globalThis.window) return;
 
@@ -279,6 +333,7 @@ export class Wallet {
           this.#connected = msg.payload.connected;
 
           this.#network.net = msg.payload.net;
+          this.#installed = true;
           break;
         case MTypeTab.NETWORK_CHANGED:
           this.#network.net = msg.payload.net;

@@ -22,5 +22,7 @@ export declare const MTypeTab: {
     SING_MESSAGE_RESULT: string;
     RESPONSE_PUB_KEY: string;
     REQUEST_PUB_KEY: string;
+    REQUEST_PING: string;
+    PING_RESPONSE: string;
 };
 //# sourceMappingURL=stream-keys.d.ts.map
