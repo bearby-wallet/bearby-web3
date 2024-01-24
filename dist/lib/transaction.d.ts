@@ -1,6 +1,7 @@
 import { OperationsType } from "config/operations";
 import { CallParam } from "types/massa";
 export declare class Transaction {
+    #private;
     fee?: string;
     gasPrice?: string;
     gasLimit?: string;

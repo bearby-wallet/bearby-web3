@@ -33,7 +33,7 @@ export class Transaction {
         code: this.contract,
         func: this.functionName,
         params: this.parameters,
-        unsafeParams: this.unsafeParams,
+        unsafeParams: this.unsafeParams ? this.#uint8ArrayToHex(this.unsafeParams) : undefined,
         toAddr: this.recipient || this.contract,
         deployer: this.deployer
       })
@@ -67,5 +67,11 @@ export class Transaction {
         return data;
       });
     }
+  }
+
+  #uint8ArrayToHex(bytes: Uint8Array): string {
+    return Array.from(bytes)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 }
