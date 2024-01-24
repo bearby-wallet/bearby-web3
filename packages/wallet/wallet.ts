@@ -125,6 +125,8 @@ export class Wallet {
   }
 
   async requestPubKey(): Promise<string> {
+    assert(this.connected, WALLET_IS_NOT_CONNECTED);
+
     const type = MTypeTab.REQUEST_PUB_KEY;
     const recipient = MTypeTabContent.CONTENT;
     const uuid = uuidv4();
