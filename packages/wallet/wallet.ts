@@ -305,7 +305,6 @@ export class Wallet {
         setTimeout(() => {
           if (sub) sub();
 
-          this.#installed = false;
           reject(new Error(NOT_INSTALLED));
         }, TIME_OUT_SECONDS);
       });

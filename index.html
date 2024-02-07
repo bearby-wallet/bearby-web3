@@ -25,7 +25,9 @@
       console.log(status);
     }
     async function connect() {
+      console.log(bearby.wallet.installed);
       const status = await bearby.wallet.connect();
+      console.log(bearby.wallet.installed);
       console.log(status);
     }
     async function deploy() {
