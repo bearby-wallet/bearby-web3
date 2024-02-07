@@ -26,60 +26,85 @@ export interface Slot {
 
 export interface JsonRPCResponseNodeStatus {
   result?: {
-    config: {
-      block_reward: string;
-      delta_f0: number;
-      end_timestamp: number | null;
-      genesis_timestamp: number;
-      max_block_size: number;
-      operation_validity_periods: number;
-      periods_per_cycle: number;
-      pos_lock_cycles: number;
-      pos_lookback_cycles: number;
-      roll_price: string;
-      t0: number;
-      thread_count: number;
-    },
-    connected_nodes: {
-      [key: string]: Array<boolean | string>;
-    },
-    consensus_stats: {
-      clique_count: number;
-      end_timespan: number;
-      final_block_count: number;
-      final_operation_count: number;
-      staker_count: number;
-      stale_block_count: number;
-      start_timespan: number;
-    },
-    current_cycle: number;
-    current_time: number;
-    last_slot?: Slot;
-    network_stats: {
-      active_node_count: number;
-      banned_peer_count: number;
-      in_connection_count: number;
-      known_peer_count: number;
-      out_connection_count: number;
-    },
-    next_slot: Slot;
     node_id: string;
     node_ip: string;
-    pool_stats: {
-      endorsement_count: number;
-      operation_count: number;
-    },
     version: string;
+    current_time: number;
+    current_cycle: number;
+    current_cycle_time: number;
+    next_cycle_time: number;
+    connected_nodes: {
+      [key: string]: [string, boolean];
+    };
+    last_slot: {
+      period: number;
+      thread: number;
+    };
+    next_slot: {
+      period: number;
+      thread: number;
+    };
+    consensus_stats: {
+      start_timespan: number;
+      end_timespan: number;
+      final_block_count: number;
+      stale_block_count: number;
+      clique_count: number;
+    };
+    pool_stats: number[];
+    network_stats: {
+      in_connection_count: number;
+      out_connection_count: number;
+      known_peer_count: number;
+      banned_peer_count: number;
+      active_node_count: number;
+    };
+    execution_stats: {
+      time_window_start: number;
+      time_window_end: number;
+      final_block_count: number;
+      final_executed_operations_count: number;
+      active_cursor: {
+        period: number;
+        thread: number;
+      };
+      final_cursor: {
+        period: number;
+        thread: number;
+      };
+    };
+    config: {
+      genesis_timestamp: number;
+      end_timestamp: number | null;
+      thread_count: number;
+      t0: number;
+      delta_f0: number;
+      operation_validity_periods: number;
+      periods_per_cycle: number;
+      block_reward: string;
+      roll_price: string;
+      max_block_size: number;
+    };
+    chain_id: number;
   };
 }
 
 export interface AddressInfo {
-  final_parallel_balance: string;
+  address: string;
+  thread: number;
+  final_balance: string;
   final_roll_count: number;
-  final_sequential_balance: string;
-  candidate_parallel_balance: string;
+  final_datastore_keys: Array<number[]>;
+  candidate_balance: string;
   candidate_roll_count: number;
-  candidate_sequential_balance: string;
+  candidate_datastore_keys: Array<number[]>;
+  cycle_infos: Array<{
+    cycle: number;
+    is_final: boolean;
+    ok_count: number;
+    nok_count: number;
+    active_rolls: number | null;
+  }>;
 }
 
 export interface JsonRPCResponseNodeStatusAddresses {
