@@ -17,6 +17,7 @@
   <button onclick="test_sign()">sign message</button>
   <button onclick="test_req_pub_key()">get pubkey</button>
   <button onclick="testunsafe()">test unsafe</button>
+  <button onclick="tryReadContract()">try read contract</button>
 
   <script>
     window.contract = '';
@@ -29,6 +30,21 @@
       const status = await bearby.wallet.connect();
       console.log(bearby.wallet.installed);
       console.log(status);
+    }
+    async function tryReadContract() {
+       const account = bearby.wallet.account.base58;
+        const result = await bearby.contract.readSmartContract(
+          {
+            fee: 0,
+            maxGas: 4294167295,
+            simulatedGasPrice: 0,
+            targetAddress: "AS1CNmKBzXY3jwkqempmrv95wZUMqBHRBAQK3G4vicb3WpxZAy3e",
+            targetFunction: "getMessage",
+            parameter: [],
+            callerAddress: account
+          }
+        );
+      console.log(result);
     }
     async function deploy() {
       const hash = await bearby.contract.deploy({

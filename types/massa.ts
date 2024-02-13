@@ -316,12 +316,12 @@ export interface ExecuteReadOnlyBytecodeParam {
 }
 
 export interface ExecuteReadOnlyCall {
-  fee: number;
-  maxGas: number;
-  simulatedGasPrice: number;
+  fee?: number;
+  maxGas?: number;
+  coins?: number;
   targetAddress: string;
   targetFunction: string;
-  parameters: string | Uint8Array | number[];
+  parameter: CallParam[];
   callerAddress?: string;
 }
 

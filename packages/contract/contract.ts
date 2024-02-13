@@ -114,10 +114,9 @@ export class Contract {
       method,
       params: [params.map((v) => ({
         max_gas: v.maxGas,
-        simulated_gas_price: String(v.simulatedGasPrice),
         target_address: v.targetAddress,
         target_function: v.targetFunction,
-        parameters: v.parameters,
+        parameter: v.parameter,
         caller_address: v.callerAddress || this.#wallet.account.base58
       }))]
     }]);
