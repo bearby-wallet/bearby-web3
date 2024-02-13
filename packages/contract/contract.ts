@@ -121,10 +121,6 @@ export class Contract {
       }))]
     }]);
 
-    if (params.length === 1) {
-      return responses[0];
-    }
-
     return responses;
   }
 }
