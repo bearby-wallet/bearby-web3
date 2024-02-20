@@ -268,9 +268,6 @@
                             caller_address: v.callerAddress || __classPrivateFieldGet(this, _Contract_wallet, "f").account.base58
                         }))]
                 }]);
-            if (params.length === 1) {
-                return responses[0];
-            }
             return responses;
         }
     }
@@ -591,6 +588,7 @@
         constructor(subject) {
             _Account_subject.set(this, void 0);
             __classPrivateFieldSet(this, _Account_subject, subject, "f");
+            this.accounts = [];
         }
         subscribe(cb) {
             if (!cb) {
@@ -752,6 +750,7 @@
                     }
                     __classPrivateFieldSet(this, _Wallet_connected, false, "f");
                     __classPrivateFieldGet(this, _Wallet_account, "f").base58 = undefined;
+                    __classPrivateFieldGet(this, _Wallet_account, "f").accounts = [];
                     __classPrivateFieldGet(this, _Wallet_network, "f").net = msg.payload.net;
                     obs();
                     return resolve(this.connected);
@@ -841,6 +840,7 @@
                     }
                     __classPrivateFieldSet(this, _Wallet_connected, Boolean(msg.payload.resolve), "f");
                     __classPrivateFieldGet(this, _Wallet_account, "f").base58 = msg.payload.base58;
+                    __classPrivateFieldGet(this, _Wallet_account, "f").accounts = msg.payload.accounts;
                     __classPrivateFieldGet(this, _Wallet_network, "f").net = msg.payload.net;
                     obs();
                     return resolve(this.connected);
@@ -962,6 +962,7 @@
                 case MTypeTab.GET_DATA:
                     __classPrivateFieldGet(this, _Wallet_blockchain, "f").period = msg.payload.period;
                     __classPrivateFieldGet(this, _Wallet_account, "f").base58 = msg.payload.base58;
+                    __classPrivateFieldGet(this, _Wallet_account, "f").accounts = msg.payload.accounts;
                     __classPrivateFieldSet(this, _Wallet_enabled, msg.payload.enabled, "f");
                     __classPrivateFieldSet(this, _Wallet_connected, msg.payload.connected, "f");
                     __classPrivateFieldGet(this, _Wallet_network, "f").net = msg.payload.net;

@@ -6,9 +6,11 @@ import { Subject } from "../../lib/subject";
 export class Account {
   #subject: Subject;
   base58?: string;
+  accounts: string[];
 
   constructor(subject: Subject) {
     this.#subject = subject;
+    this.accounts = [];
   }
 
   subscribe(cb: (base58?: string) => void) {

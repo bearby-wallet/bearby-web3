@@ -91,6 +91,7 @@ export class Wallet {
 
         this.#connected = false;
         this.#account.base58 = undefined;
+        this.#account.accounts = [];
         this.#network.net = msg.payload.net;
 
         obs();
@@ -193,6 +194,7 @@ export class Wallet {
         this.#connected = Boolean(msg.payload.resolve);
 
         this.#account.base58 = msg.payload.base58;
+        this.#account.accounts = msg.payload.accounts;
         this.#network.net = msg.payload.net;
 
         obs();
@@ -330,6 +332,7 @@ export class Wallet {
         case MTypeTab.GET_DATA:
           this.#blockchain.period = msg.payload.period;
           this.#account.base58 = msg.payload.base58;
+          this.#account.accounts = msg.payload.accounts;
           this.#enabled = msg.payload.enabled;
           this.#connected = msg.payload.connected;
 
