@@ -169,7 +169,7 @@ const data = await web3.contract.readSmartContract({
   simulatedGasPrice: 0,
   targetAddress: 'A12KqAUVvPZAAybdmJijkKbynfJeDUsfztEUh8JCSx6DPjczdYLt',
   targetFunction: "balanceOf",
-  parameters: []
+  parameter: []
 });
 console.log(data);
 ```
