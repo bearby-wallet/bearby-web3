@@ -282,6 +282,7 @@
     const MTypeTab = {
         GET_DATA: `@/${app}/get-wallet-data`,
         NEW_SLOT: `@/${app}/new-slot-emited`,
+        CONNECTION_CHANGED: `@/${app}/connection-account-changed`,
         ACCOUNT_CHANGED: `@/${app}/accounts-just-changed`,
         CONTENT_PROXY_MEHTOD: `@/${app}/proxy-method`,
         CONTENT_PROXY_RESULT: `@/${app}/response-from-content`,
@@ -950,6 +951,12 @@
             return;
         __classPrivateFieldGet(this, _Wallet_subject, "f").on((msg) => {
             switch (msg.type) {
+                case MTypeTab.CONNECTION_CHANGED:
+                    if (msg.payload && msg.payload.base58 && msg.payload.accounts) {
+                        this.account.base58 = msg.payload.base58;
+                        this.account.accounts = msg.payload.accounts;
+                    }
+                    break;
                 case MTypeTab.NEW_SLOT:
                     __classPrivateFieldGet(this, _Wallet_blockchain, "f").period = msg.payload;
                     break;

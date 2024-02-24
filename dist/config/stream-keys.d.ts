@@ -5,6 +5,7 @@ export declare const MTypeTabContent: {
 export declare const MTypeTab: {
     GET_DATA: string;
     NEW_SLOT: string;
+    CONNECTION_CHANGED: string;
     ACCOUNT_CHANGED: string;
     CONTENT_PROXY_MEHTOD: string;
     CONTENT_PROXY_RESULT: string;

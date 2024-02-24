@@ -10,6 +10,7 @@ export const MTypeTabContent = {
 export const MTypeTab = {
   GET_DATA: `@/${app}/get-wallet-data`,
   NEW_SLOT: `@/${app}/new-slot-emited`,
+  CONNECTION_CHANGED: `@/${app}/connection-account-changed`,
   ACCOUNT_CHANGED: `@/${app}/accounts-just-changed`,
   CONTENT_PROXY_MEHTOD: `@/${app}/proxy-method`,
   CONTENT_PROXY_RESULT: `@/${app}/response-from-content`,

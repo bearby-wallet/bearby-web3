@@ -320,6 +320,12 @@ export class Wallet {
 
     this.#subject.on((msg) => {
       switch (msg.type) {
+        case MTypeTab.CONNECTION_CHANGED:
+          if (msg.payload && msg.payload.base58 && msg.payload.accounts) {
+            this.account.base58 = msg.payload.base58;
+            this.account.accounts = msg.payload.accounts;
+          }
+          break;
         case MTypeTab.NEW_SLOT:
           this.#blockchain.period = msg.payload;
           break;
