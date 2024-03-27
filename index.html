@@ -93,9 +93,14 @@
         fee: 0,
         maxGas: 200000,
         simulatedGasPrice: 0,
-        targetAddress: window.contract,
+        targetAddress: "AS12Emra1SrLsFgYdFRQXBjsksWummAs8zG14iFytS73bZBjbVY5v",
         targetFunction: "balanceOf",
-        parameters: bearby.wallet.account.base58
+        parameters: [
+          {
+            type: bearby.contract.types.STRING,
+            value: "AU1aFiPAan1ucLZjS6iREznGYHHpTseRFAXEYvYsbCocU9RL64GW"
+          },
+        ]
       });
       console.log('readSmartContract', data);
     }
