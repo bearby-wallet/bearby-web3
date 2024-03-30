@@ -13,16 +13,20 @@ export class Account {
     this.accounts = [];
   }
 
-  subscribe(cb: (base58?: string) => void) {
+  subscribe(cb: (base58?: string, accounts?: string[]) => void) {
     if (!cb) {
       throw new Error(CALLBACK_ERROR);
     }
     if (this.base58) {
-      cb(this.base58);
+      cb(this.base58, this.accounts);
     }
 
     const obs = this.#subject.on((msg) => {
       switch (msg.type) {
+        case MTypeTab.CONNECTION_CHANGED:
+          this.base58 = msg.payload.base58;
+          this.accounts = msg.payload.accounts;
+          break;
         case MTypeTab.DISCONNECT_APP_RESULT:
           this.base58 = undefined;
           break;
@@ -39,7 +43,7 @@ export class Account {
           return;
       }
 
-      cb(this.base58);
+      cb(this.base58, this.accounts);
     });
 
     return {

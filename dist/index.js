@@ -614,10 +614,14 @@
                 throw new Error(CALLBACK_ERROR);
             }
             if (this.base58) {
-                cb(this.base58);
+                cb(this.base58, this.accounts);
             }
             const obs = __classPrivateFieldGet(this, _Account_subject, "f").on((msg) => {
                 switch (msg.type) {
+                    case MTypeTab.CONNECTION_CHANGED:
+                        this.base58 = msg.payload.base58;
+                        this.accounts = msg.payload.accounts;
+                        break;
                     case MTypeTab.DISCONNECT_APP_RESULT:
                         this.base58 = undefined;
                         break;
@@ -633,7 +637,7 @@
                     default:
                         return;
                 }
-                cb(this.base58);
+                cb(this.base58, this.accounts);
             });
             return {
                 unsubscribe: () => obs()
