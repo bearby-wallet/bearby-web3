@@ -35,6 +35,7 @@ export class Account {
           break;
         case MTypeTab.RESPONSE_CONNECT_APP:
           this.base58 = msg.payload.base58;
+          this.accounts = msg.payload.accounts;
           break;
         case MTypeTab.GET_DATA:
           this.base58 = msg.payload.base58;

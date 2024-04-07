@@ -91,11 +91,11 @@
     async function readBalance() {
       const data = await bearby.contract.readSmartContract({
         fee: 0,
-        maxGas: 200000,
+        maxGas: 2100000,
         simulatedGasPrice: 0,
         targetAddress: "AS12Emra1SrLsFgYdFRQXBjsksWummAs8zG14iFytS73bZBjbVY5v",
         targetFunction: "balanceOf",
-        parameters: [
+        parameter: [
           {
             type: bearby.contract.types.STRING,
             value: "AU1aFiPAan1ucLZjS6iREznGYHHpTseRFAXEYvYsbCocU9RL64GW"
@@ -111,7 +111,7 @@
         coins: 0,
         targetAddress: "AS1brg4nueUAT41sm8eRZrmYndUgkAhs2hwEkJD4N8UejtK2Qa9C",
         functionName: 'transfer',
-        parameters: [
+        parameter: [
           {
             type: bearby.contract.types.STRING,
             value: "Hello, World!"
