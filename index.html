@@ -6,7 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
-  <script src="./dist//index.js"></script>
+  <script type="module" src="./dist//index.js"></script>
+  <script type="module">
+    import { Args } from 'https://cdn.jsdelivr.net/npm/@massalabs/massa-web3@next/+esm'
+    window['Args'] = Args
+  </script>
 </head>
 <body>
   <button onclick="deploy()">deploy</button>
@@ -18,9 +22,9 @@
   <button onclick="test_req_pub_key()">get pubkey</button>
   <button onclick="testunsafe()">test unsafe</button>
   <button onclick="tryReadContract()">try read contract</button>
+  <button onclick="tryReadContractWithUnsafeParams()">try read contract with unsafe params</button>
 
-  <script>
-    window.contract = '';
+  <script >
     async function disconnect() {
       const status = await bearby.wallet.disconnect();
       console.log(status);
@@ -42,6 +46,25 @@
             targetFunction: "getMessage",
             parameter: [],
             callerAddress: account
+          }
+        );
+      console.log(result);
+    }
+    async function tryReadContractWithUnsafeParams() {
+      const account = bearby.wallet.account.base58;
+       const USDC = 'AS12k8viVmqPtRuXzCm6rKXjLgpQWqbuMjc37YHhB452KSUUb9FgL'
+       const Args = window['Args']
+       if(!Args) {
+         console.error('Massa-web3 is not loaded. please wait a second')
+         return
+       }
+       const unsafeParameters = new Args().addString(account).serialize();
+        const result = await bearby.contract.readSmartContract(
+          {
+            maxGas: 4294167295,
+            targetAddress: USDC,
+            targetFunction: "balanceOf",
+            parameter: Array.from(unsafeParameters),
           }
         );
       console.log(result);
