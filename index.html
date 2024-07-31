@@ -11,6 +11,8 @@
 <body>
   <button onclick="deploy()">deploy</button>
   <button onclick="readBalance()">readBalance</button>
+  <button onclick="getNodesStatus()">getNodesStatus</button>
+  <button onclick="accountBalance()">Account balance</button>
   <button onclick="transfer()">transfer</button>
   <button onclick="disconnect()">disconect</button>
   <button onclick="connect()">conect</button>
@@ -30,6 +32,12 @@
       const status = await bearby.wallet.connect();
       console.log(bearby.wallet.installed);
       console.log(status);
+    }
+    async function accountBalance() {
+       const account = bearby.wallet.account.base58;
+       const res = await bearby.massa.getAddresses(account);
+       const { final_balance, candidate_balance } = res.result[0];
+       console.log(final_balance, candidate_balance);
     }
     async function tryReadContract() {
        const account = bearby.wallet.account.base58;
@@ -102,7 +110,14 @@
           },
         ]
       });
-      console.log('readSmartContract', data);
+      console.log('readSmartContract',  data[0].result[0]);
+    }
+
+    async function getNodesStatus() {
+      const network = await bearby.wallet.network
+      console.log("network", network)
+      const data = await bearby.massa.getNodesStatus()
+      console.log('getNodesStatus',  data);
     }
 
     async function transfer() {
