@@ -115,47 +115,66 @@ export interface JsonRPCResponseStakers {
   result?: Array<[string, number]>;
 }
 
+export interface Transaction {
+  amount: string;
+  recipient_address: string;
+}
+
+export type Datastore = Record<string, unknown>
+
+export interface ExecuteSC {
+  data: number[];
+  max_gas: number;
+  datastore: Datastore;
+}
+
+export interface CallSC {
+  target_addr: string;
+  target_func: string;
+  param: string;
+  max_gas: number;
+  coins: number;
+}
+
+export interface RollBuy {
+  roll_count: number;
+}
+
+export interface RollSell {
+  roll_count: number;
+}
+
+export interface OperationType {
+  Transaction?: Transaction;
+  ExecutSC?: ExecuteSC;
+  CallSC?: CallSC;
+  RollBuy?: RollBuy;
+  RollSell?: RollSell;
+}
+
+export interface Operation {
+  fee: string;
+  expire_period: number;
+  op: OperationType;
+}
+
+export interface WrappedOperation {
+  content: Operation;
+  signature: string;
+  content_creator_pub_key?: string;
+  content_creator_address?: string;
+  id?: string;
+}
+
 export interface OperationTransaction {
   result?: {
     id: string; // Operation id
     in_blocks: string[]; // Block ids
     in_pool: boolean;
-    is_final: boolean;
-    operation: {
-      content: {
-        expire_period: number;// after that period, the operation become invalid forever
-        fee: string; // represent an Amount in coins
-        op: {
-          Transaction?: {
-            amount: string; // represent an Amount in coins
-            recipient_address: string
-          };
-          RollBuy?: {
-            roll_count: number;
-          };
-          RollSell?: {
-            roll_count: number;
-          };
-          ExecuteSC?: {
-            data: number[]; // vec of bytes to execute
-            max_gas: number; // maximum amount of gas that the execution of the contract is allowed to cost.
-            coins: string; // represent an Amount in coins that are spent by consensus and are available in the execution context of the contract.
-            gas_price: string; // represent an Amount in coins, price per unit of gas that the caller is willing to pay for the execution.
-          };
-          CallSC?: {
-            target_addr: string; // Address
-            target_func: string; // Function name
-            param: string; // parameters to pass to the function
-            max_gas: number;
-            sequential_coins: number; // Amount
-            parallel_coins: number; // Amount
-            gas_price: number; // Amount
-          };
-        };
-        sender_public_key: string;
-      };
-      signature: string;
-    }
+    is_operation_final: boolean | null;
+    thread: number;
+    op_exec_status: boolean | null
+    operation: WrappedOperation
   }[];
 }
 
