@@ -7,8 +7,7 @@ import {
   EventFilterParam,
   ExecuteReadOnlyBytecodeParam,
   ExecuteReadOnlyCall,
-  JsonRPCResponseExecuteReadOnlyBytecode,
-  JsonRPCResponseExecuteReadOnlyCall,
+  JsonRPCResponseExecuteReadOnly,
   JsonRPCResponseFilteredSCOutputEvent
 } from '../../types';
 
@@ -102,7 +101,7 @@ export class Contract {
 
   async executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]) {
     const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
-    return this.#provider.send<JsonRPCResponseExecuteReadOnlyBytecode[]>([{
+    return this.#provider.send<JsonRPCResponseExecuteReadOnly[]>([{
       method,
       params: [params]
     }]);
@@ -110,7 +109,7 @@ export class Contract {
 
   async readSmartContract(...params: ExecuteReadOnlyCall[]) {
     const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_CALL;
-    const responses = await this.#provider.send<JsonRPCResponseExecuteReadOnlyCall[]>([{
+    const responses = await this.#provider.send<JsonRPCResponseExecuteReadOnly[]>([{
       method,
       params: [params.map((v) => ({
         max_gas: v.maxGas,

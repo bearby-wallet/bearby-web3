@@ -253,50 +253,44 @@ export interface JsonRPCResponseFilteredSCOutputEvent {
   }[];
 }
 
-export interface JsonRPCResponseExecuteReadOnlyBytecode {
-  result?: {
-    executed_at: {
-      period: number;
-      thread: number;
-    },
-    result: string; //ok or error message
-    output_events: {
-      id: string; //id of the event
-      context: {
-        slot: Slot;
-        block?: string; // block id,
-        read_only: boolean; // wether the event was generated during  read only call
-        call_stack: string[]; //Addresses
-        index_in_slot: number;
-        origin_operation_id?: string; // operation id
-      };
-      data: string; // String of the event you sended
-    }[];
-  }[];
+export interface EventExecutionContext {
+  slot: Slot;
+  block?: string;
+  read_only: boolean;
+  call_stack: string[];
+  index_in_slot: number;
+  origin_operation_id?: string;
+  is_final: boolean;
+  is_error?: boolean;
 }
 
-export interface JsonRPCResponseExecuteReadOnlyCall {
+export interface SCEvent {
+  data: string;
+  context: EventExecutionContext;
+}
+
+export interface StateChanges {
+  ledger_changes: Record<string, unknown>;
+  async_pool_changes: Record<string, unknown>[];
+  pos_changes: Record<string, unknown>;
+  executed_ops_changes: Record<string, unknown>;
+  executed_denunciations_changes: Record<string, unknown>;
+  execution_trail_hash_change: string;
+}
+
+export interface JsonRPCResponseExecuteReadOnly {
   result?: {
     executed_at: {
       period: number;
       thread: number;
     },
-    result: string; //ok or error message
-    output_events: [
-      // Each id is a event id. The size of this array is dynamic over the number of events pop in the execution.
-      id1: {
-        id: string; //id of the event
-        context: {
-          slot: Slot;
-          block?: string; // block id,
-          read_only: Boolean // wether the event was generated during  read only call
-          call_stack: string[], //Addresses
-          index_in_slot: number;
-          origin_operation_id?: string; // operation id
-        }
-        data: string; // String of the event you sended
-      }
-    ]
+    gas_cost: number;
+    result: {
+      Ok?: number[]
+      Error?: string
+    };
+    output_events: SCEvent[],
+    state_changes: StateChanges
   }[];
 }
 
