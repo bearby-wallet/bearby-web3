@@ -88,7 +88,7 @@ export interface JsonRPCResponseNodeStatus {
   minimal_fees: string
 }
 
-export interface AddressInfo {
+export interface JsonRPCResponseNodeStatusAddresses {
   address: string;
   thread: number;
   final_balance: string;
@@ -104,10 +104,6 @@ export interface AddressInfo {
     nok_count: number;
     active_rolls: number | null;
   }>;
-}
-
-export interface JsonRPCResponseNodeStatusAddresses {
-  result?: AddressInfo[];
 }
 
 export interface JsonRPCResponseStakers {
