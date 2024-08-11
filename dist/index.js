@@ -26,7 +26,6 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
 
-
 const FAVICON_REQUIRED = 'website favicon is required';
 const WALLET_IS_NOT_CONNECTED = 'Wallet is not connected';
 const INVALID_SIGN_PARAMS = 'Invalid sign params';
@@ -283,7 +282,6 @@ class Contract {
             }]);
         return responses;
     }
-
 }
 _Contract_provider = new WeakMap(), _Contract_wallet = new WeakMap();
 
@@ -1036,3 +1034,4 @@ const web3 = main();
 
 export { ArgTypes, ArrayTypes, ContentProvider, Contract, Massa, Wallet, Web3, web3 };
 //# sourceMappingURL=index.js.map
+
