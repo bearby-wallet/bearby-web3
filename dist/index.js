@@ -1034,3 +1034,4 @@ const web3 = main();
 
 export { ArgTypes, ArrayTypes, ContentProvider, Contract, Massa, Wallet, Web3, web3 };
 //# sourceMappingURL=index.js.map
+
