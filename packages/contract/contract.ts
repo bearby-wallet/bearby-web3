@@ -99,7 +99,7 @@ export class Contract {
     }]);
   }
 
-  async executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]) {
+  async executeReadOnlyBytecode(params: ExecuteReadOnlyBytecodeParam[]) {
     const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
     return this.#provider.send<JsonRPCResponseExecuteReadOnly[]>([{
       method,
