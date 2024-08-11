@@ -26,10 +26,6 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
 
-typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-    var e = new Error(message);
-    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-};
 
 const FAVICON_REQUIRED = 'website favicon is required';
 const WALLET_IS_NOT_CONNECTED = 'Wallet is not connected';
@@ -266,7 +262,7 @@ class Contract {
                 params: [data]
             }]);
     }
-    async executeReadOnlyBytecode(params) {
+    async executeReadOlyBytecode(params) {
         const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
         return __classPrivateFieldGet(this, _Contract_provider, "f").send([{
                 method,
@@ -287,6 +283,7 @@ class Contract {
             }]);
         return responses;
     }
+
 }
 _Contract_provider = new WeakMap(), _Contract_wallet = new WeakMap();
 
