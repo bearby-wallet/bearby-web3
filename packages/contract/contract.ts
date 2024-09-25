@@ -15,9 +15,8 @@ import { ContentProvider } from '../../packages/massa';
 import { Transaction } from '../../lib/transaction';
 import { OperationsType } from '../../config/operations';
 import { JsonRPCRequestMethods } from '../../config/rpc-methods';
-import { utf8ToBytes } from '../../lib/hex';
+import { strToBytes } from '../../lib/hex';
 import { ArgTypes } from 'config/args-types';
-
 
 export class Contract {
   readonly #provider: ContentProvider;
@@ -86,14 +85,15 @@ export class Contract {
 
   async getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<DataStoreEntryResponse[]> {
     const method = JsonRPCRequestMethods.GET_DATASTORE_ENTRIES;
-    const data = [];
-    for (const { key, address } of params) {
-      data.push({
-        address,
-        key: Array.from(utf8ToBytes(key))
-      });
-    }
-    return await this.#provider.send<DataStoreEntryResponse[]>([{
+    const data = params.map((entry) => {
+      const keyBytes: Uint8Array =
+        typeof entry.key === 'string' ? strToBytes(entry.key) : entry.key
+      return {
+        key: Array.from(keyBytes),
+        address: entry.address,
+      }
+    })
+    return this.#provider.send<DataStoreEntryResponse[]>([{
       method,
       params: [data]
     }]);

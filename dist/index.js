@@ -167,12 +167,13 @@ var JsonRPCRequestMethods;
     JsonRPCRequestMethods["GET_DATASTORE_ENTRIES"] = "get_datastore_entries";
 })(JsonRPCRequestMethods || (JsonRPCRequestMethods = {}));
 
-function utf8ToBytes(str) {
-    let binaryArray = new Uint8Array(str.length);
-    Array.prototype.forEach.call(binaryArray, (_, idx, arr) => {
-        arr[idx] = str.charCodeAt(idx);
-    });
-    return binaryArray;
+// Converts utf-16 string to a Uint8Array.
+// copied from https://github.com/massalabs/massa-web3/blob/b8f0c7e310f8663cb25d6cf9f6c922f84903e810/src/basicElements/serializers/strings.ts#L10
+function strToBytes(str) {
+    if (!str.length) {
+        return new Uint8Array(0);
+    }
+    return new TextEncoder().encode(str);
 }
 
 var ArgTypes;
@@ -249,19 +250,19 @@ class Contract {
     }
     async getDatastoreEntries(...params) {
         const method = JsonRPCRequestMethods.GET_DATASTORE_ENTRIES;
-        const data = [];
-        for (const { key, address } of params) {
-            data.push({
-                address,
-                key: Array.from(utf8ToBytes(key))
-            });
-        }
-        return await __classPrivateFieldGet(this, _Contract_provider, "f").send([{
+        const data = params.map((entry) => {
+            const keyBytes = typeof entry.key === 'string' ? strToBytes(entry.key) : entry.key;
+            return {
+                key: Array.from(keyBytes),
+                address: entry.address,
+            };
+        });
+        return __classPrivateFieldGet(this, _Contract_provider, "f").send([{
                 method,
                 params: [data]
             }]);
     }
-    async executeReadOlyBytecode(params) {
+    async executeReadOnlyBytecode(params) {
         const method = JsonRPCRequestMethods.EXECUTE_READ_ONLY_BYTECODE;
         return __classPrivateFieldGet(this, _Contract_provider, "f").send([{
                 method,
@@ -1034,4 +1035,3 @@ const web3 = main();
 
 export { ArgTypes, ArrayTypes, ContentProvider, Contract, Massa, Wallet, Web3, web3 };
 //# sourceMappingURL=index.js.map
-

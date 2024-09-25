@@ -17,7 +17,6 @@
   <button onclick="accountBalance()">Account balance</button>
   <button onclick="readBalance()">readBalance</button>
   <button onclick="getNodesStatus()">getNodesStatus</button>
-  <button onclick="accountBalance()">Account balance</button>
   <button onclick="transfer()">transfer</button>
   <button onclick="disconnect()">disconect</button>
   <button onclick="connect()">conect</button>
@@ -26,8 +25,12 @@
   <button onclick="testunsafe()">test unsafe</button>
   <button onclick="tryReadContract()">try read contract</button>
   <button onclick="tryReadContractWithUnsafeParams()">try read contract with unsafe params</button>
+  <button onclick="getDatastoreEntries()">Get datastore entry</button>
 
   <script >
+    // Buildnet contract
+    const USDC = 'AS12k8viVmqPtRuXzCm6rKXjLgpQWqbuMjc37YHhB452KSUUb9FgL'
+
     async function disconnect() {
       const status = await bearby.wallet.disconnect();
       console.log(status);
@@ -44,12 +47,7 @@
       console.log(bearby.wallet.installed);
       console.log(status);
     }
-    async function accountBalance() {
-       const account = bearby.wallet.account.base58;
-       const res = await bearby.massa.getAddresses(account);
-       const { final_balance, candidate_balance } = res.result[0];
-       console.log(final_balance, candidate_balance);
-    }
+
     async function tryReadContract() {
        const account = bearby.wallet.account.base58;
         const result = await bearby.contract.readSmartContract(
@@ -67,7 +65,6 @@
     }
     async function tryReadContractWithUnsafeParams() {
       const account = bearby.wallet.account.base58;
-       const USDC = 'AS12k8viVmqPtRuXzCm6rKXjLgpQWqbuMjc37YHhB452KSUUb9FgL'
        const Args = window['Args']
        if(!Args) {
          console.error('Massa-web3 is not loaded. please wait a second')
@@ -141,6 +138,11 @@
         ]
       });
       console.log('readSmartContract',  data[0].result[0]);
+    }
+
+    async function getDatastoreEntries() {
+      const data = await bearby.contract.getDatastoreEntries({address: USDC, key: 'SYMBOL'});
+      console.log('Datastore data:',  data[0].result[0]);
     }
 
     async function getNodesStatus() {
