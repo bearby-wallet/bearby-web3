@@ -15,14 +15,14 @@ export default [
 		},
 		plugins: [
 			resolve({
-				brower: true
+				brower: true,
 			}),
 			typescript({
 				sourceMap: true,
 				declaration: true,
 				inlineSources: true
 			}),
-			commonjs()
+			commonjs(),
 		]
 	}
 ];

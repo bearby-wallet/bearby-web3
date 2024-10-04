@@ -14,7 +14,7 @@ export interface DeployParams {
 
 export interface DatastoreEntryInputParam {
   address: string;
-  key: string;
+  key: string | Uint8Array;
 }
 
 export interface DataStoreEntryResponse {

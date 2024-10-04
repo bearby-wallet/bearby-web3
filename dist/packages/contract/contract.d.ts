@@ -10,7 +10,7 @@ export declare class Contract {
     call(params: CallSmartContractParams): Promise<string>;
     getFilteredSCOutputEvent(...filters: EventFilterParam[]): Promise<JsonRPCResponseFilteredSCOutputEvent | JsonRPCResponseFilteredSCOutputEvent[]>;
     getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<DataStoreEntryResponse[]>;
-    executeReadOlyBytecode(params: ExecuteReadOnlyBytecodeParam[]): Promise<JsonRPCResponseExecuteReadOnly[]>;
+    executeReadOnlyBytecode(params: ExecuteReadOnlyBytecodeParam[]): Promise<JsonRPCResponseExecuteReadOnly[]>;
     readSmartContract(...params: ExecuteReadOnlyCall[]): Promise<JsonRPCResponseExecuteReadOnly[]>;
 }
 //# sourceMappingURL=contract.d.ts.map
