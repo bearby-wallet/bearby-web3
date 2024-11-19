@@ -71,16 +71,10 @@ export class Contract {
 
   async getFilteredSCOutputEvent(...filters: EventFilterParam[]) {
     const method = JsonRPCRequestMethods.GET_FILTERED_SC_OUTPUT_EVENT;
-    const responses = await this.#provider.send<JsonRPCResponseFilteredSCOutputEvent[]>(filters.map((filter) => ({
+    return this.#provider.send<JsonRPCResponseFilteredSCOutputEvent>(filters.map((filter) => ({
       method,
       params: [filter]
     })));
-
-    if (filters.length === 1) {
-      return responses[0];
-    }
-
-    return responses;
   }
 
   async getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<DataStoreEntryResponse[]> {

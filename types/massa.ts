@@ -1,8 +1,11 @@
-import { JsonRPCRequestMethods } from '../config/rpc-methods';
-import { ArgTypes, NativeType } from '../config/args-types';
+import { JsonRPCRequestMethods } from "../config/rpc-methods";
+import { ArgTypes, NativeType } from "../config/args-types";
 
-
-export type Params = object[] | string[] | number[] | (string | string[] | number[])[];
+export type Params =
+  | object[]
+  | string[]
+  | number[]
+  | (string | string[] | number[])[];
 
 export interface RPCBody {
   method: JsonRPCRequestMethods;
@@ -85,7 +88,7 @@ export interface JsonRPCResponseNodeStatus {
     max_block_size: number;
   };
   chain_id: number;
-  minimal_fees: string
+  minimal_fees: string;
 }
 
 export interface JsonRPCResponseNodeStatusAddresses {
@@ -115,7 +118,7 @@ export interface Transaction {
   recipient_address: string;
 }
 
-export type Datastore = Record<string, unknown>
+export type Datastore = Record<string, unknown>;
 
 export interface ExecuteSC {
   data: number[];
@@ -162,94 +165,80 @@ export interface WrappedOperation {
 }
 
 export interface OperationTransaction {
-  result?: {
-    id: string; // Operation id
-    in_blocks: string[]; // Block ids
-    in_pool: boolean;
-    is_operation_final: boolean | null;
-    thread: number;
-    op_exec_status: boolean | null
-    operation: WrappedOperation
-  }[];
+  id: string; // Operation id
+  in_blocks: string[]; // Block ids
+  in_pool: boolean;
+  is_operation_final: boolean | null;
+  thread: number;
+  op_exec_status: boolean | null;
+  operation: WrappedOperation;
 }
 
 export interface GraphIntervalResponse {
-  result?: {
-    creator: string;
-    id: string;
-    is_final: boolean;
-    is_in_blockclique: boolean;
-    is_stale: boolean;
-    parents: string[];
-    slot: Slot;
-  }[];
+  creator: string;
+  id: string;
+  is_final: boolean;
+  is_in_blockclique: boolean;
+  is_stale: boolean;
+  parents: string[];
+  slot: Slot;
 }
 
 export interface MassaBlock {
-  result?: {
-    id: string; // BlockId,
-    content?: {
-      is_candidate: boolean;
-      is_discarded: boolean;
-      is_final: boolean;
-      is_in_blockclique: boolean;
-      block: {
-        header: {
-          content: {
-            endorsements: {
-              content: {
-                endorsed_block: string;
-                index: number;
-                slot: Slot;
-              };
-              creator_address: string;
-              creator_public_key: string;
-              id: string;
-              signature: string;
+  id: string; // BlockId,
+  content?: {
+    is_candidate: boolean;
+    is_discarded: boolean;
+    is_final: boolean;
+    is_in_blockclique: boolean;
+    block: {
+      header: {
+        content: {
+          endorsements: {
+            content: {
+              endorsed_block: string;
+              index: number;
+              slot: Slot;
             };
-            operation_merkle_root: string;
-            parents: string[];
-            slot: Slot;
+            creator_address: string;
+            creator_public_key: string;
+            id: string;
+            signature: string;
           };
-          creator_address: string;
-          creator_public_key: string;
-          id: string;
-          signature: string;
+          operation_merkle_root: string;
+          parents: string[];
+          slot: Slot;
         };
-        operations: string[];
+        creator_address: string;
+        creator_public_key: string;
+        id: string;
+        signature: string;
       };
+      operations: string[];
     };
-  }
-}
-
-export interface OperationResponse {
-  result?: string[];
+  };
 }
 
 export interface JsonRPCResponseEndorsements {
-  result?: {
-    id: string; // EndorsementId,
-    in_pool: boolean;
-    in_blocks: string[]; // BlockIds,
-    is_final: boolean;
-    endorsement: {
-      content: {
-        sender_public_key: string;
-        slot: Slot;
-        index: number;
-        endorsed_block: string; // BlockId,
-      };
-      signature: string;
-    }
-  }[];
+  id: string; // EndorsementId,
+  in_pool: boolean;
+  in_blocks: string[]; // BlockIds,
+  is_final: boolean;
+  endorsement: {
+    content: {
+      sender_public_key: string;
+      slot: Slot;
+      index: number;
+      endorsed_block: string; // BlockId,
+    };
+    signature: string;
+  };
 }
 
 export interface JsonRPCResponseCliques {
-  result?: {
-    block_ids: string[];
-    fitness: number;
-    is_blockclique: boolean;
-  }[];
+  block_ids: string[];
+  fitness: number;
+  is_blockclique: boolean;
 }
 
 export interface SCEvent {
@@ -272,7 +261,6 @@ export interface EventExecutionContext {
   is_error?: boolean;
 }
 
-
 export interface StateChanges {
   ledger_changes: Record<string, unknown>;
   async_pool_changes: Record<string, unknown>[];
@@ -287,14 +275,14 @@ export interface JsonRPCResponseExecuteReadOnly {
     executed_at: {
       period: number;
       thread: number;
-    },
+    };
     gas_cost: number;
     result: {
-      Ok?: number[]
-      Error?: string
+      Ok?: number[];
+      Error?: string;
     };
-    output_events: SCEvent[],
-    state_changes: StateChanges
+    output_events: SCEvent[];
+    state_changes: StateChanges;
   }[];
 }
 
@@ -330,4 +318,3 @@ export interface CallParam {
   vname?: string;
   value: NativeType | NativeType[] | Uint8Array;
 }
-
