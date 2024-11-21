@@ -103,7 +103,6 @@ class Transaction {
             type: this.type,
             amount: this.amount,
             fee: this.fee,
-            gasPrice: this.gasPrice,
             gasLimit: this.gasLimit,
             coins: this.coins,
             maxCoins: this.maxCoins,
@@ -225,7 +224,6 @@ class Contract {
         transaction.deployer = params.deployerBase64;
         transaction.fee = String(params.fee);
         transaction.gasLimit = String(params.maxGas);
-        transaction.gasPrice = params.gasPrice ? String(params.gasPrice) : undefined;
         transaction.maxCoins = String(params.maxCoins);
         transaction.coins = String(params.coins);
         return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);

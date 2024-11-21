@@ -44,7 +44,6 @@ export class Contract {
     transaction.deployer = params.deployerBase64;
     transaction.fee = String(params.fee);
     transaction.gasLimit = String(params.maxGas);
-    transaction.gasPrice = params.gasPrice ? String(params.gasPrice) : undefined;
     transaction.maxCoins = String(params.maxCoins);
     transaction.coins = String(params.coins);
 
