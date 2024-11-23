@@ -4,7 +4,6 @@ export interface DeployParams {
   maxGas: number | string | bigint;
   maxCoins: number | string | bigint;
   coins: number | string | bigint;
-  gasPrice: number | string | bigint;
   contractDataBase64: string;
   deployerBase64: string;
   fee?: number | string | bigint;

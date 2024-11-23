@@ -5,7 +5,6 @@ import { TypeOf } from "./type";
 
 export class Transaction {
   fee?: string;
-  gasPrice?: string;
   gasLimit?: string;
 
   coins?: string;
@@ -26,7 +25,6 @@ export class Transaction {
         type: this.type,
         amount: this.amount,
         fee: this.fee,
-        gasPrice: this.gasPrice,
         gasLimit: this.gasLimit,
         coins: this.coins,
         maxCoins: this.maxCoins,

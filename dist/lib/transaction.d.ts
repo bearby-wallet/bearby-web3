@@ -3,7 +3,6 @@ import { CallParam } from "types/massa";
 export declare class Transaction {
     #private;
     fee?: string;
-    gasPrice?: string;
     gasLimit?: string;
     coins?: string;
     maxCoins?: string;
