@@ -8,7 +8,7 @@ export declare class Contract {
     constructor(provider: ContentProvider, wallet: Wallet);
     deploy(params: DeployParams): Promise<string>;
     call(params: CallSmartContractParams): Promise<string>;
-    getFilteredSCOutputEvent(...filters: EventFilterParam[]): Promise<JsonRPCResponseFilteredSCOutputEvent | JsonRPCResponseFilteredSCOutputEvent[]>;
+    getFilteredSCOutputEvent(...filters: EventFilterParam[]): Promise<JsonRPCResponseFilteredSCOutputEvent>;
     getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<DataStoreEntryResponse[]>;
     executeReadOnlyBytecode(params: ExecuteReadOnlyBytecodeParam[]): Promise<JsonRPCResponseExecuteReadOnly[]>;
     readSmartContract(...params: ExecuteReadOnlyCall[]): Promise<JsonRPCResponseExecuteReadOnly[]>;

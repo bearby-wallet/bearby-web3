@@ -26,7 +26,7 @@ export class Transaction {
         amount: this.amount,
         fee: this.fee,
         gasLimit: this.gasLimit,
-        coins: this.coins,
+        coins: this.coins || this.amount,
         maxCoins: this.maxCoins,
         code: this.contract,
         func: this.functionName,

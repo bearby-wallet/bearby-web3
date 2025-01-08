@@ -26,6 +26,7 @@
   <button onclick="tryReadContract()">try read contract</button>
   <button onclick="tryReadContractWithUnsafeParams()">try read contract with unsafe params</button>
   <button onclick="getDatastoreEntries()">Get datastore entry</button>
+  <button onclick="test_payment()">test payment</button>
 
   <script >
     // Buildnet contract
@@ -209,6 +210,13 @@
 
       console.log(res);
     }
+
+    async function test_payment() {
+      const res = await bearby.massa.payment("2000000000", "AU1PjA6nuV79B1iqTKbUeYz2bFY9oEFUQkyWftPCaxwXR7tyNZnM");
+
+      console.log(res);
+    }
+
     console.log(bearby);
   </script>
 </body>
