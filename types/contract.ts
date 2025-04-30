@@ -11,6 +11,14 @@ export interface DeployParams {
   unsafeParameters?: Uint8Array;
 }
 
+export interface ExecuteBytecodeParams {
+  maxGas: number | string | bigint;
+  maxCoins: number | string | bigint;
+  bytecodeBase64: string;
+  fee?: number | string | bigint;
+  datastore: Map<Uint8Array, Uint8Array>;
+}
+
 export interface DatastoreEntryInputParam {
   address: string;
   key: string | Uint8Array;

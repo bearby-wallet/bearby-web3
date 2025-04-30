@@ -5,6 +5,7 @@ import {
   DataStoreEntryResponse,
   DeployParams,
   EventFilterParam,
+  ExecuteBytecodeParams,
   ExecuteReadOnlyBytecodeParam,
   ExecuteReadOnlyCall,
   JsonRPCResponseExecuteReadOnly,
@@ -37,15 +38,28 @@ export class Contract {
       undefined,
       params.parameters,
       params.unsafeParameters,
-      params.contractDataBase64,
-      undefined
     );
 
-    transaction.deployer = params.deployerBase64;
+    transaction.bytecode = params.deployerBase64;
+    transaction.bytecodeToDeploy = params.contractDataBase64;
     transaction.fee = String(params.fee);
     transaction.gasLimit = String(params.maxGas);
     transaction.maxCoins = String(params.maxCoins);
     transaction.coins = String(params.coins);
+
+    return this.#wallet.signTransaction(transaction);
+  }
+
+  async executeBytecode(params: ExecuteBytecodeParams) {
+    const transaction = new Transaction(
+      OperationsType.ExecuteSC,
+    );
+
+    transaction.bytecode = params.bytecodeBase64;
+    transaction.datastore = params.datastore;
+    transaction.fee = String(params.fee);
+    transaction.gasLimit = String(params.maxGas);
+    transaction.maxCoins = String(params.maxCoins);
 
     return this.#wallet.signTransaction(transaction);
   }

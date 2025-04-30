@@ -12,8 +12,6 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
-
 
 function __classPrivateFieldGet(receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
@@ -27,11 +25,6 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
-
-typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-    var e = new Error(message);
-    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-};
 
 const FAVICON_REQUIRED = 'website favicon is required';
 const WALLET_IS_NOT_CONNECTED = 'Wallet is not connected';
@@ -103,7 +96,7 @@ const TypeOf = Object.freeze({
     }
 });
 
-var _Transaction_instances, _Transaction_uint8ArrayToHex;
+var _Transaction_instances, _Transaction_uint8ArrayToHex, _Transaction_serializeDatastore;
 class Transaction {
     get payload() {
         return JSON.parse(JSON.stringify({
@@ -113,15 +106,16 @@ class Transaction {
             gasLimit: this.gasLimit,
             coins: this.coins || this.amount,
             maxCoins: this.maxCoins,
-            code: this.contract,
             func: this.functionName,
             params: this.parameters,
             unsafeParams: this.unsafeParams ? __classPrivateFieldGet(this, _Transaction_instances, "m", _Transaction_uint8ArrayToHex).call(this, this.unsafeParams) : undefined,
             toAddr: this.recipient || this.contract,
-            deployer: this.deployer
+            bytecode: this.bytecode,
+            bytecodeToDeploy: this.bytecodeToDeploy,
+            datastore: this.datastore ? __classPrivateFieldGet(this, _Transaction_instances, "m", _Transaction_serializeDatastore).call(this, this.datastore) : undefined,
         }));
     }
-    constructor(type, amount, recipient, parameters, unsafeParams, contract, functionName) {
+    constructor(type, amount = '0', recipient, parameters, unsafeParams, contract, functionName) {
         _Transaction_instances.add(this);
         this.type = type;
         this.amount = String(amount);
@@ -145,6 +139,12 @@ _Transaction_instances = new WeakSet(), _Transaction_uint8ArrayToHex = function 
     return Array.from(bytes)
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
+}, _Transaction_serializeDatastore = function _Transaction_serializeDatastore(data) {
+    const serialized = {};
+    for (const [key, value] of data.entries()) {
+        serialized[__classPrivateFieldGet(this, _Transaction_instances, "m", _Transaction_uint8ArrayToHex).call(this, key)] = __classPrivateFieldGet(this, _Transaction_instances, "m", _Transaction_uint8ArrayToHex).call(this, value);
+    }
+    return serialized;
 };
 
 var OperationsType;
@@ -227,12 +227,22 @@ class Contract {
         __classPrivateFieldSet(this, _Contract_wallet, wallet, "f");
     }
     async deploy(params) {
-        const transaction = new Transaction(OperationsType.ExecuteSC, '0', undefined, params.parameters, params.unsafeParameters, params.contractDataBase64, undefined);
-        transaction.deployer = params.deployerBase64;
+        const transaction = new Transaction(OperationsType.ExecuteSC, '0', undefined, params.parameters, params.unsafeParameters);
+        transaction.bytecode = params.deployerBase64;
+        transaction.bytecodeToDeploy = params.contractDataBase64;
         transaction.fee = String(params.fee);
         transaction.gasLimit = String(params.maxGas);
         transaction.maxCoins = String(params.maxCoins);
         transaction.coins = String(params.coins);
+        return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);
+    }
+    async executeBytecode(params) {
+        const transaction = new Transaction(OperationsType.ExecuteSC);
+        transaction.bytecode = params.bytecodeBase64;
+        transaction.datastore = params.datastore;
+        transaction.fee = String(params.fee);
+        transaction.gasLimit = String(params.maxGas);
+        transaction.maxCoins = String(params.maxCoins);
         return __classPrivateFieldGet(this, _Contract_wallet, "f").signTransaction(transaction);
     }
     async call(params) {

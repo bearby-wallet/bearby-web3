@@ -14,7 +14,9 @@ export class Transaction {
   parameters?: CallParam[];
   unsafeParams?: Uint8Array;
   recipient?: string;
-  deployer?: string;
+  bytecode?: string; // Bytecode to be executed (potentially deployer) (Base64 str)
+  bytecodeToDeploy?: string; // Bytecode to be deployed (Base64 str)
+  datastore?: Map<Uint8Array, Uint8Array>;
 
   readonly type: OperationsType;
   readonly amount: string;
@@ -28,19 +30,20 @@ export class Transaction {
         gasLimit: this.gasLimit,
         coins: this.coins || this.amount,
         maxCoins: this.maxCoins,
-        code: this.contract,
         func: this.functionName,
         params: this.parameters,
         unsafeParams: this.unsafeParams ? this.#uint8ArrayToHex(this.unsafeParams) : undefined,
         toAddr: this.recipient || this.contract,
-        deployer: this.deployer
+        bytecode: this.bytecode,
+        bytecodeToDeploy: this.bytecodeToDeploy,
+        datastore: this.datastore ? this.#serializeDatastore(this.datastore) : undefined,
       })
     );
   }
 
   constructor(
     type: OperationsType,
-    amount: string,
+    amount: string = '0',
     recipient?: string,
     parameters?: CallParam[],
     unsafeParams?: Uint8Array,
@@ -71,5 +74,13 @@ export class Transaction {
     return Array.from(bytes)
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
+  }
+
+  #serializeDatastore(data: Map<Uint8Array,Uint8Array>): Record<string, string> {
+    const serialized: Record<string, string> = {};
+    for (const [key, value] of data.entries()) {
+      serialized[this.#uint8ArrayToHex(key)] = this.#uint8ArrayToHex(value);
+    }
+    return serialized;
   }
 }
