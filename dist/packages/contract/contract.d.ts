@@ -1,5 +1,5 @@
 import { Wallet } from '../../packages/wallet';
-import { CallSmartContractParams, DatastoreEntryInputParam, DataStoreEntryResponse, DeployParams, EventFilterParam, ExecuteReadOnlyBytecodeParam, ExecuteReadOnlyCall, JsonRPCResponseExecuteReadOnly, JsonRPCResponseFilteredSCOutputEvent } from '../../types';
+import { CallSmartContractParams, DatastoreEntryInputParam, DataStoreEntryResponse, DeployParams, EventFilterParam, ExecuteBytecodeParams, ExecuteReadOnlyBytecodeParam, ExecuteReadOnlyCall, JsonRPCResponseExecuteReadOnly, JsonRPCResponseFilteredSCOutputEvent } from '../../types';
 import { ContentProvider } from '../../packages/massa';
 import { ArgTypes } from 'config/args-types';
 export declare class Contract {
@@ -7,6 +7,7 @@ export declare class Contract {
     readonly types: typeof ArgTypes;
     constructor(provider: ContentProvider, wallet: Wallet);
     deploy(params: DeployParams): Promise<string>;
+    executeBytecode(params: ExecuteBytecodeParams): Promise<string>;
     call(params: CallSmartContractParams): Promise<string>;
     getFilteredSCOutputEvent(...filters: EventFilterParam[]): Promise<JsonRPCResponseFilteredSCOutputEvent>;
     getDatastoreEntries(...params: DatastoreEntryInputParam[]): Promise<DataStoreEntryResponse[]>;
